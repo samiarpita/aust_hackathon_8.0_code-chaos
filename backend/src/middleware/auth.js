@@ -92,6 +92,75 @@ async function authMiddleware(req, res, next) {
 }
 
 /**
+ * Optional Authentication Middleware
+ * Validates JWT if provided, but allows unauthenticated access if not provided
+ */
+async function optionalAuth(req, res, next) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return next();
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token || token.trim() === '') {
+      return next();
+    }
+
+    // 1. Mock/dev tokens
+    if (token.startsWith('mock-') || token.startsWith('faculty-') || token.startsWith('student-')) {
+      const isStudent = token.includes('student');
+      const userId = token.startsWith('faculty-') || token.startsWith('student-')
+        ? token
+        : (isStudent ? 's1234567-58cc-4372-a567-0e02b2c3d479' : 'f47ac10b-58cc-4372-a567-0e02b2c3d479');
+
+      req.user = {
+        id: userId,
+        email: isStudent ? 'student@aust.edu' : 'faculty@aust.edu',
+        name: isStudent ? 'Demo Student' : 'Professor Doe',
+        role: isStudent ? 'student' : 'faculty'
+      };
+      return next();
+    }
+
+    // 2. Local JWT
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      if (decoded && decoded.id) {
+        const profile = await db.getProfileById(decoded.id);
+        req.user = {
+          id: decoded.id,
+          email: decoded.email,
+          name: profile?.name || decoded.name || 'User',
+          role: profile?.role || decoded.role || 'faculty'
+        };
+        return next();
+      }
+    } catch {
+      // Continue to Supabase check
+    }
+
+    // 3. Supabase Auth
+    if (supabase) {
+      const { data } = await supabase.auth.getUser(token);
+      if (data?.user) {
+        const profile = await db.getProfileById(data.user.id);
+        req.user = {
+          id: data.user.id,
+          email: data.user.email,
+          name: profile?.name || data.user.user_metadata?.name || 'User',
+          role: profile?.role || data.user.user_metadata?.role || 'faculty'
+        };
+      }
+    }
+
+    return next();
+  } catch {
+    return next();
+  }
+}
+
+/**
  * Role-Based Access Control Middleware
  * @param {string|string[]} roles - 'faculty' | 'student'
  */
@@ -112,5 +181,6 @@ function requireRole(roles) {
 
 module.exports = authMiddleware;
 module.exports.authMiddleware = authMiddleware;
+module.exports.optionalAuth = optionalAuth;
 module.exports.requireRole = requireRole;
 module.exports.JWT_SECRET = JWT_SECRET;

@@ -25,7 +25,20 @@ export const apiClient = {
     localStorage.setItem('radar_force_mock', String(active));
   },
 
-  async createAnalysis({ questionId, questionText, clos = [], answers = [], correctAnswer = null }, forceMock = false) {
+  async createAnalysis({
+    questionId,
+    questionText,
+    clos = [],
+    answers = [],
+    correctAnswer = null,
+    assignmentType = 'code',
+    courseId,
+    courseCode,
+    courseName,
+    assignmentTitle,
+    questionNumber,
+    isSolutionApproved = false
+  }, forceMock = false) {
     if (!questionId && (!questionText || questionText.trim().length === 0)) {
       throw new Error("Question text is required.");
     }
@@ -49,7 +62,20 @@ export const apiClient = {
       const res = await fetch(`${API_BASE_URL}/api/analyses`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ questionId, questionText, clos, answers, correctAnswer }),
+        body: JSON.stringify({
+          questionId,
+          questionText,
+          clos,
+          answers,
+          correctAnswer,
+          assignmentType,
+          courseId,
+          courseCode,
+          courseName,
+          assignmentTitle,
+          questionNumber,
+          isSolutionApproved
+        }),
       });
 
       if (!res.ok) {
@@ -285,5 +311,28 @@ export const apiClient = {
       console.warn("Backend error fetching question submissions:", networkError);
       return [];
     }
+  },
+
+  async postAssignment(assignmentData) {
+    const token = getAuthToken();
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const res = await fetch(`${API_BASE_URL}/api/courses/assignments`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(assignmentData)
+    });
+
+    if (!res.ok) {
+      const errJson = await res.json().catch(() => ({}));
+      throw new Error(errJson.error || `Failed to post assignment (${res.status})`);
+    }
+
+    return await res.json();
   }
 };

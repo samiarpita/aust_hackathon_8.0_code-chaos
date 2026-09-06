@@ -58,9 +58,24 @@ class CourseController {
 
   async listStudentAssignments(req, res, next) {
     try {
-      const studentId = req.user.role === 'student' ? req.user.id : null;
+      const studentId = req.user?.role === 'student' ? req.user.id : null;
       const assignments = await courseService.listStudentAssignments(studentId);
       return res.status(200).json(assignments);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async postAssignment(req, res, next) {
+    try {
+      const data = req.validatedBody || req.body;
+      const result = await courseService.postAssignment({
+        ...data,
+        facultyId: req.user?.id || data.facultyId,
+        facultyName: req.user?.name || data.facultyName,
+        facultyEmail: req.user?.email || data.facultyEmail
+      });
+      return res.status(201).json(result);
     } catch (err) {
       next(err);
     }

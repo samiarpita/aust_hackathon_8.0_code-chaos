@@ -31,11 +31,11 @@ export function AnalysisProvider({ children }) {
     apiClient.setMockActive(next);
   };
 
-  const analyze = async ({ questionText, clos, answers }) => {
+  const analyze = async (params) => {
     setIsAnalyzing(true);
     setAnalysisError(null);
     try {
-      const result = await apiClient.createAnalysis({ questionText, clos, answers }, isMockMode);
+      const result = await apiClient.createAnalysis(params, isMockMode);
       setCurrentAnalysis(result);
       await refreshHistory();
       return result;

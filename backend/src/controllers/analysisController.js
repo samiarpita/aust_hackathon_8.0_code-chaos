@@ -16,8 +16,14 @@ class AnalysisController {
         clos,
         answers,
         examId,
+        courseId,
+        courseCode,
+        courseName,
+        assignmentTitle,
         questionNumber,
-        correctAnswer
+        correctAnswer,
+        assignmentType,
+        isSolutionApproved
       } = req.validatedBody || req.body;
 
       const result = await analysisService.createAnalysis({
@@ -27,8 +33,14 @@ class AnalysisController {
         clos,
         answers,
         examId,
+        courseId,
+        courseCode,
+        courseName,
+        assignmentTitle,
         questionNumber,
-        correctAnswer
+        correctAnswer,
+        assignmentType,
+        isSolutionApproved
       });
 
       return res.status(200).json(result);

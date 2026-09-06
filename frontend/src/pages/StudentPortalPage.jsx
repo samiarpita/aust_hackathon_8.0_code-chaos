@@ -244,10 +244,13 @@ const INITIAL_COURSES = [
 export default function StudentPortalPage() {
   const { user } = useAuth();
 
-  // Multi-Course State
+  // Multi-Course & Faculty State
   const [coursesData, setCoursesData] = useState(INITIAL_COURSES);
   const [selectedCourseFilter, setSelectedCourseFilter] = useState('ALL'); // 'ALL' or course code e.g. 'CSE 2100'
-  const [selectedQuestionId, setSelectedQuestionId] = useState('Q3');
+  const [selectedFacultyFilter, setSelectedFacultyFilter] = useState('ALL'); // 'ALL' or faculty ID
+  const [selectedQuestionId, setSelectedQuestionId] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastSyncedTime, setLastSyncedTime] = useState(new Date());
 
   // Faculties List for Recipient Routing
   const [facultiesList, setFacultiesList] = useState([]);
@@ -271,11 +274,13 @@ export default function StudentPortalPage() {
             courseCode: c.code,
             courseName: c.name,
             courseSection: c.section,
-            faculty: c.faculty,
+            faculty: q.faculty || a.faculty || c.faculty,
             assignmentId: a.id,
             assignmentTitle: a.title,
+            assignmentType: q.assignmentType || a.assignmentType || 'code',
             dueDate: a.dueDate,
-            totalMarks: a.totalMarks
+            totalMarks: a.totalMarks,
+            createdAt: q.createdAt || a.createdAt
           });
         });
       });
@@ -283,10 +288,66 @@ export default function StudentPortalPage() {
     return list;
   }, [coursesData]);
 
-  // Currently Active Question
-  const activeQuestion = allQuestions.find(q => q.id === selectedQuestionId || q.questionNumber === selectedQuestionId) || allQuestions[0] || INITIAL_COURSES[0].assignments[0].questions[0];
+  // Distinct Faculties List from both API and Courses Data
+  const distinctFaculties = React.useMemo(() => {
+    const map = new Map();
+    facultiesList.forEach(f => {
+      if (f.id && !map.has(f.id)) {
+        map.set(f.id, {
+          id: f.id,
+          name: f.name,
+          email: f.email,
+          designation: f.designation || 'Faculty Member',
+          department: f.department || 'CSE'
+        });
+      }
+    });
+    allQuestions.forEach(q => {
+      if (q.faculty?.id && !map.has(q.faculty.id)) {
+        map.set(q.faculty.id, {
+          id: q.faculty.id,
+          name: q.faculty.name,
+          email: q.faculty.email,
+          designation: q.faculty.designation || 'Faculty Member',
+          department: q.faculty.department || 'CSE'
+        });
+      }
+    });
+    return Array.from(map.values());
+  }, [facultiesList, allQuestions]);
 
-  // Active Assigned Faculty (Default is the course instructor, but can be switched by student)
+  // Filtered Questions by Course Tab and Faculty Filter
+  const filteredQuestions = React.useMemo(() => {
+    return allQuestions.filter(q => {
+      const matchCourse = selectedCourseFilter === 'ALL' || q.courseCode === selectedCourseFilter;
+      const matchFaculty = selectedFacultyFilter === 'ALL' || 
+        q.faculty?.id === selectedFacultyFilter || 
+        (q.faculty?.email && q.faculty?.email.toLowerCase() === selectedFacultyFilter.toLowerCase());
+      return matchCourse && matchFaculty;
+    });
+  }, [allQuestions, selectedCourseFilter, selectedFacultyFilter]);
+
+  // Currently Active Question
+  const activeQuestion = filteredQuestions.find(q => q.id === selectedQuestionId || q.questionNumber === selectedQuestionId) ||
+    allQuestions.find(q => q.id === selectedQuestionId || q.questionNumber === selectedQuestionId) ||
+    filteredQuestions[0] ||
+    allQuestions[0] ||
+    INITIAL_COURSES[0].assignments[0].questions[0];
+
+  // Auto-select first question in filtered view if current selection is invalid or uninitialized
+  useEffect(() => {
+    if (filteredQuestions.length > 0) {
+      const existsInFiltered = filteredQuestions.some(q => q.id === selectedQuestionId || q.questionNumber === selectedQuestionId);
+      if (!existsInFiltered || !selectedQuestionId) {
+        setSelectedQuestionId(filteredQuestions[0].id);
+        if (filteredQuestions[0].faculty?.id) {
+          setSelectedFacultyId(filteredQuestions[0].faculty.id);
+        }
+      }
+    }
+  }, [filteredQuestions, selectedQuestionId]);
+
+  // Active Assigned Faculty (Default is the question instructor, but can be switched by student)
   const defaultFaculty = activeQuestion?.faculty || {
     id: 'faculty-arpita',
     name: 'Dr. Arpita Sengupta',
@@ -298,52 +359,61 @@ export default function StudentPortalPage() {
   const activeRecipientFaculty = facultiesList.find(f => f.id === selectedFacultyId) || defaultFaculty;
 
   // Initialize and fetch real database coursework and faculty list
-  useEffect(() => {
-    async function initPortalData() {
-      try {
-        const [assignmentsResp, facultiesResp, feedbacksResp] = await Promise.allSettled([
-          apiClient.getStudentAssignments(),
-          apiClient.getFaculties(),
-          apiClient.getMyFeedbacks()
-        ]);
+  const fetchPortalData = async (isManual = false) => {
+    if (isManual) setIsRefreshing(true);
+    try {
+      const [assignmentsResp, facultiesResp, feedbacksResp] = await Promise.allSettled([
+        apiClient.getStudentAssignments(),
+        apiClient.getFaculties(),
+        apiClient.getMyFeedbacks()
+      ]);
 
-        if (facultiesResp.status === 'fulfilled' && Array.isArray(facultiesResp.value) && facultiesResp.value.length > 0) {
-          setFacultiesList(facultiesResp.value);
-        }
-
-        if (assignmentsResp.status === 'fulfilled' && Array.isArray(assignmentsResp.value) && assignmentsResp.value.length > 0) {
-          setCoursesData(assignmentsResp.value);
-        }
-
-        if (feedbacksResp.status === 'fulfilled' && Array.isArray(feedbacksResp.value)) {
-          const subMap = {};
-          feedbacksResp.value.forEach(fb => {
-            const qKey = fb.questionNumber || fb.questionId;
-            subMap[qKey] = {
-              id: fb.submissionId,
-              questionId: fb.questionId,
-              questionNumber: qKey,
-              answerText: fb.myAnswer,
-              isCorrect: fb.evaluation?.isCorrect,
-              isSolutionApproved: fb.isSolutionApproved,
-              submittedAt: fb.submittedAt ? new Date(fb.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently',
-              targetFacultyName: fb.targetFacultyName || 'Course Faculty',
-              diagnostic: {
-                isCorrect: fb.evaluation?.isCorrect,
-                identifiedLacking: fb.evaluation?.identifiedLacking,
-                feedback: fb.evaluation?.feedback,
-                recommendedAction: fb.evaluation?.recommendedAction
-              }
-            };
-          });
-          setSubmittedAnswers(subMap);
-        }
-      } catch (err) {
-        console.warn('Error loading student portal data:', err);
+      if (facultiesResp.status === 'fulfilled' && Array.isArray(facultiesResp.value) && facultiesResp.value.length > 0) {
+        setFacultiesList(facultiesResp.value);
       }
-    }
 
-    initPortalData();
+      if (assignmentsResp.status === 'fulfilled' && Array.isArray(assignmentsResp.value) && assignmentsResp.value.length > 0) {
+        setCoursesData(assignmentsResp.value);
+      }
+
+      if (feedbacksResp.status === 'fulfilled' && Array.isArray(feedbacksResp.value)) {
+        const subMap = {};
+        feedbacksResp.value.forEach(fb => {
+          const qKey = fb.questionNumber || fb.questionId;
+          subMap[qKey] = {
+            id: fb.submissionId,
+            questionId: fb.questionId,
+            questionNumber: qKey,
+            answerText: fb.myAnswer,
+            isCorrect: fb.evaluation?.isCorrect,
+            isSolutionApproved: fb.isSolutionApproved,
+            submittedAt: fb.submittedAt ? new Date(fb.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently',
+            targetFacultyName: fb.targetFacultyName || 'Course Faculty',
+            diagnostic: {
+              isCorrect: fb.evaluation?.isCorrect,
+              identifiedLacking: fb.evaluation?.identifiedLacking,
+              feedback: fb.evaluation?.feedback,
+              recommendedAction: fb.evaluation?.recommendedAction
+            }
+          };
+        });
+        setSubmittedAnswers(subMap);
+      }
+      setLastSyncedTime(new Date());
+    } catch (err) {
+      console.warn('Error loading student portal data:', err);
+    } finally {
+      if (isManual) setIsRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPortalData();
+    // Auto sync every 8 seconds to show newly published assignments instantly
+    const timer = setInterval(() => {
+      fetchPortalData(false);
+    }, 8000);
+    return () => clearInterval(timer);
   }, []);
 
   // Sync initial answer text for active question
@@ -427,11 +497,6 @@ export default function StudentPortalPage() {
 
   const currentSubmission = submittedAnswers[activeQuestion?.id] || submittedAnswers[activeQuestion?.questionNumber];
 
-  // Filtered Questions by Course Tab
-  const filteredQuestions = selectedCourseFilter === 'ALL'
-    ? allQuestions
-    : allQuestions.filter(q => q.courseCode === selectedCourseFilter);
-
   // Determine solution approval state
   const isSolutionApproved = activeQuestion?.isSolutionApproved || currentSubmission?.isSolutionApproved;
 
@@ -444,10 +509,25 @@ export default function StudentPortalPage() {
         className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 sm:p-7 rounded-3xl glass-surface-elevated border border-[#B49BDE]/30 dark:border-[#C4ABF0]/20 shadow-sm"
       >
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-300 text-xs font-semibold">
-            <GraduationCap className="w-3.5 h-3.5" />
-            <span>Student Assessment Portal — Multi-Course & Multi-Faculty Hub</span>
+          <div className="flex items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-300 text-xs font-semibold">
+              <GraduationCap className="w-3.5 h-3.5" />
+              <span>Student Assessment Portal — Multi-Course & Multi-Faculty Hub</span>
+            </div>
+            
+            <button
+              type="button"
+              onClick={() => fetchPortalData(true)}
+              disabled={isRefreshing}
+              className="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 text-[#6C5B82] dark:text-[#CAB7E4] transition-colors"
+              title="Sync & check for new assignments from faculty"
+            >
+              <div className={`w-3.5 h-3.5 flex items-center justify-center ${isRefreshing ? 'animate-spin' : ''}`}>
+                🔄
+              </div>
+            </button>
           </div>
+
           <h1 className="text-xl sm:text-2xl font-display font-bold text-[#231735] dark:text-[#FAF7FD]">
             Welcome, {studentName} 👋
           </h1>
@@ -458,7 +538,9 @@ export default function StudentPortalPage() {
             <span>•</span>
             <span>Semester: <strong className="text-[#231735] dark:text-[#FAF7FD]">{studentSemester}</strong></span>
             <span>•</span>
-            <span className="text-[#7847EB] dark:text-[#B388FF] font-semibold">Enrolled in 3 Active Departmental Courses</span>
+            <span className="text-[#7847EB] dark:text-[#B388FF] font-semibold">
+              Enrolled in {coursesData.length} Courses ({allQuestions.length} Total Assignments across {distinctFaculties.length} Instructors)
+            </span>
           </div>
         </div>
 
@@ -470,7 +552,7 @@ export default function StudentPortalPage() {
               <span>Submission Recipient</span>
             </span>
             <span className="text-[10px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold px-1.5 py-0.5 rounded">
-              Connected
+              Live Connected
             </span>
           </div>
           <div>
@@ -483,6 +565,69 @@ export default function StudentPortalPage() {
           </div>
         </div>
       </motion.div>
+
+      {/* Faculty Instructor Filter Bar */}
+      <div className="p-4 sm:p-5 rounded-3xl glass-surface border border-[#B49BDE]/20 dark:border-[#C4ABF0]/15 space-y-2.5">
+        <div className="flex items-center justify-between text-xs">
+          <span className="font-bold text-[#7847EB] dark:text-[#B388FF] uppercase tracking-wider flex items-center gap-1.5">
+            <Filter className="w-3.5 h-3.5" />
+            <span>Filter Coursework by Faculty Instructor</span>
+          </span>
+          <span className="text-[#6C5B82] dark:text-[#CAB7E4] text-[11px]">
+            {distinctFaculties.length} Faculty Members Available
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          <button
+            type="button"
+            onClick={() => setSelectedFacultyFilter('ALL')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              selectedFacultyFilter === 'ALL'
+                ? 'bg-gradient-to-r from-[#7847EB] to-[#9061F9] text-white shadow-md'
+                : 'bg-white/60 dark:bg-[#1E132D]/60 border border-[#B49BDE]/20 text-[#6C5B82] dark:text-[#CAB7E4] hover:border-[#7847EB]/40'
+            }`}
+          >
+            <span>👥 All Instructors</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/10 dark:bg-white/15">
+              {allQuestions.length}
+            </span>
+          </button>
+
+          {distinctFaculties.map(fac => {
+            const isSelected = selectedFacultyFilter === fac.id || selectedFacultyFilter === fac.email;
+            const facQuestionCount = allQuestions.filter(q => q.faculty?.id === fac.id || (q.faculty?.email && q.faculty?.email.toLowerCase() === fac.email.toLowerCase())).length;
+
+            return (
+              <button
+                key={fac.id || fac.email}
+                type="button"
+                onClick={() => {
+                  setSelectedFacultyFilter(fac.id);
+                  setSelectedFacultyId(fac.id);
+                }}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                  isSelected
+                    ? 'bg-gradient-to-r from-[#DB2777] to-[#EC4899] text-white shadow-md'
+                    : 'bg-white/60 dark:bg-[#1E132D]/60 border border-[#B49BDE]/20 text-[#6C5B82] dark:text-[#CAB7E4] hover:border-[#EC4899]/40'
+                }`}
+              >
+                <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${
+                  isSelected ? 'bg-white text-[#DB2777]' : 'bg-[#7847EB]/20 text-[#7847EB] dark:text-[#B388FF]'
+                }`}>
+                  {fac.name ? fac.name[0] : 'F'}
+                </div>
+                <span>{fac.name}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                  isSelected ? 'bg-white/20' : 'bg-black/5 dark:bg-white/10'
+                }`}>
+                  {facQuestionCount}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Multi-Course Filter Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[#B49BDE]/20">
@@ -514,7 +659,7 @@ export default function StudentPortalPage() {
                   : 'glass-surface border border-[#B49BDE]/20 text-[#6C5B82] dark:text-[#CAB7E4] hover:border-[#EC4899]/40'
               }`}
             >
-              <span>{course.code}: {course.name.split(' ')[0]}</span>
+              <span>{course.code}: {course.name?.split(' ')[0]}</span>
               <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
                 isSelected ? 'bg-white/20' : 'bg-black/5 dark:bg-white/10'
               }`}>
@@ -530,71 +675,100 @@ export default function StudentPortalPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-[#6C5B82] dark:text-[#CAB7E4]">
           <span className="font-bold text-[#7847EB] dark:text-[#B388FF] uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Select Coursework Assignment Question</span>
+            <span>Coursework Assignments Catalog</span>
           </span>
           <span className="font-medium bg-black/5 dark:bg-white/10 px-2.5 py-1 rounded-full self-start sm:self-auto">
             Showing {filteredQuestions.length} Questions across Multi-Faculty Instructors
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {filteredQuestions.map((q) => {
-            const isSelected = activeQuestion?.id === q.id;
-            const isDone = !!submittedAnswers[q.id] || !!submittedAnswers[q.questionNumber];
-            const qApproved = q.isSolutionApproved || submittedAnswers[q.id]?.isSolutionApproved;
+        {filteredQuestions.length === 0 ? (
+          <div className="p-8 text-center rounded-2xl bg-black/5 dark:bg-white/5 border border-dashed border-[#B49BDE]/30 space-y-2">
+            <p className="text-sm font-bold text-[#231735] dark:text-[#FAF7FD]">
+              No coursework questions found for current filter.
+            </p>
+            <p className="text-xs text-[#6C5B82] dark:text-[#CAB7E4]">
+              Try selecting "All Instructors" or "All Courses" above.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            {filteredQuestions.map((q) => {
+              const isSelected = activeQuestion?.id === q.id;
+              const isDone = !!submittedAnswers[q.id] || !!submittedAnswers[q.questionNumber];
+              const qApproved = q.isSolutionApproved || submittedAnswers[q.id]?.isSolutionApproved;
+              const isNew = q.id?.startsWith('q-') || (q.createdAt && (Date.now() - new Date(q.createdAt).getTime()) < 86400000 * 7);
 
-            return (
-              <button
-                key={q.id}
-                type="button"
-                onClick={() => {
-                  setSelectedQuestionId(q.id);
-                  setSubmissionSuccessMsg(null);
-                  if (q.faculty?.id) {
-                    setSelectedFacultyId(q.faculty.id);
-                  }
-                }}
-                className={`p-3.5 rounded-2xl text-left border transition-all relative overflow-hidden group ${
-                  isSelected
-                    ? 'bg-gradient-to-r from-[#7847EB]/15 to-[#EC4899]/15 border-[#EC4899] text-[#231735] dark:text-[#FAF7FD] shadow-sm'
-                    : 'glass-surface border-[#B49BDE]/20 text-[#6C5B82] dark:text-[#CAB7E4] hover:border-[#7847EB]/40'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className={`text-[10px] font-bold uppercase tracking-wider ${
-                    isSelected ? 'text-[#EC4899]' : 'text-[#7847EB] dark:text-[#B388FF]'
-                  }`}>
-                    {q.courseCode} • {q.questionNumber} ({q.marks})
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    {qApproved ? (
-                      <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                        <Unlock className="w-2.5 h-2.5" /> Model Open
-                      </span>
-                    ) : (
-                      <span className="text-[9px] font-semibold text-slate-400 bg-black/5 dark:bg-white/5 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                        <Lock className="w-2.5 h-2.5" /> Locked
-                      </span>
-                    )}
+              return (
+                <button
+                  key={q.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedQuestionId(q.id);
+                    setSubmissionSuccessMsg(null);
+                    if (q.faculty?.id) {
+                      setSelectedFacultyId(q.faculty.id);
+                    }
+                  }}
+                  className={`p-4 rounded-2xl text-left border transition-all relative overflow-hidden group flex flex-col justify-between gap-3 ${
+                    isSelected
+                      ? 'bg-gradient-to-r from-[#7847EB]/15 to-[#EC4899]/15 border-[#EC4899] text-[#231735] dark:text-[#FAF7FD] shadow-md ring-2 ring-[#EC4899]/20'
+                      : 'glass-surface border-[#B49BDE]/20 text-[#6C5B82] dark:text-[#CAB7E4] hover:border-[#7847EB]/40'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <span className={`text-[10px] font-bold uppercase tracking-wider ${
+                          isSelected ? 'text-[#EC4899]' : 'text-[#7847EB] dark:text-[#B388FF]'
+                        }`}>
+                          {q.courseCode} • {q.questionNumber}
+                        </span>
+                        {isNew && (
+                          <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-pink-500/20 text-[#EC4899] dark:text-[#F472B6]">
+                            ✨ NEW
+                          </span>
+                        )}
+                      </div>
 
-                    {isDone && (
-                      <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded-full">
-                        <Check className="w-2.5 h-2.5" />
-                      </span>
-                    )}
+                      <div className="flex items-center gap-1.5">
+                        {qApproved ? (
+                          <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                            <Unlock className="w-2.5 h-2.5" /> Model Open
+                          </span>
+                        ) : (
+                          <span className="text-[9px] font-semibold text-slate-400 bg-black/5 dark:bg-white/5 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                            <Lock className="w-2.5 h-2.5" /> Locked
+                          </span>
+                        )}
+
+                        {isDone && (
+                          <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded-full">
+                            <Check className="w-2.5 h-2.5" />
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <h3 className="text-xs font-bold line-clamp-2 text-[#231735] dark:text-[#FAF7FD] group-hover:text-[#7847EB] dark:group-hover:text-[#B388FF] transition-colors">
+                      {q.title}
+                    </h3>
                   </div>
-                </div>
 
-                <p className="text-xs font-bold truncate text-[#231735] dark:text-[#FAF7FD]">
-                  {q.title}
-                </p>
-                <p className="text-[10px] text-[#6C5B82] dark:text-[#CAB7E4] truncate mt-0.5">
-                  Instructor: {q.faculty?.name || 'Faculty Member'}
-                </p>
-              </button>
-            );
-          })}
-        </div>
+                  <div className="pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-[10px]">
+                    <span className="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 truncate max-w-[180px]">
+                      <UserCheck className="w-3 h-3 flex-shrink-0" />
+                      <span className="truncate">By: {q.faculty?.name || 'Faculty Member'}</span>
+                    </span>
+                    <span className="font-mono text-[#6C5B82] dark:text-[#CAB7E4]">
+                      {q.marks || '10 Marks'}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Submission Success Toast Banner */}
@@ -622,9 +796,9 @@ export default function StudentPortalPage() {
         {/* Left Column: Student Answer Submission & Reference Model */}
         <div className="space-y-6">
           <div className="p-6 rounded-3xl glass-surface-elevated border border-[#B49BDE]/30 dark:border-[#C4ABF0]/15 space-y-4">
-            {/* Header & Course Badge */}
-            <div>
-              <div className="flex items-center justify-between mb-1">
+            {/* Header & Assigned Faculty Banner */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#EC4899]">
                   {activeQuestion?.courseCode}: {activeQuestion?.questionNumber} — Student Solution
                 </span>
@@ -632,10 +806,31 @@ export default function StudentPortalPage() {
                   {activeQuestion?.marks} • Due: {activeQuestion?.dueDate || '2026-09-30'}
                 </span>
               </div>
-              <h2 className="text-base font-display font-bold text-[#231735] dark:text-[#FAF7FD]">
+
+              {/* Faculty Attribution Card */}
+              <div className="p-3 rounded-2xl bg-[#7847EB]/5 dark:bg-[#B388FF]/10 border border-[#7847EB]/20 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-[#7847EB] to-[#9061F9] text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                    {activeQuestion?.faculty?.name ? activeQuestion.faculty.name[0] : 'F'}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[#231735] dark:text-[#FAF7FD]">
+                      Assigned by: {activeQuestion?.faculty?.name || 'Course Faculty'}
+                    </p>
+                    <p className="text-[10px] text-[#6C5B82] dark:text-[#CAB7E4]">
+                      {activeQuestion?.faculty?.email} • {activeQuestion?.faculty?.department || 'CSE'}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                  {activeQuestion?.assignmentType || 'code'}
+                </span>
+              </div>
+
+              <h2 className="text-base font-display font-bold text-[#231735] dark:text-[#FAF7FD] pt-1">
                 {activeQuestion?.title}
               </h2>
-              <p className="text-xs text-[#6C5B82] dark:text-[#CAB7E4] mt-1 leading-relaxed">
+              <p className="text-xs text-[#6C5B82] dark:text-[#CAB7E4] leading-relaxed">
                 {activeQuestion?.prompt}
               </p>
             </div>

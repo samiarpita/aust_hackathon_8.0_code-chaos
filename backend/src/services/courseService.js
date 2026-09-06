@@ -27,6 +27,10 @@ class CourseService {
   async listStudentAssignments(studentId) {
     return await db.listStudentAssignments(studentId);
   }
+
+  async postAssignment(assignmentData) {
+    return await db.postAssignment(assignmentData);
+  }
 }
 
 module.exports = new CourseService();
