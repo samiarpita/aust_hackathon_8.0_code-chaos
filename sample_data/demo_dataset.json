@@ -1,0 +1,58 @@
+{
+  "course": {
+    "name": "Data Structures and Algorithms",
+    "code": "CSE 2100"
+  },
+  "exam": {
+    "title": "Midterm Examination Fall 2026"
+  },
+  "question": {
+    "question_number": "Q3",
+    "text": "Write a recursive function `Node* reverse(Node* head)` in C to reverse a singly linked list. Explain your base case condition and how pointer redirection works during the unwinding phase.",
+    "max_marks": 10
+  },
+  "clos": [
+    {
+      "code": "CLO-2",
+      "description": "Design recursive algorithms with correct boundary termination and state backtracking."
+    },
+    {
+      "code": "CLO-3",
+      "description": "Manipulate dynamic pointer structures without memory leaks or cyclic references."
+    }
+  ],
+  "submissions": [
+    {
+      "student_identifier": "Student 01",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}"
+    },
+    {
+      "student_identifier": "Student 02",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}"
+    },
+    {
+      "student_identifier": "Student 03",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next = head;\n  return rest;\n}"
+    },
+    {
+      "student_identifier": "Student 04",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head.next);\n  head.next.next = head;\n  return rest;\n}"
+    },
+    {
+      "student_identifier": "Student 05",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}"
+    },
+    {
+      "student_identifier": "Student 06",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  return head;\n}"
+    },
+    {
+      "student_identifier": "Student 07",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL) return NULL;\n  head->next = reverse(head->next);\n  return head;\n}"
+    },
+    {
+      "student_identifier": "Student 08",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* newHead = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return newHead;\n}"
+    }
+  ]
+}
