@@ -12,48 +12,168 @@ import {
   Loader2,
   CheckCircle2,
   HelpCircle,
-  Code
+  Code,
+  ShieldCheck,
+  Lock,
+  Unlock,
+  Layers
 } from 'lucide-react';
 import { useAnalysis } from '../context/AnalysisContext';
 import { MAX_UPLOAD_SIZE_MB, MAX_UPLOAD_BYTES, apiClient } from '../lib/api';
 import ConfirmationModal from '../components/ConfirmationModal';
 
+const PRESET_QUESTIONS = [
+  {
+    id: 'Q1',
+    label: 'CSE 2100: Q1 (Call Stack)',
+    course: 'CSE 2100',
+    prompt: "Explain recursion and why the base case terminates the call stack.",
+    correctAnswer: "A base case is a terminating condition in a recursive function that returns a value directly without making further recursive calls, preventing stack overflow.",
+    clos: [
+      "CLO 1: Understand call stack frame creation and unwinding",
+      "CLO 2: Prevent stack overflow in recursive definitions"
+    ],
+    sampleAnswers: [
+      "A base case is an if condition that stops recursion so the stack does not overflow.",
+      "Recursion keeps calling itself until memory runs out. The base case gives a return value.",
+      "Base case terminates the function. If there is no base case, the function runs forever and causes a stack overflow error.",
+      "Base case is when n==0, it returns 0. Without it, recursion continues infinitely on the call stack.",
+      "It is a condition that returns a value without making a recursive call, allowing stack frames to pop.",
+      "A base case is used to start the recursion from bottom to top.",
+      "Recursion does not need a base case if we use a for loop inside the function.",
+      "The base case returns a value directly to unwind the activation records stored on the call stack."
+    ]
+  },
+  {
+    id: 'Q2',
+    label: 'CSE 2100: Q2 (Memory Model)',
+    course: 'CSE 2100',
+    prompt: "Explain the difference between stack and heap memory allocation in C.",
+    correctAnswer: "Stack memory is automatically managed for local variables and function calls, while heap memory is manually allocated via malloc() and persists until freed.",
+    clos: [
+      "CLO 1: Understand memory allocation lifecycles",
+      "CLO 2: Manage dynamic heap pointers and avoid memory leaks"
+    ],
+    sampleAnswers: [
+      "Stack is fast and automatic for local variables. Heap is used with malloc() for dynamic memory.",
+      "Stack memory is for functions and local variables. Heap is for dynamic memory that stays until free() is called.",
+      "Stack memory is allocated dynamically with malloc and heap is static variables.",
+      "Stack has fixed size and manages function call frames. Heap is larger and we must free the memory ourselves.",
+      "Heap memory is automatically deleted when function exits, but stack memory persists forever.",
+      "Stack variables are destroyed when function returns, while heap memory must be freed with free().",
+      "Stack memory uses pointers and heap memory does not use any pointers.",
+      "Stack frames are deallocated automatically upon return, while heap memory requires explicit deallocation."
+    ]
+  },
+  {
+    id: 'Q3',
+    label: 'CSE 2100: Q3 (List Reversal)',
+    course: 'CSE 2100',
+    prompt: "Explain how the base case works in recursion and write a recursive function Node* reverse(Node* head) in C to reverse a singly linked list.",
+    correctAnswer: `Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}`,
+    clos: [
+      "CLO 1: Understand recursion boundary conditions",
+      "CLO 2: Analyze dynamic pointer manipulation"
+    ],
+    sampleAnswers: [
+      "Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "Node* reverse(Node* head) {\n  if (head == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next = NULL;\n  return rest;\n}",
+      "Node* reverse(Node* head) {\n  while(head != NULL) {\n    Node* next = head->next;\n    head->next = prev;\n    prev = head;\n    head = next;\n  }\n  return prev;\n}",
+      "Node* reverse(Node* head) {\n  if (head == NULL) return NULL;\n  if (head->next == NULL) return head;\n  Node* newHead = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return newHead;\n}",
+      "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}"
+    ]
+  },
+  {
+    id: 'Q4_ALGO1',
+    label: 'CSE 2201: Q4 (Master Theorem)',
+    course: 'CSE 2201',
+    prompt: "State the Master Theorem conditions. Solve T(n) = 2T(n/2) + O(n) and state the tight asymptotic bound with explanation.",
+    correctAnswer: "Using Master Theorem: T(n) = aT(n/b) + f(n)\na = 2, b = 2 => log_b(a) = log_2(2) = 1.\nf(n) = O(n) = Theta(n^1).\nThis matches Case 2: f(n) = Theta(n^{log_b(a)}).\nTherefore, T(n) = Theta(n^{log_b(a)} * log n) = Theta(n log n).",
+    clos: [
+      "CLO 1: Formulate and solve recurrence relations using asymptotic analysis"
+    ],
+    sampleAnswers: [
+      "T(n) = 2T(n/2) + O(n)\nHere a=2, b=2, f(n)=n. Since a=b, time complexity is O(n^2).",
+      "Using Master Theorem Case 2: a=2, b=2, log2(2)=1, so f(n)=n matches n^1. Complexity is Theta(n log n).",
+      "T(n) = O(n) because at each step we do linear work and divide the array into halves.",
+      "By Master theorem Case 2, T(n) = Theta(n log n) because work per level is constant across tree depth."
+    ]
+  },
+  {
+    id: 'Q5_ALGO2',
+    label: 'CSE 2201: Q5 (0/1 Knapsack DP)',
+    course: 'CSE 2201',
+    prompt: "Explain why greedy choice fails for 0/1 Knapsack. Write the dynamic programming state transition dp[i][w] to find maximum value with capacity W and items {wt[i], val[i]}.",
+    correctAnswer: "Greedy choice fails because items cannot be fractionally divided.\nDP Transition:\nif wt[i-1] <= w:\n  dp[i][w] = max(val[i-1] + dp[i-1][w - wt[i-1]], dp[i-1][w])\nelse:\n  dp[i][w] = dp[i-1][w]",
+    clos: [
+      "CLO 3: Synthesize dynamic programming states and distinguish overlapping subproblems from greedy choice"
+    ],
+    sampleAnswers: [
+      "dp[i][w] = dp[i-1][w] + val[i];\nWe pick the item with highest val/weight ratio greedily.",
+      "Greedy fails because taking high ratio items can leave empty weight. DP transition takes max(include, exclude).",
+      "dp[i][w] = max(val[i-1] + dp[i-1][w - wt[i-1]], dp[i-1][w]) when weight fits.",
+      "Greedy choice always works if we sort items by value per weight descending."
+    ]
+  },
+  {
+    id: 'Q6_DBMS1',
+    label: 'CSE 3103: Q6 (3NF vs BCNF)',
+    course: 'CSE 3103',
+    prompt: "Given relation R(A, B, C, D) with FDs: AB -> C, C -> D, D -> A. Find all candidate keys and determine whether R is in 3NF and BCNF.",
+    correctAnswer: "Candidate Keys: AB, BC, BD.\nPrime attributes: A, B, C, D (all attributes are prime!).\n3NF check: All FDs have prime RHS => R is in 3NF.\nBCNF check: For C -> D, C is not a superkey => R is NOT in BCNF.",
+    clos: [
+      "CLO 2: Evaluate functional dependencies and perform loss-less relational decompositions"
+    ],
+    sampleAnswers: [
+      "Candidate key is {A, B}. Since all attributes are in keys, R is in BCNF.",
+      "Keys are AB, BC, BD. All attributes are prime so it is in 3NF, but C->D violates BCNF because C is not a superkey.",
+      "R is not in 3NF because there are transitive dependencies C->D and D->A.",
+      "Candidate keys are AB and BC. R is in 3NF and BCNF."
+    ]
+  }
+];
+
 export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = null }) {
   const { analyze, isAnalyzing, demoDataset } = useAnalysis();
 
-  // Question selection / input
+  // Selected question preset
   const [selectedPresetQ, setSelectedPresetQ] = useState(initialDataset?.selectedQ || 'Q3');
+  const [selectedCourse, setSelectedCourse] = useState('CSE 2100');
+
+  // Question & Solution text
   const [questionText, setQuestionText] = useState(
     initialDataset?.questionText || 
     "Explain how the base case works in recursion and write a recursive function Node* reverse(Node* head) in C to reverse a singly linked list."
   );
-
-  // Faculty correct answer field
   const [correctAnswer, setCorrectAnswer] = useState(
     `Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}`
   );
 
-  // CLOs state
+  // CLOs
   const [clos, setClos] = useState(initialDataset?.clos || [
     "CLO 1: Understand recursion boundary conditions",
     "CLO 2: Analyze dynamic pointer manipulation"
   ]);
   const [newCloInput, setNewCloInput] = useState('');
 
-  // Student answers state
+  // Release solution to students checkbox
+  const [autoApproveSolution, setAutoApproveSolution] = useState(false);
+
+  // Answers text
   const [answersText, setAnswersText] = useState(initialDataset ? initialDataset.answers?.join('\n---\n') : demoDataset.answers.join('\n---\n'));
   const [fileError, setFileError] = useState(null);
   const [formError, setFormError] = useState(null);
   const [syncNotice, setSyncNotice] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  // Live portal submissions state
+  // Live submissions
   const [livePortalSubmissions, setLivePortalSubmissions] = useState([]);
   const [isLoadingLiveSubmissions, setIsLoadingLiveSubmissions] = useState(false);
 
   const fileInputRef = useRef(null);
 
-  // Fetch live submissions from students for the selected question
+  // Fetch live student submissions
   const fetchLiveSubmissions = React.useCallback(async (qKey) => {
     setIsLoadingLiveSubmissions(true);
     try {
@@ -76,7 +196,7 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
     }
   }, [initialDataset]);
 
-  // Parse student answers
+  // Parse answers
   const parsedAnswers = React.useMemo(() => {
     if (!answersText.trim()) return [];
     if (answersText.includes('---')) {
@@ -87,50 +207,17 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
 
   const isValid = questionText.trim().length > 0 && parsedAnswers.length >= 2;
 
-  // Preset question switcher
-  const handleSelectPreset = (q) => {
-    setSelectedPresetQ(q);
-    fetchLiveSubmissions(q);
-    if (q === 'Q1') {
-      setQuestionText("Explain recursion and why the base case terminates the call stack.");
-      setCorrectAnswer("A base case is a terminating condition in a recursive function that returns a value directly without making further recursive calls, preventing stack overflow.");
-      setClos([
-        "CLO 1: Understand call stack frame creation and unwinding",
-        "CLO 2: Prevent stack overflow in recursive definitions"
-      ]);
-      setAnswersText([
-        "A base case is an if condition that stops recursion so the stack does not overflow.",
-        "Recursion keeps calling itself until memory runs out. The base case gives a return value.",
-        "Base case terminates the function. If there is no base case, the function runs forever and causes a stack overflow error.",
-        "Base case is when n==0, it returns 0. Without it, recursion continues infinitely on the call stack.",
-        "It is a condition that returns a value without making a recursive call, allowing stack frames to pop.",
-        "A base case is used to start the recursion from bottom to top.",
-        "Recursion does not need a base case if we use a for loop inside the function.",
-        "The base case returns a value directly to unwind the activation records stored on the call stack."
-      ].join('\n---\n'));
-    } else if (q === 'Q2') {
-      setQuestionText("Explain the difference between stack and heap memory allocation in C.");
-      setCorrectAnswer("Stack memory is automatically managed for local variables and function calls, while heap memory is manually allocated via malloc() and persists until freed.");
-      setClos([
-        "CLO 1: Understand memory allocation lifecycles",
-        "CLO 2: Manage dynamic heap pointers and avoid memory leaks"
-      ]);
-      setAnswersText([
-        "Stack is fast and automatic for local variables. Heap is used with malloc() for dynamic memory.",
-        "Stack memory is for functions and local variables. Heap is for dynamic memory that stays until free() is called.",
-        "Stack memory is allocated dynamically with malloc and heap is static variables.",
-        "Stack has fixed size and manages function call frames. Heap is larger and we must free the memory ourselves.",
-        "Heap memory is automatically deleted when function exits, but stack memory persists forever.",
-        "Stack variables are destroyed when function returns, while heap memory must be freed with free().",
-        "Stack memory uses pointers and heap memory does not use any pointers.",
-        "Stack frames are deallocated automatically upon return, while heap memory requires explicit deallocation."
-      ].join('\n---\n'));
-    } else {
-      setQuestionText(demoDataset.questionText);
-      setCorrectAnswer(`Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}`);
-      setClos(demoDataset.clos);
-      setAnswersText(demoDataset.answers.join('\n---\n'));
-    }
+  // Preset selector
+  const handleSelectPreset = (qKey) => {
+    setSelectedPresetQ(qKey);
+    fetchLiveSubmissions(qKey);
+
+    const preset = PRESET_QUESTIONS.find(p => p.id === qKey) || PRESET_QUESTIONS[2];
+    setSelectedCourse(preset.course);
+    setQuestionText(preset.prompt);
+    setCorrectAnswer(preset.correctAnswer);
+    setClos(preset.clos);
+    setAnswersText(preset.sampleAnswers.join('\n---\n'));
   };
 
   const handleLoadLiveSubmissions = async () => {
@@ -142,12 +229,8 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
         if (liveTexts.length > 0) {
           let finalAnswers = liveTexts;
           if (finalAnswers.length < 2) {
-            const fallback = selectedPresetQ === 'Q1' 
-              ? ["A base case is an if condition that stops recursion so the stack does not overflow."]
-              : selectedPresetQ === 'Q2'
-              ? ["Stack is fast and automatic for local variables. Heap is used with malloc() for dynamic memory."]
-              : ["Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}"];
-            finalAnswers = [...finalAnswers, ...fallback];
+            const preset = PRESET_QUESTIONS.find(p => p.id === selectedPresetQ) || PRESET_QUESTIONS[2];
+            finalAnswers = [...finalAnswers, ...preset.sampleAnswers.slice(0, 2)];
           }
           setAnswersText(finalAnswers.join('\n---\n'));
           setSyncNotice(`✓ Synced ${data.length} live submissions from student portal for ${selectedPresetQ}!`);
@@ -175,13 +258,6 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
 
   const handleRemoveClo = (index) => {
     setClos(clos.filter((_, i) => i !== index));
-  };
-
-  // Pre-fill demo data
-  const handleLoadSample = () => {
-    handleSelectPreset('Q3');
-    setFormError(null);
-    setFileError(null);
   };
 
   // Handle CSV upload
@@ -217,6 +293,15 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
   const executeAnalysis = async () => {
     setFormError(null);
     try {
+      // If faculty chose to approve solution upon analysis
+      if (autoApproveSolution) {
+        try {
+          await apiClient.approveQuestionSolution(selectedPresetQ, true);
+        } catch (e) {
+          console.warn('Could not auto-approve solution:', e);
+        }
+      }
+
       const result = await analyze({
         questionText: questionText.trim(),
         clos,
@@ -259,13 +344,13 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
             New Misconception Analysis
           </h1>
           <p className="text-xs sm:text-sm text-[#6C5B82] dark:text-[#CAB7E4] mt-1">
-            Faculty assessment flow: question setup, correct reference model, and student batch analysis.
+            Faculty assessment flow: course assignment, correct reference model, and student batch evaluation.
           </p>
         </div>
 
         <button
           type="button"
-          onClick={handleLoadSample}
+          onClick={() => handleSelectPreset('Q3')}
           className="px-4 py-2 rounded-xl glass-surface-elevated hover:border-[#7847EB]/40 text-[#7847EB] dark:text-[#B388FF] text-xs font-semibold flex items-center gap-2 self-start sm:self-auto transition-all"
         >
           <Sparkles className="w-3.5 h-3.5" />
@@ -297,52 +382,33 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
       ) : (
         /* Step-by-Step Form */
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Step 1 — Question Selection & Prompt */}
+          {/* Step 1 — Question Selection & Course Context */}
           <div className="p-6 sm:p-7 rounded-3xl glass-surface-elevated border border-[#B49BDE]/30 dark:border-[#C4ABF0]/15 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
               <label className="block text-sm font-display font-bold text-[#231735] dark:text-[#FAF7FD]">
-                Step 1 — Select or Enter Exam Question <span className="text-rose-500">*</span>
+                Step 1 — Select Coursework Question <span className="text-rose-500">*</span>
               </label>
               <span className="text-xs text-[#6C5B82] dark:text-[#CAB7E4]">
-                Choose from exam or enter custom text
+                Multi-Course Faculty Presets
               </span>
             </div>
 
-            {/* Question Quick Selector */}
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                onClick={() => handleSelectPreset('Q1')}
-                className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all ${
-                  selectedPresetQ === 'Q1'
-                    ? 'bg-[#7847EB]/15 border-[#7847EB] text-[#7847EB] dark:text-[#B388FF]'
-                    : 'glass-surface border-[#B49BDE]/20 text-[#6C5B82] dark:text-[#CAB7E4]'
-                }`}
-              >
-                Q1 — Call Stack
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSelectPreset('Q2')}
-                className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all ${
-                  selectedPresetQ === 'Q2'
-                    ? 'bg-[#7847EB]/15 border-[#7847EB] text-[#7847EB] dark:text-[#B388FF]'
-                    : 'glass-surface border-[#B49BDE]/20 text-[#6C5B82] dark:text-[#CAB7E4]'
-                }`}
-              >
-                Q2 — Stack vs Heap
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSelectPreset('Q3')}
-                className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all ${
-                  selectedPresetQ === 'Q3'
-                    ? 'bg-[#7847EB]/15 border-[#7847EB] text-[#7847EB] dark:text-[#B388FF]'
-                    : 'glass-surface border-[#B49BDE]/20 text-[#6C5B82] dark:text-[#CAB7E4]'
-                }`}
-              >
-                Q3 — List Reversal
-              </button>
+            {/* Quick Preset Selector */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {PRESET_QUESTIONS.map(p => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => handleSelectPreset(p.id)}
+                  className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all text-left truncate ${
+                    selectedPresetQ === p.id
+                      ? 'bg-[#7847EB]/15 border-[#7847EB] text-[#7847EB] dark:text-[#B388FF] shadow-xs'
+                      : 'glass-surface border-[#B49BDE]/20 text-[#6C5B82] dark:text-[#CAB7E4] hover:border-[#7847EB]/30'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
             </div>
 
             <textarea
@@ -355,22 +421,24 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
             />
           </div>
 
-          {/* Step 2 — Faculty Correct Reference Answer */}
-          <div className="p-6 sm:p-7 rounded-3xl glass-surface-elevated border border-emerald-500/25 dark:border-emerald-500/20 shadow-sm space-y-3">
+          {/* Step 2 — Faculty Correct Reference Answer & Approval Setting */}
+          <div className="p-6 sm:p-7 rounded-3xl glass-surface-elevated border border-emerald-500/25 dark:border-emerald-500/20 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <label className="block text-sm font-display font-bold text-[#231735] dark:text-[#FAF7FD]">
-                  Step 2 — Faculty Correct / Reference Solution
+                  Step 2 — Faculty Benchmark Reference Solution
                 </label>
               </div>
               <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
-                Reference Model
+                Ground Truth Model
               </span>
             </div>
+
             <p className="text-xs text-[#6C5B82] dark:text-[#CAB7E4]">
-              Post the ideal answer or code solution. The AI uses this ground truth to identify conceptual deviation in student answers.
+              The AI uses this benchmark to evaluate conceptual deviations in student answers.
             </p>
+
             <textarea
               rows={4}
               value={correctAnswer}
@@ -378,6 +446,31 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
               placeholder="Paste the ideal solution or rubric criteria..."
               className="w-full p-3.5 rounded-2xl glass-input text-xs font-mono resize-y leading-relaxed"
             />
+
+            {/* Approval Toggle */}
+            <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-[#B49BDE]/20 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck className="w-4 h-4 text-[#7847EB] dark:text-[#B388FF]" />
+                <div>
+                  <p className="text-xs font-bold text-[#231735] dark:text-[#FAF7FD]">
+                    Release Reference Model to Students upon running analysis?
+                  </p>
+                  <p className="text-[11px] text-[#6C5B82] dark:text-[#CAB7E4]">
+                    If unchecked, the solution remains locked until you approve it from the dashboard.
+                  </p>
+                </div>
+              </div>
+
+              <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                <input 
+                  type="checkbox" 
+                  checked={autoApproveSolution}
+                  onChange={(e) => setAutoApproveSolution(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600"></div>
+              </label>
+            </div>
           </div>
 
           {/* Step 3 — Course Learning Outcomes */}
@@ -437,7 +530,7 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
             )}
           </div>
 
-          {/* Step 4 — Student Answers */}
+          {/* Step 4 — Student Answers Batch */}
           <div className="p-6 sm:p-7 rounded-3xl glass-surface-elevated border border-[#B49BDE]/30 dark:border-[#C4ABF0]/15 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
               <label className="block text-sm font-display font-bold text-[#231735] dark:text-[#FAF7FD]">
@@ -452,7 +545,7 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
                   className="px-3.5 py-1.5 rounded-xl bg-[#7847EB]/10 dark:bg-[#B388FF]/15 hover:bg-[#7847EB]/20 border border-[#7847EB]/30 text-xs font-semibold text-[#7847EB] dark:text-[#B388FF] flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isLoadingLiveSubmissions ? 'animate-spin' : ''}`} />
-                  <span>📥 Sync Live Student Portal Submissions ({livePortalSubmissions.length})</span>
+                  <span>📥 Sync Live Student Submissions ({livePortalSubmissions.length})</span>
                 </button>
 
                 <input
@@ -517,7 +610,7 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
               disabled={!isValid || isAnalyzing}
               className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#7847EB] to-[#9061F9] text-white font-semibold text-sm shadow-lg shadow-[#7847EB]/25 hover:shadow-xl hover:shadow-[#7847EB]/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
             >
-              <span>Analyze Answers →</span>
+              <span>Run Misconception Radar →</span>
             </button>
           </div>
         </form>

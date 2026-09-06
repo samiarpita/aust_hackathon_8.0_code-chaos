@@ -109,7 +109,7 @@ export const apiClient = {
     }
   },
 
-  async submitStudentAnswer({ questionId, answerText }) {
+  async submitStudentAnswer({ questionId, answerText, facultyId = null, facultyName = null, courseCode = null, assignmentTitle = null }) {
     const token = getAuthToken();
     const headers = {
       'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ export const apiClient = {
       const res = await fetch(`${API_BASE_URL}/api/submissions`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ questionId, answerText })
+        body: JSON.stringify({ questionId, answerText, facultyId, facultyName, courseCode, assignmentTitle })
       });
 
       if (!res.ok) {
@@ -139,10 +139,87 @@ export const apiClient = {
           id: `sub-${Date.now()}`,
           question_id: questionId,
           answer_text: answerText,
+          faculty_id: facultyId,
+          faculty_name: facultyName,
           created_at: new Date().toISOString()
         }
       };
     }
+  },
+
+  async getStudentAssignments() {
+    const token = getAuthToken();
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/courses/student-assignments`, { headers });
+      if (!res.ok) {
+        throw new Error(`Failed to retrieve student assignments (${res.status})`);
+      }
+      return await res.json();
+    } catch (networkError) {
+      console.warn("Backend error fetching student assignments:", networkError);
+      return [];
+    }
+  },
+
+  async getFaculties() {
+    const token = getAuthToken();
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/courses/faculties`, { headers });
+      if (!res.ok) {
+        throw new Error(`Failed to retrieve faculty list (${res.status})`);
+      }
+      return await res.json();
+    } catch (networkError) {
+      console.warn("Backend error fetching faculty list:", networkError);
+      return [];
+    }
+  },
+
+  async approveQuestionSolution(questionId, isApproved = true) {
+    const token = getAuthToken();
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const res = await fetch(`${API_BASE_URL}/api/questions/${encodeURIComponent(questionId)}/approve`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ isApproved })
+    });
+
+    if (!res.ok) {
+      const errJson = await res.json().catch(() => ({}));
+      throw new Error(errJson.error || `Failed to update solution approval (${res.status})`);
+    }
+
+    return await res.json();
+  },
+
+  async getQuestion(questionId) {
+    const token = getAuthToken();
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const res = await fetch(`${API_BASE_URL}/api/questions/${encodeURIComponent(questionId)}`, { headers });
+    if (!res.ok) {
+      throw new Error(`Failed to get question (${res.status})`);
+    }
+    return await res.json();
   },
 
   async getMyFeedbacks() {

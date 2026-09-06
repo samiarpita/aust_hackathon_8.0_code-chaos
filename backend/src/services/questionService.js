@@ -66,6 +66,17 @@ class QuestionService {
       uploadedCount: answersToInsert.length
     };
   }
+
+  async approveSolution(questionId, isApproved = true) {
+    const updated = await db.setQuestionSolutionApproval({
+      questionId,
+      isApproved: Boolean(isApproved)
+    });
+    return {
+      message: `Question solution ${isApproved ? 'approved and unlocked for students' : 'locked and hidden from students'}`,
+      question: updated
+    };
+  }
 }
 
 module.exports = new QuestionService();

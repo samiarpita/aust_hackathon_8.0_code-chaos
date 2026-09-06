@@ -21,14 +21,34 @@
       "passwordHash": "$2b$10$lifLUSdn2/1SGNi9Zd.88O.cR27UgUMdKxBf1BLFDQlR.fE02GjcW"
     },
     {
-      "id": "c70518e0-83d6-4422-ab2c-3fa080820ec0",
+      "id": "7c5f4e19-5704-4bc3-a954-6360bb44074a",
       "email": "sarah.faculty@aust.edu",
-      "passwordHash": "$2b$10$g6ZNM1yBRAW8iIAoX3ifl.0Gsc5iZ1zYb.IrvEuYkBKxj5j3KIQG6"
+      "passwordHash": "$2b$10$lAwop3pe86H0yAsC3yJ0DunFEjDpMwOqsMicsOFR39JlwcDJQmdte"
     },
     {
-      "id": "febe11e6-557e-4a4f-8094-88dd92f8c6a1",
+      "id": "d067a63d-28dc-4642-b023-97885286048d",
       "email": "alex.student@aust.edu",
-      "passwordHash": "$2b$10$dq/UCXNwkzsuSoBTBrxvDeVoF2lddE8PkvK6s00/52TgukhkWj4iS"
+      "passwordHash": "$2b$10$POaRU26xQcxsA9kucwfru.n51gxNAYV6Ki7E872Uzh8qL0cng16za"
+    },
+    {
+      "id": "faculty-arpita",
+      "email": "arpita.cse@aust.edu",
+      "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
+    },
+    {
+      "id": "faculty-alex",
+      "email": "alex.chen@aust.edu",
+      "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
+    },
+    {
+      "id": "user-faculty-demo",
+      "email": "faculty.demo@aust.edu",
+      "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
+    },
+    {
+      "id": "user-student-demo",
+      "email": "student.demo@aust.edu",
+      "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
     }
   ],
   "profiles": [
@@ -77,26 +97,73 @@
       "updated_at": "2026-09-06T08:05:25.772Z"
     },
     {
-      "id": "c70518e0-83d6-4422-ab2c-3fa080820ec0",
+      "id": "7c5f4e19-5704-4bc3-a954-6360bb44074a",
       "email": "sarah.faculty@aust.edu",
       "name": "Dr. Sarah Connor",
       "role": "faculty",
       "student_id_number": null,
       "semester": null,
       "department": "Department of CSE",
-      "created_at": "2026-09-06T08:20:02.762Z",
-      "updated_at": "2026-09-06T08:20:02.762Z"
+      "created_at": "2026-09-06T09:08:59.166Z",
+      "updated_at": "2026-09-06T09:08:59.166Z"
     },
     {
-      "id": "febe11e6-557e-4a4f-8094-88dd92f8c6a1",
+      "id": "d067a63d-28dc-4642-b023-97885286048d",
       "email": "alex.student@aust.edu",
       "name": "Alex Rivera",
       "role": "student",
       "student_id_number": "20210104001",
       "semester": "Fall 2026",
       "department": null,
-      "created_at": "2026-09-06T08:20:02.912Z",
-      "updated_at": "2026-09-06T08:20:02.912Z"
+      "created_at": "2026-09-06T09:08:59.314Z",
+      "updated_at": "2026-09-06T09:08:59.314Z"
+    },
+    {
+      "id": "faculty-arpita",
+      "email": "arpita.cse@aust.edu",
+      "name": "Dr. Arpita Sengupta",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Computer Science & Engineering",
+      "designation": "Associate Professor",
+      "created_at": "2026-09-06T09:16:25.532Z",
+      "updated_at": "2026-09-06T09:16:25.532Z"
+    },
+    {
+      "id": "faculty-alex",
+      "email": "alex.chen@aust.edu",
+      "name": "Prof. Alex Chen",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Computer Science & Engineering",
+      "designation": "Professor & Head of Dept.",
+      "created_at": "2026-09-06T09:16:25.532Z",
+      "updated_at": "2026-09-06T09:16:25.532Z"
+    },
+    {
+      "id": "user-faculty-demo",
+      "email": "faculty.demo@aust.edu",
+      "name": "Dr. Arpita Sengupta",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Computer Science & Engineering",
+      "designation": "Associate Professor",
+      "created_at": "2026-09-06T09:16:25.532Z",
+      "updated_at": "2026-09-06T09:16:25.532Z"
+    },
+    {
+      "id": "user-student-demo",
+      "email": "student.demo@aust.edu",
+      "name": "Samia Arpita",
+      "role": "student",
+      "student_id_number": "20220104001",
+      "semester": "4.1",
+      "department": "Computer Science & Engineering",
+      "created_at": "2026-09-06T09:16:25.532Z",
+      "updated_at": "2026-09-06T09:16:25.532Z"
     }
   ],
   "courses": [
@@ -139,6 +206,22 @@
       "code": "CSE 2201",
       "created_at": "2026-09-06T08:20:03.385Z",
       "updated_at": "2026-09-06T08:20:03.385Z"
+    },
+    {
+      "id": "55277399-60b8-48f3-9e7f-40b3edf2fdd2",
+      "faculty_id": "7c5f4e19-5704-4bc3-a954-6360bb44074a",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2201",
+      "created_at": "2026-09-06T09:08:59.788Z",
+      "updated_at": "2026-09-06T09:08:59.788Z"
+    },
+    {
+      "id": "course-cse3103",
+      "faculty_id": "faculty-sarah",
+      "name": "Database Management Systems",
+      "code": "CSE 3103",
+      "created_at": "2026-09-06T09:16:25.372Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
     }
   ],
   "enrollments": [],
@@ -177,6 +260,58 @@
       "title": "Midterm Exam Fall 2026",
       "created_at": "2026-09-06T08:20:03.396Z",
       "updated_at": "2026-09-06T08:20:03.396Z"
+    },
+    {
+      "id": "e2474b1f-15ac-462d-a686-d11fb139e202",
+      "course_id": "55277399-60b8-48f3-9e7f-40b3edf2fdd2",
+      "title": "Midterm Exam Fall 2026",
+      "created_at": "2026-09-06T09:08:59.800Z",
+      "updated_at": "2026-09-06T09:08:59.800Z"
+    },
+    {
+      "id": "exam-cse2100-a1",
+      "course_id": "course-cse2100",
+      "title": "Assignment 1: Recursion & Call Stack Boundary Conditions",
+      "due_date": "2026-09-15",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "exam-cse2201-a1",
+      "course_id": "course-cse2201",
+      "title": "Assignment 1: Divide & Conquer Recurrences (Master Theorem)",
+      "due_date": "2026-09-18",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "exam-cse2201-a2",
+      "course_id": "course-cse2201",
+      "title": "Assignment 2: Dynamic Programming & 0/1 Knapsack Formulations",
+      "due_date": "2026-09-28",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "exam-cse3103-a1",
+      "course_id": "course-cse3103",
+      "title": "Assignment 1: Relational Schema Normalization (3NF & BCNF)",
+      "due_date": "2026-09-16",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "exam-cse3103-a2",
+      "course_id": "course-cse3103",
+      "title": "Assignment 2: ACID Transactions & Strict 2-Phase Locking",
+      "due_date": "2026-09-30",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
     }
   ],
   "questions": [
@@ -187,7 +322,9 @@
       "text": "Explain recursion and why the base case terminates the call stack.",
       "correct_answer": "A base case is a terminating condition in a recursive function that returns a value directly without making further recursive calls, preventing stack overflow.",
       "max_marks": 5,
-      "created_at": "2026-09-06T07:59:10.546Z"
+      "created_at": "2026-09-06T07:59:10.546Z",
+      "is_solution_approved": true,
+      "updated_at": "2026-09-06T09:16:48.696Z"
     },
     {
       "id": "Q2",
@@ -260,6 +397,55 @@
       "correct_answer": "A recursive function calls itself on smaller inputs until reaching a base case condition which stops further recursive calls and returns the base result.",
       "max_marks": 10,
       "created_at": "2026-09-06T08:20:03.419Z"
+    },
+    {
+      "id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "exam_id": "e2474b1f-15ac-462d-a686-d11fb139e202",
+      "question_number": "Q3",
+      "text": "Explain recursion and the importance of a base case.",
+      "correct_answer": "A recursive function calls itself on smaller inputs until reaching a base case condition which stops further recursive calls and returns the base result.",
+      "max_marks": 10,
+      "created_at": "2026-09-06T09:08:59.821Z"
+    },
+    {
+      "id": "Q4_ALGO1",
+      "exam_id": "exam-cse2201-a1",
+      "question_number": "Q4",
+      "text": "State the Master Theorem conditions. Solve T(n) = 2T(n/2) + O(n) and state the tight asymptotic bound with explanation.",
+      "correct_answer": "Using Master Theorem: T(n) = aT(n/b) + f(n)\na = 2, b = 2 => log_b(a) = log_2(2) = 1.\nf(n) = O(n) = Theta(n^1).\nThis matches Case 2: f(n) = Theta(n^{log_b(a)}).\nTherefore, T(n) = Theta(n^{log_b(a)} * log n) = Theta(n log n).",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "Q5_ALGO2",
+      "exam_id": "exam-cse2201-a2",
+      "question_number": "Q5",
+      "text": "Explain why greedy choice fails for 0/1 Knapsack. Write the dynamic programming state transition dp[i][w] to find maximum value with capacity W and items {wt[i], val[i]}.",
+      "correct_answer": "Greedy choice fails because items cannot be fractionally divided, so taking highest ratio may leave unused capacity that could hold a more valuable combination.\nDP Transition:\nif wt[i-1] <= w:\n  dp[i][w] = max(val[i-1] + dp[i-1][w - wt[i-1]], dp[i-1][w])\nelse:\n  dp[i][w] = dp[i-1][w]",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "Q6_DBMS1",
+      "exam_id": "exam-cse3103-a1",
+      "question_number": "Q6",
+      "text": "Given relation R(A, B, C, D) with FDs: AB -> C, C -> D, D -> A. Find all candidate keys and determine whether R is in 3NF and BCNF.",
+      "correct_answer": "1. Closures:\n(AB)+ = {A,B,C,D} => AB is a key.\n(BC)+ = {B,C,D,A} => BC is a key.\n(BD)+ = {B,D,A,C} => BD is a key.\nCandidate Keys: AB, BC, BD.\nPrime attributes: A, B, C, D (all attributes are prime!).\n2. 3NF check: For each FD X -> Y, either X is superkey or Y is prime. All FDs have prime RHS => R is in 3NF.\n3. BCNF check: For C -> D, C is not a superkey => R is NOT in BCNF.",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "Q7_DBMS2",
+      "exam_id": "exam-cse3103-a2",
+      "question_number": "Q7",
+      "text": "Explain the difference between Standard 2PL and Strict 2PL. How does Strict 2PL prevent cascading aborts?",
+      "correct_answer": "Standard 2PL has a growing phase (acquire locks) and shrinking phase (release locks anytime before commit).\nStrict 2PL requires all exclusive (X) locks to be held until the transaction explicitly COMMITS or ABORTS.\nHow it prevents cascading aborts: No other transaction can read uncommitted dirty data written by T. If T aborts, no other transaction has read its intermediate values, eliminating cascading rollbacks.",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:16:25.373Z"
     }
   ],
   "clos": [
@@ -325,6 +511,13 @@
       "code": "CLO-2",
       "description": "Design recursive algorithms with base case termination.",
       "created_at": "2026-09-06T08:20:03.419Z"
+    },
+    {
+      "id": "e50ec38f-5887-4526-8147-2a1d5984b3a9",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "code": "CLO-2",
+      "description": "Design recursive algorithms with base case termination.",
+      "created_at": "2026-09-06T09:08:59.822Z"
     }
   ],
   "submissions": [
@@ -334,11 +527,16 @@
       "student_id": "5cc1d89a-82ee-42a8-8be6-2f156e443e7d",
       "student_name": "Tonima",
       "student_identifier": "Tonima",
-      "answer_text": "// Question 1: Memory Allocation (First Fit & Worst Fit)\n#include <iostream>\nusing namespace std;\n\nvoid firstFitFunc(int block[], int nBlocks, int process[], int nProcesses) {\n    int blockCopy[nBlocks];\n    int allocation[nProcesses];\n\n    for (int i = 0; i < nBlocks; i++) {\n        blockCopy[i] = block[i];\n    }\n    for (int i = 0; i < nProcesses; i++) {\n        allocation[i] = -1;\n    }\n\n    for (int i = 0; i < nProcesses; i++) {\n        for (int j = 0; j < nBlocks; j++) {\n            if (blockCopy[j] >= process[i]) {\n                allocation[i] = j;\n                blockCopy[j] -= process[i];\n                break;\n            }\n        }\n    }\n\n    cout << \"\\nFirst Fit Allocation:\\n\";\n    for (int i = 0; i < nProcesses; i++) {\n        cout << \"P\" << i + 1 << \" (\" << process[i] << \") -> \";\n        if (allocation[i] != -1)\n            cout << \"Block \" << allocation[i] + 1;\n        else\n            cout << \"Not Allocated\";\n        cout << endl;\n    }\n}\n\nvoid worstFitFunc(int block[], int nBlocks, int process[], int nProcesses) {\n    int blockCopy[nBlocks];\n    int allocation[nProcesses];\n\n    for (int i = 0; i < nBlocks; i++) {\n        blockCopy[i] = block[i];\n    }\n    for (int i = 0; i < nProcesses; i++) {\n        allocation[i] = -1;\n    }\n\n    for (int i = 0; i < nProcesses; i++) {\n        int worstIndex = -1;\n\n        for (int j = 0; j < nBlocks; j++) {\n            if (blockCopy[j] >= process[i]) {\n\n                if (worstIndex == -1 || blockCopy[j] > blockCopy[worstIndex]) {\n                    worstIndex = j;\n                }\n            }\n        }\n\n        if (worstIndex != -1) {\n            allocation[i] = worstIndex;\n            blockCopy[worstIndex] -= process[i];\n        }\n    }\n\n    cout << \"\\nWorst Fit Allocation:\\n\";\n    for (int i = 0; i < nProcesses; i++) {\n        cout << \"P\" << i + 1 << \" (\" << process[i] << \") -> \";\n        if (allocation[i] != -1)\n            cout << \"Block \" << allocation[i] + 1;\n        else\n            cout << \"Not Allocated\";\n        cout << endl;\n    }\n}\n\nint main() {\n    int nBlocks, nProcesses;\n\n    cout << \"Enter number of memory blocks: \";\n    cin >> nBlocks;\n\n    int block[nBlocks];\n    cout << \"Enter block sizes:\\n\";\n    for (int i = 0; i < nBlocks; i++) {\n        cin >> block[i];\n    }\n\n    cout << \"Enter number of processes: \";\n    cin >> nProcesses;\n\n    int process[nProcesses];\n    cout << \"Enter process sizes:\\n\";\n    for (int i = 0; i < nProcesses; i++) {\n        cin >> process[i];\n    }\n\n    firstFitFunc(block, nBlocks, process, nProcesses);\n    worstFitFunc(block, nBlocks, process, nProcesses);\n\n    return 0;\n}",
-      "misconception_group": "Missing Call-Stack Unwinding Concept",
-      "feedback": "Your answer does not clearly explain how stack frames pop off the call stack when the terminating condition is met.",
-      "is_correct": false,
-      "created_at": "2026-09-06T08:12:12.761Z"
+      "answer_text": "int sum(int n) {\n  // Missing base case boundary check\n  return n + sum(n - 1);\n}",
+      "misconception_group": "Concept Mastered",
+      "feedback": "Excellent explanation! You correctly identified that the base case terminates recursive activation records to prevent stack overflow.",
+      "is_correct": true,
+      "created_at": "2026-09-06T08:12:12.761Z",
+      "faculty_id": "faculty-default",
+      "faculty_name": "Dr. Arpita Sengupta",
+      "course_code": "CSE 2100",
+      "assignment_title": "Midterm Examination Fall 2026",
+      "updated_at": "2026-09-06T09:19:09.415Z"
     },
     {
       "id": "78910299-dae2-44fb-90e5-ca26984d02db",
@@ -807,6 +1005,86 @@
       "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
       "is_correct": false,
       "created_at": "2026-09-06T08:20:03.463Z"
+    },
+    {
+      "id": "5f0f8e60-935a-4871-bdbf-8f1418792b30",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "student_id": "d067a63d-28dc-4642-b023-97885286048d",
+      "student_name": "Alex Rivera",
+      "student_identifier": "Alex Rivera",
+      "answer_text": "Recursion is when a function calls itself. If head == NULL return head, then reverse rest.",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:08:59.840Z"
+    },
+    {
+      "id": "570dbad5-6781-4b70-8ff7-71cbf67bc031",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL || head->next == NULL) return head; Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "created_at": "2026-09-06T09:08:59.862Z"
+    },
+    {
+      "id": "aa253fc1-c9fd-4455-9cc7-757206f3c9dd",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Node* reverse(Node* head) { Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:08:59.866Z"
+    },
+    {
+      "id": "759cced9-da0e-48e6-9921-46c906afcb8c",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL) return head; Node* rest = reverse(head->next); head->next = head; return rest; }",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:08:59.886Z"
+    },
+    {
+      "id": "e236ef1d-ab19-4cc9-98e9-1c3251b78149",
+      "question_id": "Q4_ALGO1",
+      "student_id": "user-student-demo",
+      "student_name": "Samia Arpita",
+      "student_identifier": "Samia Arpita",
+      "faculty_id": "faculty-alex",
+      "faculty_name": "Prof. Alex Chen",
+      "course_code": "CSE 2201",
+      "assignment_title": "Assignment 1: Divide & Conquer Recurrences (Master Theorem)",
+      "answer_text": "Using Master Theorem Case 2: a=2, b=2, log2(2)=1, so f(n)=n matches n^1. Complexity is Theta(n log n).",
+      "misconception_group": "Concept Mastered",
+      "feedback": "Spot on! You correctly recognized Master Theorem Case 2 with balanced work across levels yielding Theta(n log n).",
+      "is_correct": true,
+      "created_at": "2026-09-06T09:16:48.711Z"
+    },
+    {
+      "id": "089d457c-9c9f-4edf-a611-42b5d340a439",
+      "question_id": "Q2",
+      "student_id": "5cc1d89a-82ee-42a8-8be6-2f156e443e7d",
+      "student_name": "Tonima",
+      "student_identifier": "Tonima",
+      "faculty_id": "faculty-default",
+      "faculty_name": "Dr. Arpita Sengupta",
+      "course_code": "CSE 2100",
+      "assignment_title": "Midterm Examination Fall 2026",
+      "answer_text": "int* createArray() {\n  int arr[10];\n  // Flaw: returning local stack address\n  return arr;\n}",
+      "misconception_group": "Dangling Stack Memory Misconception",
+      "feedback": "Warning: Stack variables are invalidated upon function return. Returning a local stack address creates a dangling pointer.",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:19:26.525Z"
     }
   ],
   "analyses": [
@@ -965,6 +1243,27 @@
       "model_used": "gemini-1.5-pro",
       "total_submissions": 4,
       "created_at": "2026-09-06T08:20:03.534Z"
+    },
+    {
+      "id": "323b7cff-e4cb-4efd-aab9-18c687e27bb6",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "misconception_groups": [
+        {
+          "label": "Pointer cycle / Memory disconnection",
+          "percentage": 50,
+          "count": 2
+        },
+        {
+          "label": "Fully correct",
+          "percentage": 50,
+          "count": 2
+        }
+      ],
+      "insight": "Most students grasp the recursive step but fail to establish safe termination boundaries or detach pointers correctly.",
+      "intervention": "Spend 15 minutes reviewing recursion call stack diagrams and base-case design before the next topic.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T09:08:59.929Z"
     }
   ]
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   PlusCircle, 
   BarChart3, 
@@ -18,11 +18,25 @@ import {
   AlertCircle,
   Clock,
   Send,
-  Radio
+  Radio,
+  Lock,
+  Unlock,
+  ShieldCheck,
+  Check
 } from 'lucide-react';
 import { useAnalysis } from '../context/AnalysisContext';
 import { useAuth } from '../context/AuthContext';
 import { apiClient } from '../lib/api';
+
+const DEFAULT_COURSE_QUESTIONS = [
+  { id: 'Q1', questionNumber: 'Q1', title: 'Recursion Call Stack & Base Case Termination', course: 'CSE 2100', marks: '5 Marks', isApproved: false },
+  { id: 'Q2', questionNumber: 'Q2', title: 'Stack vs Heap Memory Model in C', course: 'CSE 2100', marks: '5 Marks', isApproved: false },
+  { id: 'Q3', questionNumber: 'Q3', title: 'Recursive Singly Linked List Reversal', course: 'CSE 2100', marks: '10 Marks', isApproved: false },
+  { id: 'Q4_ALGO1', questionNumber: 'Q4', title: 'Divide & Conquer Recurrences (Master Theorem)', course: 'CSE 2201', marks: '10 Marks', isApproved: false },
+  { id: 'Q5_ALGO2', questionNumber: 'Q5', title: 'Dynamic Programming & 0/1 Knapsack Formulations', course: 'CSE 2201', marks: '10 Marks', isApproved: false },
+  { id: 'Q6_DBMS1', questionNumber: 'Q6', title: 'Relational Schema Normalization (3NF & BCNF)', course: 'CSE 3103', marks: '10 Marks', isApproved: false },
+  { id: 'Q7_DBMS2', questionNumber: 'Q7', title: 'ACID Transactions & Strict 2-Phase Locking', course: 'CSE 3103', marks: '10 Marks', isApproved: false }
+];
 
 export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenStudentPortal }) {
   const { history, demoDataset } = useAnalysis();
@@ -30,6 +44,18 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenS
   const [liveSubmissions, setLiveSubmissions] = useState([]);
   const [isLoadingSubmissions, setIsLoadingSubmissions] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState(new Date());
+
+  // Faculty Solution Approval State
+  const [questionApprovalStates, setQuestionApprovalStates] = useState({
+    Q1: false,
+    Q2: false,
+    Q3: false,
+    Q4_ALGO1: false,
+    Q5_ALGO2: false,
+    Q6_DBMS1: false,
+    Q7_DBMS2: false
+  });
+  const [approvalToast, setApprovalToast] = useState(null);
 
   // Fetch live student submissions for faculty
   const fetchLiveSubmissions = async () => {
@@ -53,6 +79,36 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenS
     const timer = setInterval(fetchLiveSubmissions, 15000);
     return () => clearInterval(timer);
   }, []);
+
+  const handleToggleSolutionApproval = async (qId, qNum) => {
+    const currentState = questionApprovalStates[qId] || false;
+    const newState = !currentState;
+
+    try {
+      await apiClient.approveQuestionSolution(qId, newState);
+      setQuestionApprovalStates(prev => ({
+        ...prev,
+        [qId]: newState
+      }));
+
+      setApprovalToast(
+        newState 
+          ? `✓ Reference solution for ${qNum} is now APPROVED and visible to students in their portal.`
+          : `🔒 Reference solution for ${qNum} has been LOCKED and hidden from students.`
+      );
+
+      setTimeout(() => {
+        setApprovalToast(null);
+      }, 5000);
+    } catch (err) {
+      console.error('Failed to toggle approval:', err);
+      // Fallback local toggle
+      setQuestionApprovalStates(prev => ({
+        ...prev,
+        [qId]: newState
+      }));
+    }
+  };
 
   // Compute statistics
   const totalAnalyses = history.length;
@@ -79,8 +135,8 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenS
           </h1>
           <p className="text-sm text-[#6C5B82] dark:text-[#CAB7E4] max-w-lg leading-relaxed">
             {isStudent 
-              ? "Access your assigned exam questions, submit your answers, and view instant AI diagnostic feedback."
-              : "Course Instructor for CSE 2100. Monitor live student submissions and run AI Misconception Radar."}
+              ? "Access your assigned coursework, submit answers to faculty, and view instant AI diagnostic feedback."
+              : "Course Faculty Hub. Monitor live student submissions, control benchmark solution release, and run AI Misconception Radar."}
           </p>
         </div>
 
@@ -158,6 +214,102 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenS
         </div>
       </div>
 
+      {/* Faculty Benchmark Reference Model Release & Approval Controls */}
+      {!isStudent && (
+        <div className="p-6 sm:p-7 rounded-3xl glass-surface-elevated border border-[#B49BDE]/30 dark:border-[#C4ABF0]/20 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                  Academic Integrity & Reference Model Release Controls
+                </span>
+              </div>
+              <h2 className="text-lg font-display font-bold text-[#231735] dark:text-[#FAF7FD]">
+                Approve & Unlock Benchmark Solutions for Students
+              </h2>
+              <p className="text-xs text-[#6C5B82] dark:text-[#CAB7E4]">
+                Reference models remain hidden in student portal until you explicitly approve and release them here.
+              </p>
+            </div>
+          </div>
+
+          {/* Toast Notification */}
+          <AnimatePresence>
+            {approvalToast && (
+              <motion.div
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold flex items-center gap-2"
+              >
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                <span>{approvalToast}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+            {DEFAULT_COURSE_QUESTIONS.map((q) => {
+              const isApproved = questionApprovalStates[q.id] || false;
+
+              return (
+                <div 
+                  key={q.id}
+                  className={`p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
+                    isApproved
+                      ? 'bg-emerald-500/10 border-emerald-500/30 dark:bg-emerald-950/20'
+                      : 'glass-surface border-[#B49BDE]/20'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-[10px] font-mono font-bold text-[#7847EB] dark:text-[#B388FF]">
+                        {q.course} • {q.questionNumber}
+                      </span>
+                      {isApproved ? (
+                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/15 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <Unlock className="w-3 h-3" /> Released to Students
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/15 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <Lock className="w-3 h-3" /> Locked / Hidden
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-xs font-bold text-[#231735] dark:text-[#FAF7FD] line-clamp-2">
+                      {q.title}
+                    </h3>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleToggleSolutionApproval(q.id, q.questionNumber)}
+                    className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-sm ${
+                      isApproved
+                        ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 border border-amber-500/30'
+                        : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20'
+                    }`}
+                  >
+                    {isApproved ? (
+                      <>
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>Lock Solution</span>
+                      </>
+                    ) : (
+                      <>
+                        <Check className="w-3.5 h-3.5" />
+                        <span>Approve & Release Model</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Live Student Submissions Inbox & Response Feed */}
       <div className="p-6 sm:p-7 rounded-3xl glass-surface-elevated border border-[#B49BDE]/30 dark:border-[#C4ABF0]/20 shadow-sm space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -170,7 +322,7 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenS
             </div>
             <h2 className="text-lg font-display font-bold text-[#231735] dark:text-[#FAF7FD] flex items-center gap-2">
               <Inbox className="w-5 h-5 text-[#7847EB] dark:text-[#B388FF]" />
-              <span>Exam Response Inbox (CSE 2100: Midterm Fall 2026)</span>
+              <span>Multi-Course Response Inbox</span>
             </h2>
           </div>
 
@@ -203,12 +355,12 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenS
               Waiting for live student submissions...
             </p>
             <p className="text-[11px] text-[#6C5B82] dark:text-[#CAB7E4] max-w-md mx-auto">
-              When students submit answers from the Student Portal for Q1, Q2, or Q3, they will appear here live with student identity and instant diagnostic tags.
+              When students submit answers from the Student Portal for their coursework questions, they will appear here live with student identity and instant diagnostic tags.
             </p>
           </div>
         ) : (
           <div className="space-y-3">
-            {liveSubmissions.slice(0, 6).map((sub, idx) => {
+            {liveSubmissions.slice(0, 8).map((sub, idx) => {
               const dateStr = sub.submittedAt ? new Date(sub.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently';
               const isCorrect = sub.isCorrect;
 
@@ -220,7 +372,7 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenS
                   <div className="space-y-1.5 min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-[#7847EB]/15 text-[#7847EB] dark:text-[#B388FF] font-mono">
-                        {sub.questionNumber || 'Q'}
+                        {sub.courseCode || 'CSE'} • {sub.questionNumber || 'Q'}
                       </span>
                       <strong className="text-xs font-bold text-[#231735] dark:text-[#FAF7FD]">
                         {sub.studentName}
@@ -228,6 +380,11 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenS
                       {sub.studentIdentifier && (
                         <span className="text-[10px] font-mono text-[#6C5B82] dark:text-[#CAB7E4]">
                           ({sub.studentIdentifier})
+                        </span>
+                      )}
+                      {sub.targetFacultyName && (
+                        <span className="text-[10px] text-pink-600 dark:text-pink-400 font-semibold bg-pink-500/10 px-2 py-0.5 rounded-full">
+                          → {sub.targetFacultyName}
                         </span>
                       )}
                       <span className="text-[10px] text-[#6C5B82] dark:text-[#CAB7E4] flex items-center gap-1">
@@ -298,7 +455,7 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenS
                 <div>
                   <div className="flex items-center justify-between text-xs text-[#6C5B82] dark:text-[#CAB7E4] mb-2">
                     <span className="font-semibold text-[#7847EB] dark:text-[#B388FF]">
-                      {item.course || 'CSE 2100 Assessment'}
+                      {item.course || 'CSE Assessment'}
                     </span>
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />

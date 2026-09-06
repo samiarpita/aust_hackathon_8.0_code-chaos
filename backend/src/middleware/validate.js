@@ -82,7 +82,13 @@ const createQuestionSchema = z.object({
 // ------------------------------------------------------------------------------
 const studentSubmissionSchema = z.object({
   questionId: z.string().min(1, 'questionId is required'),
-  answerText: z.string().trim().min(2, 'Answer text must be provided')
+  answerText: z.string().trim().min(2, 'Answer text must be provided'),
+  facultyId: z.string().optional().nullable(),
+  facultyName: z.string().optional().nullable(),
+  courseId: z.string().optional().nullable(),
+  courseCode: z.string().optional().nullable(),
+  assignmentId: z.string().optional().nullable(),
+  assignmentTitle: z.string().optional().nullable()
 });
 
 // ------------------------------------------------------------------------------

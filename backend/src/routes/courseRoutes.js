@@ -9,6 +9,8 @@ router.use(authMiddleware);
 
 // Courses
 router.get('/', courseController.listCourses);
+router.get('/faculties', courseController.listFaculties);
+router.get('/student-assignments', courseController.listStudentAssignments);
 router.post('/', requireRole('faculty'), validateBody(createCourseSchema), courseController.createCourse);
 
 // Exams

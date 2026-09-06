@@ -3,12 +3,16 @@ const submissionService = require('../services/submissionService');
 class SubmissionController {
   async submitAnswer(req, res, next) {
     try {
-      const { questionId, answerText } = req.validatedBody || req.body;
+      const { questionId, answerText, facultyId, facultyName, courseCode, assignmentTitle } = req.validatedBody || req.body;
       const result = await submissionService.submitStudentAnswer({
         studentId: req.user.id,
         studentName: req.user.name,
         questionId,
-        answerText
+        answerText,
+        facultyId,
+        facultyName,
+        courseCode,
+        assignmentTitle
       });
       return res.status(201).json(result);
     } catch (err) {

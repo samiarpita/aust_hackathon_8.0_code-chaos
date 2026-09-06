@@ -46,6 +46,25 @@ class CourseController {
       next(err);
     }
   }
+
+  async listFaculties(req, res, next) {
+    try {
+      const faculties = await courseService.listFaculties();
+      return res.status(200).json(faculties);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async listStudentAssignments(req, res, next) {
+    try {
+      const studentId = req.user.role === 'student' ? req.user.id : null;
+      const assignments = await courseService.listStudentAssignments(studentId);
+      return res.status(200).json(assignments);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = new CourseController();

@@ -4,7 +4,7 @@ class SubmissionService {
   /**
    * Student submits an answer for a specific question
    */
-  async submitStudentAnswer({ studentId, studentName, questionId, answerText }) {
+  async submitStudentAnswer({ studentId, studentName, questionId, answerText, facultyId = null, facultyName = null, courseCode = null, assignmentTitle = null }) {
     let question = await db.getQuestionById(questionId);
     if (!question) {
       const err = new Error('Question not found');
@@ -16,6 +16,10 @@ class SubmissionService {
       questionId: question.id,
       studentId,
       studentName,
+      facultyId,
+      facultyName,
+      courseCode,
+      assignmentTitle,
       answerText
     });
 
@@ -62,6 +66,70 @@ class SubmissionService {
           recommendedAction: 'Use malloc() to allocate memory on the heap so it remains valid after function return.'
         };
       }
+    } else if (qNum === 'Q4' || qNum === 'Q4_ALGO1') {
+      if (answerStr.includes('theta(n log n)') || answerStr.includes('o(n log n)') || (answerStr.includes('log_b') && answerStr.includes('case 2'))) {
+        diagnostic = {
+          isCorrect: true,
+          identifiedLacking: 'Concept Mastered',
+          feedback: 'Spot on! You correctly recognized Master Theorem Case 2 with balanced work across levels yielding Theta(n log n).',
+          recommendedAction: 'Great mastery of divide and conquer recurrences.'
+        };
+      } else {
+        diagnostic = {
+          isCorrect: false,
+          identifiedLacking: 'Exponent Miscalculation in Master Theorem',
+          feedback: 'Review Case 2: When f(n) = Theta(n^{log_b(a)}), the recurrence expands to Theta(n^{log_b a} * log n).',
+          recommendedAction: 'Recompute log_2(2) = 1 and compare it directly with the polynomial degree of f(n) = n.'
+        };
+      }
+    } else if (qNum === 'Q5' || qNum === 'Q5_ALGO2') {
+      if (answerStr.includes('dp[i][w]') || (answerStr.includes('max(') && answerStr.includes('wt['))) {
+        diagnostic = {
+          isCorrect: true,
+          identifiedLacking: 'Concept Mastered',
+          feedback: 'Excellent dynamic programming formulation! Correctly specified overlapping subproblems and optimal substructure.',
+          recommendedAction: 'Explore space-optimized 1D array DP transitions next.'
+        };
+      } else {
+        diagnostic = {
+          isCorrect: false,
+          identifiedLacking: 'Greedy Heuristic Confusion in 0/1 Knapsack',
+          feedback: '0/1 Knapsack items are indivisible, so greedy ratio picking can yield suboptimal selections. Use the 2D decision table.',
+          recommendedAction: 'Formulate dp[i][w] = max(val + dp[i-1][w-wt], dp[i-1][w]) to account for all combinations.'
+        };
+      }
+    } else if (qNum === 'Q6' || qNum === 'Q6_DBMS1') {
+      if ((answerStr.includes('bcnf') && answerStr.includes('not in bcnf')) || (answerStr.includes('superkey') && answerStr.includes('3nf'))) {
+        diagnostic = {
+          isCorrect: true,
+          identifiedLacking: 'Concept Mastered',
+          feedback: 'Outstanding normalization analysis! You precisely distinguished prime attribute tolerance in 3NF from strict superkey requirement in BCNF.',
+          recommendedAction: 'Practice multi-valued dependencies and 4NF decompositions.'
+        };
+      } else {
+        diagnostic = {
+          isCorrect: false,
+          identifiedLacking: 'Conflating 3NF Prime Attribute Property with BCNF Superkey Requirement',
+          feedback: 'Even though all attributes are prime (satisfying 3NF), C -> D violates BCNF because C is not a superkey.',
+          recommendedAction: 'Verify that every functional dependency determinant (LHS) is a superkey for BCNF.'
+        };
+      }
+    } else if (qNum === 'Q7' || qNum === 'Q7_DBMS2') {
+      if (answerStr.includes('commit') && (answerStr.includes('cascading') || answerStr.includes('exclusive lock') || answerStr.includes('abort'))) {
+        diagnostic = {
+          isCorrect: true,
+          identifiedLacking: 'Concept Mastered',
+          feedback: 'Perfect! Strict 2PL holds write locks until COMMIT/ABORT, preventing dirty reads and cascading rollbacks.',
+          recommendedAction: 'Explore deadlock prevention schemes (Wait-Die & Wound-Wait).'
+        };
+      } else {
+        diagnostic = {
+          isCorrect: false,
+          identifiedLacking: 'Premature Lock Release in Concurrency Protocols',
+          feedback: 'Releasing exclusive locks before transaction commit exposes dirty intermediate states to concurrent readers.',
+          recommendedAction: 'Remember that Strict 2PL mandates retaining exclusive locks until explicit transaction commit/abort.'
+        };
+      }
     } else {
       if (answerStr.includes('head == null || head->next == null') || (answerStr.includes('head == null') && answerStr.includes('next == null'))) {
         diagnostic = {
@@ -101,7 +169,8 @@ class SubmissionService {
         id: question.id,
         questionNumber: question.question_number || questionId,
         text: question.text,
-        correctAnswer: question.correct_answer
+        isSolutionApproved: Boolean(question.is_solution_approved),
+        correctAnswer: question.is_solution_approved ? question.correct_answer : null
       }
     };
   }
@@ -118,13 +187,17 @@ class SubmissionService {
       const analysis = item.analysis || question?.analyses?.[0] || question?.analyses;
 
       const hasAnalysis = !!(sub.misconception_group || analysis);
+      const isApproved = Boolean(question?.is_solution_approved);
 
       return {
         submissionId: sub.id,
         questionId: sub.question_id,
         questionNumber: question?.question_number || 'Q',
         questionText: question?.text || '',
-        correctAnswer: question?.correct_answer || null,
+        isSolutionApproved: isApproved,
+        correctAnswer: isApproved ? (question?.correct_answer || null) : null,
+        targetFacultyId: sub.faculty_id,
+        targetFacultyName: sub.faculty_name,
         myAnswer: sub.answer_text,
         submittedAt: sub.created_at,
         analysisStatus: hasAnalysis ? 'analyzed' : 'pending_faculty_analysis',

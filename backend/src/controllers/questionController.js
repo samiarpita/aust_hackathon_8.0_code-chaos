@@ -55,6 +55,17 @@ class QuestionController {
       next(err);
     }
   }
+
+  async approveSolution(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { isApproved } = req.body;
+      const result = await questionService.approveSolution(id, isApproved !== false);
+      return res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = new QuestionController();
