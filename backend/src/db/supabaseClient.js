@@ -262,12 +262,12 @@ const db = {
 
   async listCoursesForFaculty(facultyId) {
     if (!isConfigured) {
-      return memoryStore.courses.filter(c => c.faculty_id === facultyId);
+      return memoryStore.courses.filter(c => !facultyId || c.faculty_id === facultyId || c.faculty_id === 'faculty-default');
     }
     const { data, error } = await supabase
       .from('courses')
       .select('*, exams(*)')
-      .eq('faculty_id', facultyId)
+      .or(`faculty_id.eq.${facultyId},faculty_id.eq.faculty-default`)
       .order('created_at', { ascending: false });
     if (error) throw error;
     return data || [];
@@ -717,6 +717,88 @@ const db = {
       .maybeSingle();
     if (error) throw error;
     return data;
+  },
+
+  async listSubmissionsForFaculty({ facultyId = null, examId = null, questionId = null } = {}) {
+    if (!isConfigured) {
+      let subs = [...memoryStore.submissions];
+      if (questionId) {
+        subs = subs.filter(s => s.question_id === questionId);
+      }
+      return subs.map(s => {
+        const q = memoryStore.questions.find(item => item.id === s.question_id);
+        const exam = q ? memoryStore.exams.find(e => e.id === q.exam_id) : null;
+        const course = exam ? memoryStore.courses.find(c => c.id === exam.course_id) : null;
+        const studentProfile = s.student_id ? memoryStore.profiles.find(p => p.id === s.student_id) : null;
+        return {
+          id: s.id,
+          submissionId: s.id,
+          questionId: s.question_id,
+          questionNumber: q?.question_number || s.question_id,
+          questionTitle: q?.text || 'Exam Question',
+          studentId: s.student_id,
+          studentName: s.student_name || studentProfile?.name || 'Student',
+          studentIdentifier: studentProfile?.student_id_number || s.student_identifier || s.student_name,
+          studentEmail: studentProfile?.email || null,
+          answerText: s.answer_text,
+          misconceptionGroup: s.misconception_group,
+          feedback: s.feedback,
+          isCorrect: s.is_correct,
+          score: s.score,
+          submittedAt: s.created_at || s.updated_at,
+          courseName: course?.name || 'Data Structures and Algorithms',
+          courseCode: course?.code || 'CSE 2100',
+          examTitle: exam?.title || 'Midterm Examination Fall 2026'
+        };
+      }).sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+    }
+
+    let query = supabase
+      .from('submissions')
+      .select(`
+        *,
+        questions (
+          id,
+          text,
+          question_number,
+          exams (
+            id,
+            title,
+            courses (
+              id,
+              name,
+              code,
+              faculty_id
+            )
+          )
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (questionId) {
+      query = query.eq('question_id', questionId);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return (data || []).map(s => ({
+      id: s.id,
+      submissionId: s.id,
+      questionId: s.question_id,
+      questionNumber: s.questions?.question_number || 'Q',
+      questionTitle: s.questions?.text || '',
+      studentId: s.student_id,
+      studentName: s.student_name || s.student_identifier || 'Student',
+      studentIdentifier: s.student_identifier,
+      answerText: s.answer_text,
+      misconceptionGroup: s.misconception_group,
+      feedback: s.feedback,
+      isCorrect: s.is_correct,
+      submittedAt: s.created_at,
+      courseName: s.questions?.exams?.courses?.name,
+      courseCode: s.questions?.exams?.courses?.code,
+      examTitle: s.questions?.exams?.title
+    }));
   },
 
   // ==========================================

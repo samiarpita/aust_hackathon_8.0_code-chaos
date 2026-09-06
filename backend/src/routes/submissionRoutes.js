@@ -13,4 +13,8 @@ router.post('/', requireRole('student'), validateBody(studentSubmissionSchema), 
 router.get('/my-feedback', requireRole('student'), submissionController.getMyFeedbacks);
 router.get('/feedback/:questionId', requireRole('student'), submissionController.getQuestionFeedback);
 
+// Faculty Live Submissions Inbox & Exam Response Feed
+router.get('/faculty-inbox', requireRole('faculty'), submissionController.getFacultyInbox);
+router.get('/question/:questionId', submissionController.getQuestionSubmissions);
+
 module.exports = router;

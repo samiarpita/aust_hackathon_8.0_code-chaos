@@ -167,6 +167,20 @@ class SubmissionService {
       classInsight: analysis?.insight || null
     };
   }
+
+  /**
+   * Faculty Inbox: List live student submissions received from student portal
+   */
+  async getFacultySubmissions({ facultyId, examId, questionId }) {
+    return await db.listSubmissionsForFaculty({ facultyId, examId, questionId });
+  }
+
+  /**
+   * Retrieve all submissions for a question (to import/sync into New Analysis)
+   */
+  async getQuestionSubmissions(questionId) {
+    return await db.listSubmissionsForFaculty({ questionId });
+  }
 }
 
 module.exports = new SubmissionService();

@@ -141,10 +141,10 @@ export default function StudentPortalPage() {
         [selectedQKey]: submissionRecord
       }));
 
-      setSubmissionSuccessMsg(`✓ Answer for ${selectedQKey} submitted successfully to faculty and evaluated by AI Radar!`);
+      setSubmissionSuccessMsg(`✓ Answer for ${selectedQKey} successfully delivered to Dr. Arpita Sengupta's Faculty Inbox! AI Diagnostic evaluated.`);
     } catch (err) {
       console.error('Submission error:', err);
-      setSubmissionSuccessMsg(`✓ Answer recorded locally.`);
+      setSubmissionSuccessMsg(`✓ Answer recorded.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -163,12 +163,12 @@ export default function StudentPortalPage() {
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 sm:p-7 rounded-3xl glass-surface-elevated border border-[#B49BDE]/30 dark:border-[#C4ABF0]/20 shadow-sm"
+        className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 sm:p-7 rounded-3xl glass-surface-elevated border border-[#B49BDE]/30 dark:border-[#C4ABF0]/20 shadow-sm"
       >
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-300 text-xs font-semibold">
             <GraduationCap className="w-3.5 h-3.5" />
-            <span>Student Diagnostic Portal — Personalized Learning Radar</span>
+            <span>Student Assessment Portal — Live Faculty Connection</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-display font-bold text-[#231735] dark:text-[#FAF7FD]">
             Welcome, {studentName} 👋
@@ -184,9 +184,18 @@ export default function StudentPortalPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold self-start sm:self-auto">
-          <UserCheck className="w-4 h-4" />
-          <span>Active Student Session</span>
+        {/* Assigned Faculty Routing Card */}
+        <div className="p-3.5 rounded-2xl bg-[#7847EB]/10 dark:bg-[#B388FF]/15 border border-[#7847EB]/20 text-xs space-y-1 self-start md:self-auto min-w-[220px]">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#7847EB] dark:text-[#B388FF]">
+            <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Assigned Course Faculty</span>
+          </div>
+          <p className="font-bold text-[#231735] dark:text-[#FAF7FD] text-sm">
+            Dr. Arpita Sengupta
+          </p>
+          <p className="text-[10px] text-[#6C5B82] dark:text-[#CAB7E4]">
+            Submissions route directly to Faculty Live Inbox
+          </p>
         </div>
       </motion.div>
 

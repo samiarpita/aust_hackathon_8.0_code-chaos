@@ -34,6 +34,30 @@ class SubmissionController {
       next(err);
     }
   }
+
+  async getFacultyInbox(req, res, next) {
+    try {
+      const { examId, questionId } = req.query;
+      const submissions = await submissionService.getFacultySubmissions({
+        facultyId: req.user.id,
+        examId,
+        questionId
+      });
+      return res.status(200).json(submissions);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getQuestionSubmissions(req, res, next) {
+    try {
+      const { questionId } = req.params;
+      const submissions = await submissionService.getQuestionSubmissions(questionId);
+      return res.status(200).json(submissions);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = new SubmissionController();

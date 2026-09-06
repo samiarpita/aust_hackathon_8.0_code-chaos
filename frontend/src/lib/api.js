@@ -162,5 +162,51 @@ export const apiClient = {
       console.warn("Backend error fetching feedbacks:", networkError);
       return [];
     }
+  },
+
+  async getFacultySubmissionsInbox({ examId = null, questionId = null } = {}) {
+    const token = getAuthToken();
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    let url = `${API_BASE_URL}/api/submissions/faculty-inbox`;
+    const params = new URLSearchParams();
+    if (examId) params.append('examId', examId);
+    if (questionId) params.append('questionId', questionId);
+    if (params.toString()) {
+      url += `?${params.toString()}`;
+    }
+
+    try {
+      const res = await fetch(url, { headers });
+      if (!res.ok) {
+        throw new Error(`Failed to retrieve faculty submissions (${res.status})`);
+      }
+      return await res.json();
+    } catch (networkError) {
+      console.warn("Backend error fetching faculty inbox:", networkError);
+      return [];
+    }
+  },
+
+  async getQuestionSubmissions(questionId) {
+    const token = getAuthToken();
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/submissions/question/${encodeURIComponent(questionId)}`, { headers });
+      if (!res.ok) {
+        throw new Error(`Failed to retrieve question submissions (${res.status})`);
+      }
+      return await res.json();
+    } catch (networkError) {
+      console.warn("Backend error fetching question submissions:", networkError);
+      return [];
+    }
   }
 };

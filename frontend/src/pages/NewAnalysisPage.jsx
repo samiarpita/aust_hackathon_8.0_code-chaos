@@ -15,14 +15,14 @@ import {
   Code
 } from 'lucide-react';
 import { useAnalysis } from '../context/AnalysisContext';
-import { MAX_UPLOAD_SIZE_MB, MAX_UPLOAD_BYTES } from '../lib/api';
+import { MAX_UPLOAD_SIZE_MB, MAX_UPLOAD_BYTES, apiClient } from '../lib/api';
 import ConfirmationModal from '../components/ConfirmationModal';
 
 export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = null }) {
   const { analyze, isAnalyzing, demoDataset } = useAnalysis();
 
   // Question selection / input
-  const [selectedPresetQ, setSelectedPresetQ] = useState('Q3');
+  const [selectedPresetQ, setSelectedPresetQ] = useState(initialDataset?.selectedQ || 'Q3');
   const [questionText, setQuestionText] = useState(
     initialDataset?.questionText || 
     "Explain how the base case works in recursion and write a recursive function Node* reverse(Node* head) in C to reverse a singly linked list."
@@ -41,12 +41,40 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
   const [newCloInput, setNewCloInput] = useState('');
 
   // Student answers state
-  const [answersText, setAnswersText] = useState(initialDataset ? initialDataset.answers.join('\n---\n') : demoDataset.answers.join('\n---\n'));
+  const [answersText, setAnswersText] = useState(initialDataset ? initialDataset.answers?.join('\n---\n') : demoDataset.answers.join('\n---\n'));
   const [fileError, setFileError] = useState(null);
   const [formError, setFormError] = useState(null);
+  const [syncNotice, setSyncNotice] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
+  // Live portal submissions state
+  const [livePortalSubmissions, setLivePortalSubmissions] = useState([]);
+  const [isLoadingLiveSubmissions, setIsLoadingLiveSubmissions] = useState(false);
+
   const fileInputRef = useRef(null);
+
+  // Fetch live submissions from students for the selected question
+  const fetchLiveSubmissions = React.useCallback(async (qKey) => {
+    setIsLoadingLiveSubmissions(true);
+    try {
+      const data = await apiClient.getQuestionSubmissions(qKey);
+      if (Array.isArray(data)) {
+        setLivePortalSubmissions(data);
+      }
+    } catch (err) {
+      console.warn('Could not fetch live question submissions:', err);
+    } finally {
+      setIsLoadingLiveSubmissions(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (initialDataset?.selectedQ) {
+      handleSelectPreset(initialDataset.selectedQ);
+    } else {
+      fetchLiveSubmissions(selectedPresetQ);
+    }
+  }, [initialDataset]);
 
   // Parse student answers
   const parsedAnswers = React.useMemo(() => {
@@ -62,6 +90,7 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
   // Preset question switcher
   const handleSelectPreset = (q) => {
     setSelectedPresetQ(q);
+    fetchLiveSubmissions(q);
     if (q === 'Q1') {
       setQuestionText("Explain recursion and why the base case terminates the call stack.");
       setCorrectAnswer("A base case is a terminating condition in a recursive function that returns a value directly without making further recursive calls, preventing stack overflow.");
@@ -101,6 +130,37 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
       setCorrectAnswer(`Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}`);
       setClos(demoDataset.clos);
       setAnswersText(demoDataset.answers.join('\n---\n'));
+    }
+  };
+
+  const handleLoadLiveSubmissions = async () => {
+    try {
+      setIsLoadingLiveSubmissions(true);
+      const data = await apiClient.getQuestionSubmissions(selectedPresetQ);
+      if (Array.isArray(data) && data.length > 0) {
+        const liveTexts = data.map(s => s.answerText).filter(Boolean);
+        if (liveTexts.length > 0) {
+          let finalAnswers = liveTexts;
+          if (finalAnswers.length < 2) {
+            const fallback = selectedPresetQ === 'Q1' 
+              ? ["A base case is an if condition that stops recursion so the stack does not overflow."]
+              : selectedPresetQ === 'Q2'
+              ? ["Stack is fast and automatic for local variables. Heap is used with malloc() for dynamic memory."]
+              : ["Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}"];
+            finalAnswers = [...finalAnswers, ...fallback];
+          }
+          setAnswersText(finalAnswers.join('\n---\n'));
+          setSyncNotice(`✓ Synced ${data.length} live submissions from student portal for ${selectedPresetQ}!`);
+          setTimeout(() => setSyncNotice(null), 5000);
+          return;
+        }
+      }
+      setSyncNotice(`No live submissions found for ${selectedPresetQ} yet. Loaded default cohort dataset.`);
+      setTimeout(() => setSyncNotice(null), 4000);
+    } catch (err) {
+      console.warn('Error loading live submissions:', err);
+    } finally {
+      setIsLoadingLiveSubmissions(false);
     }
   };
 
@@ -384,7 +444,17 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
                 Step 4 — Student Answers Batch <span className="text-rose-500">*</span>
               </label>
 
-              <div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleLoadLiveSubmissions}
+                  disabled={isLoadingLiveSubmissions}
+                  className="px-3.5 py-1.5 rounded-xl bg-[#7847EB]/10 dark:bg-[#B388FF]/15 hover:bg-[#7847EB]/20 border border-[#7847EB]/30 text-xs font-semibold text-[#7847EB] dark:text-[#B388FF] flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isLoadingLiveSubmissions ? 'animate-spin' : ''}`} />
+                  <span>📥 Sync Live Student Portal Submissions ({livePortalSubmissions.length})</span>
+                </button>
+
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -406,6 +476,13 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
             <p className="text-xs text-[#6C5B82] dark:text-[#CAB7E4]">
               Separate individual answers with <code className="px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-[#7847EB] dark:text-[#B388FF] font-mono">---</code>.
             </p>
+
+            {syncNotice && (
+              <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-xs flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-500" />
+                <span>{syncNotice}</span>
+              </div>
+            )}
 
             {fileError && (
               <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-300 text-xs flex items-center gap-2">

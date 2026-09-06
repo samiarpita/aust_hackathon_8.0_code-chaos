@@ -40,7 +40,7 @@ function AppContent() {
     }
   }, [user, activeTab]);
 
-  const handleStartAnalysis = () => {
+  const handleStartAnalysis = (preset = null) => {
     if (!user) {
       setIsAuthOpen(true);
       return;
@@ -50,7 +50,7 @@ function AppContent() {
       return;
     }
     switchRole('faculty');
-    setActivePresetDataset(null);
+    setActivePresetDataset(preset);
     setActiveTab('new-analysis');
   };
 
