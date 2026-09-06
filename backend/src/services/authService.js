@@ -15,7 +15,7 @@ class AuthService {
     // Check if user profile already exists
     const existingEmail = await db.getProfileByEmail(cleanEmail);
     if (existingEmail) {
-      const err = new Error('An account with this email already exists');
+      const err = new Error('An account with this email already exists. Please sign in instead.');
       err.statusCode = 400;
       throw err;
     }
@@ -23,7 +23,7 @@ class AuthService {
     if (cleanStudentId) {
       const existingSid = await db.getProfileByStudentId(cleanStudentId);
       if (existingSid) {
-        const err = new Error('An account with this Student ID Number already exists');
+        const err = new Error('An account with this Student ID Number already exists. Please sign in instead.');
         err.statusCode = 400;
         throw err;
       }
@@ -113,14 +113,14 @@ class AuthService {
     }
 
     if (!userProfile) {
-      const err = new Error('No registered user found with these credentials');
+      const err = new Error("No account found with this email or Student ID. Please click 'Create Account' below to register first.");
       err.statusCode = 401;
       throw err;
     }
 
-    // If student login, optionally check role or semester
+    // Check role match
     if (role && userProfile.role !== role) {
-      const err = new Error(`Account role is ${userProfile.role}, please use the ${userProfile.role} login tab`);
+      const err = new Error(`This account is registered as a ${userProfile.role}. Please switch to the ${userProfile.role === 'faculty' ? 'Faculty' : 'Student'} tab to log in.`);
       err.statusCode = 403;
       throw err;
     }
@@ -171,7 +171,7 @@ class AuthService {
 
     const isMatch = await bcrypt.compare(password, authRecord.passwordHash);
     if (!isMatch) {
-      const err = new Error('Invalid email, student ID, or password');
+      const err = new Error('Incorrect password. Please verify and try again.');
       err.statusCode = 401;
       throw err;
     }
