@@ -10,18 +10,23 @@ import {
   FileText, 
   Layers,
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  GraduationCap
 } from 'lucide-react';
 import { useAnalysis } from '../context/AnalysisContext';
+import { useAuth } from '../context/AuthContext';
 
-export default function DashboardPage({ onNewAnalysis, onSelectAnalysis }) {
+export default function DashboardPage({ onNewAnalysis, onSelectAnalysis, onOpenStudentPortal }) {
   const { history, demoDataset } = useAnalysis();
+  const { user, isStudent } = useAuth();
 
   // Compute statistics
   const totalAnalyses = history.length;
   const totalQuestions = history.length; // 1 question per analysis in MVP
   const totalMisconceptions = history.reduce((acc, curr) => acc + (curr.misconceptionGroups?.length || 0), 0);
   const recentItem = history[0];
+
+  const displayName = user?.name || (isStudent ? 'Student' : 'Faculty');
 
   return (
     <div className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-10">
@@ -33,25 +38,37 @@ export default function DashboardPage({ onNewAnalysis, onSelectAnalysis }) {
       >
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7847EB]/10 dark:bg-[#B388FF]/15 text-[#7847EB] dark:text-[#B388FF] text-xs font-semibold">
-            <span>Faculty Workspace</span>
+            <span>{isStudent ? 'Student Workspace' : 'Faculty Workspace'}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#231735] dark:text-[#FAF7FD]">
-            Welcome back, Faculty 👋
+            Welcome back, {displayName} 👋
           </h1>
           <p className="text-sm text-[#6C5B82] dark:text-[#CAB7E4] max-w-lg leading-relaxed">
-            Analyze your students' answers and discover where they are struggling.
+            {isStudent 
+              ? "Access your assigned exam questions, submit your answers, and view instant AI diagnostic feedback."
+              : "Analyze your students' answers and discover where they are struggling."}
           </p>
         </div>
 
-        {/* Large + New Analysis Button */}
+        {/* Action Button */}
         <div>
-          <button
-            onClick={onNewAnalysis}
-            className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-[#7847EB] to-[#9061F9] text-white font-bold text-sm shadow-lg shadow-[#7847EB]/25 hover:shadow-xl hover:shadow-[#7847EB]/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 group"
-          >
-            <PlusCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-            <span>+ New Analysis</span>
-          </button>
+          {isStudent ? (
+            <button
+              onClick={onOpenStudentPortal}
+              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-[#DB2777] to-[#EC4899] text-white font-bold text-sm shadow-lg shadow-pink-500/25 hover:shadow-xl hover:shadow-pink-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 group"
+            >
+              <GraduationCap className="w-5 h-5" />
+              <span>Go to Student Portal →</span>
+            </button>
+          ) : (
+            <button
+              onClick={onNewAnalysis}
+              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-gradient-to-r from-[#7847EB] to-[#9061F9] text-white font-bold text-sm shadow-lg shadow-[#7847EB]/25 hover:shadow-xl hover:shadow-[#7847EB]/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 group"
+            >
+              <PlusCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+              <span>+ New Analysis</span>
+            </button>
+          )}
         </div>
       </motion.div>
 

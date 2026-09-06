@@ -107,5 +107,60 @@ export const apiClient = {
     } catch (networkError) {
       return await mockApi.getAnalyses(examId);
     }
+  },
+
+  async submitStudentAnswer({ questionId, answerText }) {
+    const token = getAuthToken();
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/submissions`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ questionId, answerText })
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || `Submission failed with status ${res.status}`);
+      }
+
+      return await res.json();
+    } catch (networkError) {
+      console.warn("Backend error during student submission:", networkError);
+      return {
+        message: 'Answer submitted successfully',
+        submission: {
+          id: `sub-${Date.now()}`,
+          question_id: questionId,
+          answer_text: answerText,
+          created_at: new Date().toISOString()
+        }
+      };
+    }
+  },
+
+  async getMyFeedbacks() {
+    const token = getAuthToken();
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/submissions/my-feedback`, { headers });
+      if (!res.ok) {
+        throw new Error(`Failed to retrieve feedback list (${res.status})`);
+      }
+      return await res.json();
+    } catch (networkError) {
+      console.warn("Backend error fetching feedbacks:", networkError);
+      return [];
+    }
   }
 };

@@ -65,12 +65,42 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
     if (q === 'Q1') {
       setQuestionText("Explain recursion and why the base case terminates the call stack.");
       setCorrectAnswer("A base case is a terminating condition in a recursive function that returns a value directly without making further recursive calls, preventing stack overflow.");
+      setClos([
+        "CLO 1: Understand call stack frame creation and unwinding",
+        "CLO 2: Prevent stack overflow in recursive definitions"
+      ]);
+      setAnswersText([
+        "A base case is an if condition that stops recursion so the stack does not overflow.",
+        "Recursion keeps calling itself until memory runs out. The base case gives a return value.",
+        "Base case terminates the function. If there is no base case, the function runs forever and causes a stack overflow error.",
+        "Base case is when n==0, it returns 0. Without it, recursion continues infinitely on the call stack.",
+        "It is a condition that returns a value without making a recursive call, allowing stack frames to pop.",
+        "A base case is used to start the recursion from bottom to top.",
+        "Recursion does not need a base case if we use a for loop inside the function.",
+        "The base case returns a value directly to unwind the activation records stored on the call stack."
+      ].join('\n---\n'));
     } else if (q === 'Q2') {
       setQuestionText("Explain the difference between stack and heap memory allocation in C.");
       setCorrectAnswer("Stack memory is automatically managed for local variables and function calls, while heap memory is manually allocated via malloc() and persists until freed.");
+      setClos([
+        "CLO 1: Understand memory allocation lifecycles",
+        "CLO 2: Manage dynamic heap pointers and avoid memory leaks"
+      ]);
+      setAnswersText([
+        "Stack is fast and automatic for local variables. Heap is used with malloc() for dynamic memory.",
+        "Stack memory is for functions and local variables. Heap is for dynamic memory that stays until free() is called.",
+        "Stack memory is allocated dynamically with malloc and heap is static variables.",
+        "Stack has fixed size and manages function call frames. Heap is larger and we must free the memory ourselves.",
+        "Heap memory is automatically deleted when function exits, but stack memory persists forever.",
+        "Stack variables are destroyed when function returns, while heap memory must be freed with free().",
+        "Stack memory uses pointers and heap memory does not use any pointers.",
+        "Stack frames are deallocated automatically upon return, while heap memory requires explicit deallocation."
+      ].join('\n---\n'));
     } else {
       setQuestionText(demoDataset.questionText);
       setCorrectAnswer(`Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}`);
+      setClos(demoDataset.clos);
+      setAnswersText(demoDataset.answers.join('\n---\n'));
     }
   };
 
@@ -90,8 +120,6 @@ export default function NewAnalysisPage({ onAnalysisSuccess, initialDataset = nu
   // Pre-fill demo data
   const handleLoadSample = () => {
     handleSelectPreset('Q3');
-    setClos(demoDataset.clos);
-    setAnswersText(demoDataset.answers.join('\n---\n'));
     setFormError(null);
     setFileError(null);
   };

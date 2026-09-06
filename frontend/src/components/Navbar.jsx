@@ -50,18 +50,20 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth }) {
 
         {/* Center Navigation Links based on Authenticated User Role */}
         <div className="flex items-center gap-1 bg-[#F8F6FD]/70 dark:bg-[#120A21]/70 p-1 rounded-full border border-[#B49BDE]/20 dark:border-[#C4ABF0]/10">
-          <button
-            onClick={() => setActiveTab('dashboard')}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-              activeTab === 'dashboard'
-                ? 'bg-white dark:bg-[#2C1F42] text-[#7847EB] dark:text-[#B388FF] shadow-xs font-semibold'
-                : 'text-[#6C5B82] dark:text-[#CAB7E4] hover:text-[#231735] dark:hover:text-[#FAF7FD]'
-            }`}
-          >
-            Dashboard
-          </button>
+          {(!user || isFaculty) && (
+            <button
+              onClick={() => setActiveTab(user ? 'dashboard' : 'landing')}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                activeTab === 'dashboard' || (!user && activeTab === 'landing')
+                  ? 'bg-white dark:bg-[#2C1F42] text-[#7847EB] dark:text-[#B388FF] shadow-xs font-semibold'
+                  : 'text-[#6C5B82] dark:text-[#CAB7E4] hover:text-[#231735] dark:hover:text-[#FAF7FD]'
+              }`}
+            >
+              {user ? 'Dashboard' : 'Home'}
+            </button>
+          )}
 
-          {isFaculty && (
+          {user && isFaculty && (
             <>
               <button
                 onClick={() => setActiveTab('new-analysis')}
@@ -87,7 +89,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth }) {
             </>
           )}
 
-          {isStudent && (
+          {(isStudent || !user) && (
             <button
               onClick={() => setActiveTab('student-portal')}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
@@ -97,7 +99,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth }) {
               }`}
             >
               <GraduationCap className="w-3.5 h-3.5" />
-              <span>My Diagnostic Feedback</span>
+              <span>{isStudent ? 'My Diagnostic Portal' : 'Student Portal'}</span>
             </button>
           )}
         </div>

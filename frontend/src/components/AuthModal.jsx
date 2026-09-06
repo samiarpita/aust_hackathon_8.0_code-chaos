@@ -196,7 +196,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     autoComplete="off"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder={selectedRole === 'faculty' ? 'Dr. Arpita Sengupta' : 'Alex Chen'}
+                    placeholder={selectedRole === 'faculty' ? 'e.g. Dr. Arpita Sengupta' : 'e.g. Samia Rahman'}
                     className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
                   />
                   <User className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />

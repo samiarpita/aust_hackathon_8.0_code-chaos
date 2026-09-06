@@ -393,18 +393,48 @@ const db = {
 
   async getQuestionById(questionId) {
     if (!isConfigured) {
-      const q = memoryStore.questions.find(item => item.id === questionId);
+      let q = memoryStore.questions.find(item => item.id === questionId || item.question_number === questionId);
+      if (!q) {
+        if (questionId === 'Q1' || questionId === 'Q2' || questionId === 'Q3') {
+          const presets = {
+            Q1: {
+              text: "Explain recursion and why the base case terminates the call stack.",
+              correctAnswer: "A base case is a terminating condition in a recursive function that returns a value directly without making further recursive calls, preventing stack overflow.",
+              clos: ["CLO 1: Understand call stack frame creation and unwinding"]
+            },
+            Q2: {
+              text: "Explain the difference between stack and heap memory allocation in C.",
+              correctAnswer: "Stack memory is automatically managed for local variables and function calls, while heap memory is manually allocated via malloc() and persists until freed.",
+              clos: ["CLO 2: Manage dynamic heap pointers and avoid leaks"]
+            },
+            Q3: {
+              text: "Explain how the base case works in recursion and write a recursive function Node* reverse(Node* head) in C to reverse a singly linked list.",
+              correctAnswer: "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+              clos: ["CLO 1: Understand recursion boundary conditions", "CLO 2: Analyze dynamic pointer manipulation without memory leaks"]
+            }
+          };
+          const p = presets[questionId];
+          const created = await db.createQuestionWithDetails({
+            examId: 'default-midterm-exam',
+            questionNumber: questionId,
+            text: p.text,
+            correctAnswer: p.correctAnswer,
+            clos: p.clos
+          });
+          q = created.question;
+        }
+      }
       if (!q) return null;
-      const clos = memoryStore.clos.filter(c => c.question_id === questionId);
-      const subs = memoryStore.submissions.filter(s => s.question_id === questionId);
-      const analysis = memoryStore.analyses.find(a => a.question_id === questionId);
+      const clos = memoryStore.clos.filter(c => c.question_id === q.id);
+      const subs = memoryStore.submissions.filter(s => s.question_id === q.id);
+      const analysis = memoryStore.analyses.find(a => a.question_id === q.id);
       return { ...q, clos, submissions: subs, analysis };
     }
 
     const { data, error } = await supabase
       .from('questions')
       .select('*, clos(*), submissions(*), analyses(*)')
-      .eq('id', questionId)
+      .or(`id.eq.${questionId},question_number.eq.${questionId}`)
       .maybeSingle();
     if (error) throw error;
     return data;

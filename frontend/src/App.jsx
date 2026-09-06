@@ -31,9 +31,22 @@ function AppContent() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [activePresetDataset, setActivePresetDataset] = useState(null);
 
+  // Automatically ensure logged-in students are always kept in the Student Portal
+  React.useEffect(() => {
+    if (user?.role === 'student') {
+      if (['dashboard', 'new-analysis', 'history', 'results'].includes(activeTab)) {
+        setActiveTab('student-portal');
+      }
+    }
+  }, [user, activeTab]);
+
   const handleStartAnalysis = () => {
     if (!user) {
       setIsAuthOpen(true);
+      return;
+    }
+    if (user.role === 'student') {
+      setActiveTab('student-portal');
       return;
     }
     switchRole('faculty');
@@ -42,6 +55,10 @@ function AppContent() {
   };
 
   const handleViewDemo = () => {
+    if (user?.role === 'student') {
+      setActiveTab('student-portal');
+      return;
+    }
     switchRole('faculty');
     setActivePresetDataset(demoDataset);
     setActiveTab('new-analysis');
@@ -52,7 +69,6 @@ function AppContent() {
       setIsAuthOpen(true);
       return;
     }
-    switchRole('student');
     setActiveTab('student-portal');
   };
 
@@ -100,10 +116,11 @@ function AppContent() {
           <DashboardPage
             onNewAnalysis={handleStartAnalysis}
             onSelectAnalysis={handleSelectHistoricalAnalysis}
+            onOpenStudentPortal={handleOpenStudentPortal}
           />
         )}
 
-        {activeTab === 'new-analysis' && (
+        {activeTab === 'new-analysis' && isFaculty && (
           <NewAnalysisPage
             initialDataset={activePresetDataset}
             onAnalysisSuccess={handleAnalysisSuccess}
@@ -112,12 +129,12 @@ function AppContent() {
 
         {activeTab === 'results' && (
           <ResultsPage
-            onBackToDashboard={() => setActiveTab('dashboard')}
+            onBackToDashboard={() => setActiveTab(isFaculty ? 'dashboard' : 'student-portal')}
             onNewAnalysis={handleStartAnalysis}
           />
         )}
 
-        {activeTab === 'history' && (
+        {activeTab === 'history' && isFaculty && (
           <HistoryPage
             onSelectAnalysis={handleSelectHistoricalAnalysis}
             onNewAnalysis={handleStartAnalysis}
@@ -125,12 +142,7 @@ function AppContent() {
         )}
 
         {activeTab === 'student-portal' && (
-          <StudentPortalPage
-            onSwitchToFaculty={() => {
-              switchRole('faculty');
-              setActiveTab('dashboard');
-            }}
-          />
+          <StudentPortalPage />
         )}
       </main>
 
@@ -157,24 +169,27 @@ function AppContent() {
             >
               Public Home
             </button>
-            <button
-              onClick={() => {
-                switchRole('faculty');
-                setActiveTab('dashboard');
-              }}
-              className="hover:underline text-[#7847EB] dark:text-[#B388FF]"
-            >
-              Faculty Portal
-            </button>
-            <button
-              onClick={() => {
-                switchRole('student');
-                setActiveTab('student-portal');
-              }}
-              className="hover:underline text-[#DB2777] dark:text-[#F472B6]"
-            >
-              Student Portal
-            </button>
+            {(!user || isFaculty) && (
+              <button
+                onClick={() => {
+                  switchRole('faculty');
+                  setActiveTab('dashboard');
+                }}
+                className="hover:underline text-[#7847EB] dark:text-[#B388FF]"
+              >
+                Faculty Portal
+              </button>
+            )}
+            {(!user || isStudent) && (
+              <button
+                onClick={() => {
+                  setActiveTab('student-portal');
+                }}
+                className="hover:underline text-[#DB2777] dark:text-[#F472B6]"
+              >
+                Student Portal
+              </button>
+            )}
           </div>
         </div>
       </footer>
