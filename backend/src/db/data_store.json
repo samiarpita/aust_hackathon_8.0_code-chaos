@@ -1,0 +1,225 @@
+{
+  "users": [
+    {
+      "id": "a54e1958-cd35-4b22-895d-bdec0dbe0d1e",
+      "email": "samia@aust.edu",
+      "passwordHash": "$2b$10$Se0G7Q0SA0vH2p9PKROSzeo2QhOEr.jc2FVOxlXKFdguY1t4XZ1h."
+    },
+    {
+      "id": "75f0847b-ec10-4115-a4a9-4896103a16c5",
+      "email": "arpita@aust.edu",
+      "passwordHash": "$2b$10$l2sMriBgccGgVlPxneiXUe8Tx9sgfls4kQnBinJvrTwTK7C/flpcS"
+    },
+    {
+      "id": "10272950-4873-49a2-9cbf-dc56f6bba7d8",
+      "email": "sarah.faculty@aust.edu",
+      "passwordHash": "$2b$10$u7KE6RXee1LL2KYEUBeZt.nC0Ttk.XYhNPA7sT3h46sVUaoDGnnoa"
+    },
+    {
+      "id": "39fa1918-bb4b-4f9d-a345-f9db22474437",
+      "email": "alex.student@aust.edu",
+      "passwordHash": "$2b$10$7JsvZrg9/hoxzhVk77EL/eoz8iviR7syt/OsqNAX4n5DLfViocG2O"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "a54e1958-cd35-4b22-895d-bdec0dbe0d1e",
+      "email": "samia@aust.edu",
+      "name": "Samia Rahman",
+      "role": "student",
+      "student_id_number": "20220104088",
+      "semester": "4.1",
+      "department": "CSE",
+      "created_at": "2026-09-06T07:59:16.082Z",
+      "updated_at": "2026-09-06T07:59:16.082Z"
+    },
+    {
+      "id": "75f0847b-ec10-4115-a4a9-4896103a16c5",
+      "email": "arpita@aust.edu",
+      "name": "Dr. Arpita Sengupta",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "CSE",
+      "created_at": "2026-09-06T07:59:16.285Z",
+      "updated_at": "2026-09-06T07:59:16.285Z"
+    },
+    {
+      "id": "10272950-4873-49a2-9cbf-dc56f6bba7d8",
+      "email": "sarah.faculty@aust.edu",
+      "name": "Dr. Sarah Connor",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Department of CSE",
+      "created_at": "2026-09-06T07:59:40.021Z",
+      "updated_at": "2026-09-06T07:59:40.021Z"
+    },
+    {
+      "id": "39fa1918-bb4b-4f9d-a345-f9db22474437",
+      "email": "alex.student@aust.edu",
+      "name": "Alex Rivera",
+      "role": "student",
+      "student_id_number": "20210104001",
+      "semester": "Fall 2026",
+      "department": null,
+      "created_at": "2026-09-06T07:59:40.207Z",
+      "updated_at": "2026-09-06T07:59:40.207Z"
+    }
+  ],
+  "courses": [
+    {
+      "id": "course-cse2100",
+      "faculty_id": "faculty-default",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2100",
+      "created_at": "2026-09-06T07:59:10.545Z",
+      "updated_at": "2026-09-06T07:59:10.546Z"
+    },
+    {
+      "id": "b5c64414-2887-48ae-a3a4-2f3100f75cc4",
+      "faculty_id": "10272950-4873-49a2-9cbf-dc56f6bba7d8",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2201",
+      "created_at": "2026-09-06T07:59:40.791Z",
+      "updated_at": "2026-09-06T07:59:40.791Z"
+    }
+  ],
+  "enrollments": [],
+  "exams": [
+    {
+      "id": "exam-midterm-fall2026",
+      "course_id": "course-cse2100",
+      "title": "Midterm Examination Fall 2026",
+      "created_at": "2026-09-06T07:59:10.546Z",
+      "updated_at": "2026-09-06T07:59:10.546Z"
+    },
+    {
+      "id": "78bb588e-1831-469d-bba2-9b31ed69f31a",
+      "course_id": "b5c64414-2887-48ae-a3a4-2f3100f75cc4",
+      "title": "Midterm Exam Fall 2026",
+      "created_at": "2026-09-06T07:59:40.805Z",
+      "updated_at": "2026-09-06T07:59:40.805Z"
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q1",
+      "exam_id": "exam-midterm-fall2026",
+      "question_number": "Q1",
+      "text": "Explain recursion and why the base case terminates the call stack.",
+      "correct_answer": "A base case is a terminating condition in a recursive function that returns a value directly without making further recursive calls, preventing stack overflow.",
+      "max_marks": 5,
+      "created_at": "2026-09-06T07:59:10.546Z"
+    },
+    {
+      "id": "Q2",
+      "exam_id": "exam-midterm-fall2026",
+      "question_number": "Q2",
+      "text": "Explain the difference between stack and heap memory allocation in C.",
+      "correct_answer": "Stack memory is automatically managed for local variables and function calls, while heap memory is manually allocated via malloc() and persists until freed.",
+      "max_marks": 5,
+      "created_at": "2026-09-06T07:59:10.546Z"
+    },
+    {
+      "id": "Q3",
+      "exam_id": "exam-midterm-fall2026",
+      "question_number": "Q3",
+      "text": "Explain how the base case works in recursion and write a recursive function Node* reverse(Node* head) in C to reverse a singly linked list.",
+      "correct_answer": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "max_marks": 10,
+      "created_at": "2026-09-06T07:59:10.546Z"
+    },
+    {
+      "id": "bc200777-af88-4b1d-8179-63a2599f4264",
+      "exam_id": "78bb588e-1831-469d-bba2-9b31ed69f31a",
+      "question_number": "Q3",
+      "text": "Explain recursion and the importance of a base case.",
+      "correct_answer": "A recursive function calls itself on smaller inputs until reaching a base case condition which stops further recursive calls and returns the base result.",
+      "max_marks": 10,
+      "created_at": "2026-09-06T07:59:40.829Z"
+    }
+  ],
+  "clos": [
+    {
+      "id": "64cf4b23-43a8-4f26-b806-bbe0b13ed2f2",
+      "question_id": "bc200777-af88-4b1d-8179-63a2599f4264",
+      "code": "CLO-2",
+      "description": "Design recursive algorithms with base case termination.",
+      "created_at": "2026-09-06T07:59:40.829Z"
+    }
+  ],
+  "submissions": [
+    {
+      "id": "708fdeef-daad-457d-80fd-35f568f079a9",
+      "question_id": "bc200777-af88-4b1d-8179-63a2599f4264",
+      "student_id": "39fa1918-bb4b-4f9d-a345-f9db22474437",
+      "student_name": "Alex Rivera",
+      "student_identifier": "Alex Rivera",
+      "answer_text": "Recursion is when a function calls itself. If head == NULL return head, then reverse rest.",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T07:59:40.853Z"
+    },
+    {
+      "id": "fea13d38-d678-49d4-942f-c9dcfba66822",
+      "question_id": "bc200777-af88-4b1d-8179-63a2599f4264",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL || head->next == NULL) return head; Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "created_at": "2026-09-06T07:59:40.873Z"
+    },
+    {
+      "id": "f2381ee4-fc7b-4cc1-b020-7a0bdc435d05",
+      "question_id": "bc200777-af88-4b1d-8179-63a2599f4264",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Node* reverse(Node* head) { Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "created_at": "2026-09-06T07:59:40.882Z"
+    },
+    {
+      "id": "b0b13495-5534-4eb4-bcea-6768bfd87366",
+      "question_id": "bc200777-af88-4b1d-8179-63a2599f4264",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL) return head; Node* rest = reverse(head->next); head->next = head; return rest; }",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T07:59:40.883Z"
+    }
+  ],
+  "analyses": [
+    {
+      "id": "a19b6404-0ec0-4dfb-b1ea-8beee9200f08",
+      "question_id": "bc200777-af88-4b1d-8179-63a2599f4264",
+      "misconception_groups": [
+        {
+          "label": "Pointer cycle / Memory disconnection",
+          "percentage": 50,
+          "count": 2
+        },
+        {
+          "label": "Fully correct",
+          "percentage": 50,
+          "count": 2
+        }
+      ],
+      "insight": "Most students grasp the recursive step but fail to establish safe termination boundaries or detach pointers correctly.",
+      "intervention": "Spend 15 minutes reviewing recursion call stack diagrams and base-case design before the next topic.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T07:59:40.961Z"
+    }
+  ]
+}

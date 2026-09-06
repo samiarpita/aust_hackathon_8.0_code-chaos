@@ -21,20 +21,112 @@ if (isConfigured) {
   });
 }
 
+const fs = require('fs');
+const path = require('path');
+
 // ------------------------------------------------------------------------------
-// In-memory Mock DB Storage (Fallback for test/dev when Supabase is unconfigured)
+// Persistent File Storage for Local Database
 // ------------------------------------------------------------------------------
-const memoryStore = {
-  users: [],
-  profiles: [],
-  courses: [],
-  enrollments: [],
-  exams: [],
-  questions: [],
-  clos: [],
-  submissions: [],
-  analyses: []
-};
+const STORE_PATH = path.join(__dirname, 'data_store.json');
+
+function loadPersistentStore() {
+  const defaultStore = {
+    users: [],
+    profiles: [],
+    courses: [],
+    enrollments: [],
+    exams: [],
+    questions: [],
+    clos: [],
+    submissions: [],
+    analyses: []
+  };
+
+  try {
+    if (fs.existsSync(STORE_PATH)) {
+      const raw = fs.readFileSync(STORE_PATH, 'utf-8');
+      const parsed = JSON.parse(raw);
+      return {
+        users: Array.isArray(parsed.users) ? parsed.users : [],
+        profiles: Array.isArray(parsed.profiles) ? parsed.profiles : [],
+        courses: Array.isArray(parsed.courses) ? parsed.courses : [],
+        enrollments: Array.isArray(parsed.enrollments) ? parsed.enrollments : [],
+        exams: Array.isArray(parsed.exams) ? parsed.exams : [],
+        questions: Array.isArray(parsed.questions) ? parsed.questions : [],
+        clos: Array.isArray(parsed.clos) ? parsed.clos : [],
+        submissions: Array.isArray(parsed.submissions) ? parsed.submissions : [],
+        analyses: Array.isArray(parsed.analyses) ? parsed.analyses : []
+      };
+    }
+  } catch (err) {
+    console.warn('Could not read existing data_store.json:', err.message);
+  }
+  return defaultStore;
+}
+
+const memoryStore = loadPersistentStore();
+
+function persistData() {
+  try {
+    fs.writeFileSync(STORE_PATH, JSON.stringify(memoryStore, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Failed to write data_store.json:', err.message);
+  }
+}
+
+// Seed default preset questions if none exist
+if (memoryStore.questions.length === 0) {
+  const defaultCourseId = 'course-cse2100';
+  const defaultExamId = 'exam-midterm-fall2026';
+
+  memoryStore.courses.push({
+    id: defaultCourseId,
+    faculty_id: 'faculty-default',
+    name: 'Data Structures and Algorithms',
+    code: 'CSE 2100',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  });
+
+  memoryStore.exams.push({
+    id: defaultExamId,
+    course_id: defaultCourseId,
+    title: 'Midterm Examination Fall 2026',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  });
+
+  const q1 = {
+    id: 'Q1',
+    exam_id: defaultExamId,
+    question_number: 'Q1',
+    text: 'Explain recursion and why the base case terminates the call stack.',
+    correct_answer: 'A base case is a terminating condition in a recursive function that returns a value directly without making further recursive calls, preventing stack overflow.',
+    max_marks: 5.0,
+    created_at: new Date().toISOString()
+  };
+  const q2 = {
+    id: 'Q2',
+    exam_id: defaultExamId,
+    question_number: 'Q2',
+    text: 'Explain the difference between stack and heap memory allocation in C.',
+    correct_answer: 'Stack memory is automatically managed for local variables and function calls, while heap memory is manually allocated via malloc() and persists until freed.',
+    max_marks: 5.0,
+    created_at: new Date().toISOString()
+  };
+  const q3 = {
+    id: 'Q3',
+    exam_id: defaultExamId,
+    question_number: 'Q3',
+    text: 'Explain how the base case works in recursion and write a recursive function Node* reverse(Node* head) in C to reverse a singly linked list.',
+    correct_answer: 'Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}',
+    max_marks: 10.0,
+    created_at: new Date().toISOString()
+  };
+
+  memoryStore.questions.push(q1, q2, q3);
+  persistData();
+}
 
 /**
  * DB Repository Layer
@@ -64,6 +156,7 @@ const db = {
         updated_at: new Date().toISOString()
       };
       memoryStore.profiles.push(profile);
+      persistData();
       return profile;
     }
 
@@ -133,6 +226,7 @@ const db = {
     } else {
       memoryStore.users.push({ id, email: email.toLowerCase(), passwordHash });
     }
+    persistData();
   },
 
   async getUserAuthByEmail(email) {
@@ -153,6 +247,7 @@ const db = {
         updated_at: new Date().toISOString()
       };
       memoryStore.courses.push(course);
+      persistData();
       return course;
     }
 
@@ -204,6 +299,7 @@ const db = {
         updated_at: new Date().toISOString()
       };
       memoryStore.exams.push(exam);
+      persistData();
       return exam;
     }
 
@@ -249,13 +345,14 @@ const db = {
         exam = {
           id: randomUUID(),
           course_id: course.id,
-          title: 'Midterm Examination',
+          title: 'Midterm Examination Fall 2026',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         };
         memoryStore.exams.push(exam);
       }
 
+      persistData();
       return { courseId: course.id, examId: exam.id };
     }
 
@@ -296,7 +393,7 @@ const db = {
         .from('exams')
         .insert({
           course_id: courseId,
-          title: 'Midterm Examination'
+          title: 'Midterm Examination Fall 2026'
         })
         .select('id')
         .single();
@@ -349,6 +446,7 @@ const db = {
         };
       });
       memoryStore.submissions.push(...submissionRecords);
+      persistData();
 
       return { question, clos: cloRecords, submissions: submissionRecords };
     }
@@ -478,6 +576,7 @@ const db = {
       if (existing) {
         existing.answer_text = answerText;
         existing.updated_at = new Date().toISOString();
+        persistData();
         return existing;
       }
       const submission = {
@@ -493,6 +592,7 @@ const db = {
         created_at: new Date().toISOString()
       };
       memoryStore.submissions.push(submission);
+      persistData();
       return submission;
     }
 
@@ -519,6 +619,7 @@ const db = {
         sub.feedback = feedback;
         sub.is_correct = isCorrect;
       }
+      persistData();
       return sub;
     }
 
@@ -637,6 +738,7 @@ const db = {
         created_at: new Date().toISOString()
       };
       memoryStore.analyses.push(analysis);
+      persistData();
       return analysis;
     }
 
