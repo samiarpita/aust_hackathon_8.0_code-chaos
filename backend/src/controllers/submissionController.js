@@ -3,12 +3,16 @@ const submissionService = require('../services/submissionService');
 class SubmissionController {
   async submitAnswer(req, res, next) {
     try {
-      const { questionId, answerText } = req.validatedBody || req.body;
+      const { questionId, answerText, facultyId, facultyName, courseCode, assignmentTitle } = req.validatedBody || req.body;
       const result = await submissionService.submitStudentAnswer({
         studentId: req.user.id,
         studentName: req.user.name,
         questionId,
-        answerText
+        answerText,
+        facultyId,
+        facultyName,
+        courseCode,
+        assignmentTitle
       });
       return res.status(201).json(result);
     } catch (err) {
@@ -30,6 +34,30 @@ class SubmissionController {
       const { questionId } = req.params;
       const feedback = await submissionService.getStudentQuestionFeedback(req.user.id, questionId);
       return res.status(200).json(feedback);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getFacultyInbox(req, res, next) {
+    try {
+      const { examId, questionId } = req.query;
+      const submissions = await submissionService.getFacultySubmissions({
+        facultyId: req.user.id,
+        examId,
+        questionId
+      });
+      return res.status(200).json(submissions);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getQuestionSubmissions(req, res, next) {
+    try {
+      const { questionId } = req.params;
+      const submissions = await submissionService.getQuestionSubmissions(questionId);
+      return res.status(200).json(submissions);
     } catch (err) {
       next(err);
     }

@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { db } = require('../src/db/supabaseClient');
 
 describe('Role-Based Auth, Password Constraints & Student Feedback Portal Suite', () => {
   let facultyToken = null;
@@ -7,6 +8,17 @@ describe('Role-Based Auth, Password Constraints & Student Feedback Portal Suite'
   let courseId = null;
   let examId = null;
   let questionId = null;
+
+  beforeAll(() => {
+    if (db._memoryStore) {
+      db._memoryStore.profiles = db._memoryStore.profiles.filter(
+        p => !['sarah.faculty@aust.edu', 'alex.student@aust.edu', 'john@aust.edu'].includes(p.email) && p.student_id_number !== '20210104001'
+      );
+      db._memoryStore.users = db._memoryStore.users.filter(
+        u => !['sarah.faculty@aust.edu', 'alex.student@aust.edu', 'john@aust.edu'].includes(u.email)
+      );
+    }
+  });
 
   describe('1. Password Constraints & Validation', () => {
     it('should reject password with less than 8 characters', async () => {
@@ -289,6 +301,31 @@ Node* reverse(Node* head) { if (head == NULL) return head; Node* rest = reverse(
         expect(g).toHaveProperty('percentage');
         expect(g).toHaveProperty('count');
       });
+    });
+
+    it('Faculty views live student submissions inbox on GET /api/submissions/faculty-inbox', async () => {
+      const inboxRes = await request(app)
+        .get('/api/submissions/faculty-inbox')
+        .set('Authorization', facultyToken);
+
+      expect(inboxRes.status).toBe(200);
+      expect(Array.isArray(inboxRes.body)).toBe(true);
+      expect(inboxRes.body.length).toBeGreaterThanOrEqual(1);
+
+      const studentSub = inboxRes.body.find(s => s.questionId === questionId && s.studentName === 'Alex Rivera');
+      expect(studentSub).toBeDefined();
+      expect(studentSub.studentName).toBe('Alex Rivera');
+      expect(studentSub.answerText).toMatch(/recursion/i);
+    });
+
+    it('Faculty retrieves question submissions for 1-click sync on GET /api/submissions/question/:questionId', async () => {
+      const qSubsRes = await request(app)
+        .get(`/api/submissions/question/${questionId}`)
+        .set('Authorization', facultyToken);
+
+      expect(qSubsRes.status).toBe(200);
+      expect(Array.isArray(qSubsRes.body)).toBe(true);
+      expect(qSubsRes.body.length).toBeGreaterThanOrEqual(1);
     });
 
     it('Student sees updated personalized lackings and diagnostic feedback in their portal', async () => {

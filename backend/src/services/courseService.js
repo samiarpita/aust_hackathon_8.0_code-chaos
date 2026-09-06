@@ -19,6 +19,14 @@ class CourseService {
   async listExams(courseId) {
     return await db.listExamsForCourse(courseId);
   }
+
+  async listFaculties() {
+    return await db.listAllFaculties();
+  }
+
+  async listStudentAssignments(studentId) {
+    return await db.listStudentAssignments(studentId);
+  }
 }
 
 module.exports = new CourseService();

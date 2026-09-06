@@ -1,0 +1,1269 @@
+{
+  "users": [
+    {
+      "id": "a54e1958-cd35-4b22-895d-bdec0dbe0d1e",
+      "email": "samia@aust.edu",
+      "passwordHash": "$2b$10$Se0G7Q0SA0vH2p9PKROSzeo2QhOEr.jc2FVOxlXKFdguY1t4XZ1h."
+    },
+    {
+      "id": "75f0847b-ec10-4115-a4a9-4896103a16c5",
+      "email": "arpita@aust.edu",
+      "passwordHash": "$2b$10$l2sMriBgccGgVlPxneiXUe8Tx9sgfls4kQnBinJvrTwTK7C/flpcS"
+    },
+    {
+      "id": "5cc1d89a-82ee-42a8-8be6-2f156e443e7d",
+      "email": "tonima@gmail.com",
+      "passwordHash": "$2b$10$5PKoGfTcF0IGHivLIoLQeO06edorXn5/Ogv6DKxO9k3K3JQF6F0a6"
+    },
+    {
+      "id": "83547f83-d9f8-41e8-a596-07af039772dc",
+      "email": "arpita@gmail.com",
+      "passwordHash": "$2b$10$lifLUSdn2/1SGNi9Zd.88O.cR27UgUMdKxBf1BLFDQlR.fE02GjcW"
+    },
+    {
+      "id": "7c5f4e19-5704-4bc3-a954-6360bb44074a",
+      "email": "sarah.faculty@aust.edu",
+      "passwordHash": "$2b$10$lAwop3pe86H0yAsC3yJ0DunFEjDpMwOqsMicsOFR39JlwcDJQmdte"
+    },
+    {
+      "id": "d067a63d-28dc-4642-b023-97885286048d",
+      "email": "alex.student@aust.edu",
+      "passwordHash": "$2b$10$POaRU26xQcxsA9kucwfru.n51gxNAYV6Ki7E872Uzh8qL0cng16za"
+    },
+    {
+      "id": "faculty-arpita",
+      "email": "arpita.cse@aust.edu",
+      "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
+    },
+    {
+      "id": "faculty-alex",
+      "email": "alex.chen@aust.edu",
+      "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
+    },
+    {
+      "id": "user-faculty-demo",
+      "email": "faculty.demo@aust.edu",
+      "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
+    },
+    {
+      "id": "user-student-demo",
+      "email": "student.demo@aust.edu",
+      "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "a54e1958-cd35-4b22-895d-bdec0dbe0d1e",
+      "email": "samia@aust.edu",
+      "name": "Samia Rahman",
+      "role": "student",
+      "student_id_number": "20220104088",
+      "semester": "4.1",
+      "department": "CSE",
+      "created_at": "2026-09-06T07:59:16.082Z",
+      "updated_at": "2026-09-06T07:59:16.082Z"
+    },
+    {
+      "id": "75f0847b-ec10-4115-a4a9-4896103a16c5",
+      "email": "arpita@aust.edu",
+      "name": "Dr. Arpita Sengupta",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "CSE",
+      "created_at": "2026-09-06T07:59:16.285Z",
+      "updated_at": "2026-09-06T07:59:16.285Z"
+    },
+    {
+      "id": "5cc1d89a-82ee-42a8-8be6-2f156e443e7d",
+      "email": "tonima@gmail.com",
+      "name": "Tonima",
+      "role": "student",
+      "student_id_number": "20",
+      "semester": "Fall 2026",
+      "department": null,
+      "created_at": "2026-09-06T08:01:05.376Z",
+      "updated_at": "2026-09-06T08:01:05.376Z"
+    },
+    {
+      "id": "83547f83-d9f8-41e8-a596-07af039772dc",
+      "email": "arpita@gmail.com",
+      "name": "Arpita",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Department of Computer Science & Engineering",
+      "created_at": "2026-09-06T08:05:25.772Z",
+      "updated_at": "2026-09-06T08:05:25.772Z"
+    },
+    {
+      "id": "7c5f4e19-5704-4bc3-a954-6360bb44074a",
+      "email": "sarah.faculty@aust.edu",
+      "name": "Dr. Sarah Connor",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Department of CSE",
+      "created_at": "2026-09-06T09:08:59.166Z",
+      "updated_at": "2026-09-06T09:08:59.166Z"
+    },
+    {
+      "id": "d067a63d-28dc-4642-b023-97885286048d",
+      "email": "alex.student@aust.edu",
+      "name": "Alex Rivera",
+      "role": "student",
+      "student_id_number": "20210104001",
+      "semester": "Fall 2026",
+      "department": null,
+      "created_at": "2026-09-06T09:08:59.314Z",
+      "updated_at": "2026-09-06T09:08:59.314Z"
+    },
+    {
+      "id": "faculty-arpita",
+      "email": "arpita.cse@aust.edu",
+      "name": "Dr. Arpita Sengupta",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Computer Science & Engineering",
+      "designation": "Associate Professor",
+      "created_at": "2026-09-06T09:16:25.532Z",
+      "updated_at": "2026-09-06T09:16:25.532Z"
+    },
+    {
+      "id": "faculty-alex",
+      "email": "alex.chen@aust.edu",
+      "name": "Prof. Alex Chen",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Computer Science & Engineering",
+      "designation": "Professor & Head of Dept.",
+      "created_at": "2026-09-06T09:16:25.532Z",
+      "updated_at": "2026-09-06T09:16:25.532Z"
+    },
+    {
+      "id": "user-faculty-demo",
+      "email": "faculty.demo@aust.edu",
+      "name": "Dr. Arpita Sengupta",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Computer Science & Engineering",
+      "designation": "Associate Professor",
+      "created_at": "2026-09-06T09:16:25.532Z",
+      "updated_at": "2026-09-06T09:16:25.532Z"
+    },
+    {
+      "id": "user-student-demo",
+      "email": "student.demo@aust.edu",
+      "name": "Samia Arpita",
+      "role": "student",
+      "student_id_number": "20220104001",
+      "semester": "4.1",
+      "department": "Computer Science & Engineering",
+      "created_at": "2026-09-06T09:16:25.532Z",
+      "updated_at": "2026-09-06T09:16:25.532Z"
+    }
+  ],
+  "courses": [
+    {
+      "id": "course-cse2100",
+      "faculty_id": "faculty-default",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2100",
+      "created_at": "2026-09-06T07:59:10.545Z",
+      "updated_at": "2026-09-06T07:59:10.546Z"
+    },
+    {
+      "id": "a3cc3b7d-14cd-4784-8cec-dd14bbef0aa0",
+      "faculty_id": "7ec35112-d993-4eff-b01a-e41de9b26850",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2201",
+      "created_at": "2026-09-06T08:19:08.455Z",
+      "updated_at": "2026-09-06T08:19:08.455Z"
+    },
+    {
+      "id": "3d6fcaf4-824f-4afc-9671-8cc9ce3874f1",
+      "faculty_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2100",
+      "created_at": "2026-09-06T08:19:25.080Z",
+      "updated_at": "2026-09-06T08:19:25.080Z"
+    },
+    {
+      "id": "b6666f95-d9d0-47e8-bd6a-921f96564b7e",
+      "faculty_id": "f9d33797-f059-4070-8e9f-918d772f3eb2",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2201",
+      "created_at": "2026-09-06T08:19:46.790Z",
+      "updated_at": "2026-09-06T08:19:46.790Z"
+    },
+    {
+      "id": "e2de382e-b23e-456f-bee0-fe869a445077",
+      "faculty_id": "c70518e0-83d6-4422-ab2c-3fa080820ec0",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2201",
+      "created_at": "2026-09-06T08:20:03.385Z",
+      "updated_at": "2026-09-06T08:20:03.385Z"
+    },
+    {
+      "id": "55277399-60b8-48f3-9e7f-40b3edf2fdd2",
+      "faculty_id": "7c5f4e19-5704-4bc3-a954-6360bb44074a",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2201",
+      "created_at": "2026-09-06T09:08:59.788Z",
+      "updated_at": "2026-09-06T09:08:59.788Z"
+    },
+    {
+      "id": "course-cse3103",
+      "faculty_id": "faculty-sarah",
+      "name": "Database Management Systems",
+      "code": "CSE 3103",
+      "created_at": "2026-09-06T09:16:25.372Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    }
+  ],
+  "enrollments": [],
+  "exams": [
+    {
+      "id": "exam-midterm-fall2026",
+      "course_id": "course-cse2100",
+      "title": "Midterm Examination Fall 2026",
+      "created_at": "2026-09-06T07:59:10.546Z",
+      "updated_at": "2026-09-06T07:59:10.546Z"
+    },
+    {
+      "id": "78d74782-f035-42f0-a1aa-01e471a55600",
+      "course_id": "a3cc3b7d-14cd-4784-8cec-dd14bbef0aa0",
+      "title": "Midterm Exam Fall 2026",
+      "created_at": "2026-09-06T08:19:08.466Z",
+      "updated_at": "2026-09-06T08:19:08.466Z"
+    },
+    {
+      "id": "c26f6102-cb40-400f-a148-f0314633f5b7",
+      "course_id": "3d6fcaf4-824f-4afc-9671-8cc9ce3874f1",
+      "title": "Midterm Examination Fall 2026",
+      "created_at": "2026-09-06T08:19:25.080Z",
+      "updated_at": "2026-09-06T08:19:25.080Z"
+    },
+    {
+      "id": "4ac4827c-fcf8-4e85-a459-3c11067851a7",
+      "course_id": "b6666f95-d9d0-47e8-bd6a-921f96564b7e",
+      "title": "Midterm Exam Fall 2026",
+      "created_at": "2026-09-06T08:19:46.800Z",
+      "updated_at": "2026-09-06T08:19:46.801Z"
+    },
+    {
+      "id": "45ac537a-634d-47c5-91db-2022da8f2472",
+      "course_id": "e2de382e-b23e-456f-bee0-fe869a445077",
+      "title": "Midterm Exam Fall 2026",
+      "created_at": "2026-09-06T08:20:03.396Z",
+      "updated_at": "2026-09-06T08:20:03.396Z"
+    },
+    {
+      "id": "e2474b1f-15ac-462d-a686-d11fb139e202",
+      "course_id": "55277399-60b8-48f3-9e7f-40b3edf2fdd2",
+      "title": "Midterm Exam Fall 2026",
+      "created_at": "2026-09-06T09:08:59.800Z",
+      "updated_at": "2026-09-06T09:08:59.800Z"
+    },
+    {
+      "id": "exam-cse2100-a1",
+      "course_id": "course-cse2100",
+      "title": "Assignment 1: Recursion & Call Stack Boundary Conditions",
+      "due_date": "2026-09-15",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "exam-cse2201-a1",
+      "course_id": "course-cse2201",
+      "title": "Assignment 1: Divide & Conquer Recurrences (Master Theorem)",
+      "due_date": "2026-09-18",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "exam-cse2201-a2",
+      "course_id": "course-cse2201",
+      "title": "Assignment 2: Dynamic Programming & 0/1 Knapsack Formulations",
+      "due_date": "2026-09-28",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "exam-cse3103-a1",
+      "course_id": "course-cse3103",
+      "title": "Assignment 1: Relational Schema Normalization (3NF & BCNF)",
+      "due_date": "2026-09-16",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "exam-cse3103-a2",
+      "course_id": "course-cse3103",
+      "title": "Assignment 2: ACID Transactions & Strict 2-Phase Locking",
+      "due_date": "2026-09-30",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:16:25.373Z",
+      "updated_at": "2026-09-06T09:16:25.373Z"
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q1",
+      "exam_id": "exam-midterm-fall2026",
+      "question_number": "Q1",
+      "text": "Explain recursion and why the base case terminates the call stack.",
+      "correct_answer": "A base case is a terminating condition in a recursive function that returns a value directly without making further recursive calls, preventing stack overflow.",
+      "max_marks": 5,
+      "created_at": "2026-09-06T07:59:10.546Z",
+      "is_solution_approved": true,
+      "updated_at": "2026-09-06T09:16:48.696Z"
+    },
+    {
+      "id": "Q2",
+      "exam_id": "exam-midterm-fall2026",
+      "question_number": "Q2",
+      "text": "Explain the difference between stack and heap memory allocation in C.",
+      "correct_answer": "Stack memory is automatically managed for local variables and function calls, while heap memory is manually allocated via malloc() and persists until freed.",
+      "max_marks": 5,
+      "created_at": "2026-09-06T07:59:10.546Z"
+    },
+    {
+      "id": "Q3",
+      "exam_id": "exam-midterm-fall2026",
+      "question_number": "Q3",
+      "text": "Explain how the base case works in recursion and write a recursive function Node* reverse(Node* head) in C to reverse a singly linked list.",
+      "correct_answer": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "max_marks": 10,
+      "created_at": "2026-09-06T07:59:10.546Z"
+    },
+    {
+      "id": "40345d16-617a-4853-b8eb-a35e5cb16895",
+      "exam_id": "78d74782-f035-42f0-a1aa-01e471a55600",
+      "question_number": "Q3",
+      "text": "Explain recursion and the importance of a base case.",
+      "correct_answer": "A recursive function calls itself on smaller inputs until reaching a base case condition which stops further recursive calls and returns the base result.",
+      "max_marks": 10,
+      "created_at": "2026-09-06T08:19:08.488Z"
+    },
+    {
+      "id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "exam_id": "c26f6102-cb40-400f-a148-f0314633f5b7",
+      "question_number": "Q1",
+      "text": "Write a recursive function `Node* reverse(Node* head)` in C to reverse a singly linked list. Explain your base case condition and how pointer redirection works during the unwinding phase.",
+      "correct_answer": null,
+      "max_marks": 10,
+      "created_at": "2026-09-06T08:19:25.081Z"
+    },
+    {
+      "id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "exam_id": "c26f6102-cb40-400f-a148-f0314633f5b7",
+      "question_number": "Q1",
+      "text": "Write a recursive function `Node* reverse(Node* head)` in C to reverse a singly linked list. Explain your base case condition and how pointer redirection works during the unwinding phase.",
+      "correct_answer": null,
+      "max_marks": 10,
+      "created_at": "2026-09-06T08:19:45.623Z"
+    },
+    {
+      "id": "9729194a-5b68-49f4-a15c-c76dbcd4751a",
+      "exam_id": "4ac4827c-fcf8-4e85-a459-3c11067851a7",
+      "question_number": "Q3",
+      "text": "Explain recursion and the importance of a base case.",
+      "correct_answer": "A recursive function calls itself on smaller inputs until reaching a base case condition which stops further recursive calls and returns the base result.",
+      "max_marks": 10,
+      "created_at": "2026-09-06T08:19:46.822Z"
+    },
+    {
+      "id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "exam_id": "c26f6102-cb40-400f-a148-f0314633f5b7",
+      "question_number": "Q1",
+      "text": "Write a recursive function `Node* reverse(Node* head)` in C to reverse a singly linked list. Explain your base case condition and how pointer redirection works during the unwinding phase.",
+      "correct_answer": null,
+      "max_marks": 10,
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "3989fcd6-aa14-4866-8ac7-bcfa65110c9f",
+      "exam_id": "45ac537a-634d-47c5-91db-2022da8f2472",
+      "question_number": "Q3",
+      "text": "Explain recursion and the importance of a base case.",
+      "correct_answer": "A recursive function calls itself on smaller inputs until reaching a base case condition which stops further recursive calls and returns the base result.",
+      "max_marks": 10,
+      "created_at": "2026-09-06T08:20:03.419Z"
+    },
+    {
+      "id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "exam_id": "e2474b1f-15ac-462d-a686-d11fb139e202",
+      "question_number": "Q3",
+      "text": "Explain recursion and the importance of a base case.",
+      "correct_answer": "A recursive function calls itself on smaller inputs until reaching a base case condition which stops further recursive calls and returns the base result.",
+      "max_marks": 10,
+      "created_at": "2026-09-06T09:08:59.821Z"
+    },
+    {
+      "id": "Q4_ALGO1",
+      "exam_id": "exam-cse2201-a1",
+      "question_number": "Q4",
+      "text": "State the Master Theorem conditions. Solve T(n) = 2T(n/2) + O(n) and state the tight asymptotic bound with explanation.",
+      "correct_answer": "Using Master Theorem: T(n) = aT(n/b) + f(n)\na = 2, b = 2 => log_b(a) = log_2(2) = 1.\nf(n) = O(n) = Theta(n^1).\nThis matches Case 2: f(n) = Theta(n^{log_b(a)}).\nTherefore, T(n) = Theta(n^{log_b(a)} * log n) = Theta(n log n).",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "Q5_ALGO2",
+      "exam_id": "exam-cse2201-a2",
+      "question_number": "Q5",
+      "text": "Explain why greedy choice fails for 0/1 Knapsack. Write the dynamic programming state transition dp[i][w] to find maximum value with capacity W and items {wt[i], val[i]}.",
+      "correct_answer": "Greedy choice fails because items cannot be fractionally divided, so taking highest ratio may leave unused capacity that could hold a more valuable combination.\nDP Transition:\nif wt[i-1] <= w:\n  dp[i][w] = max(val[i-1] + dp[i-1][w - wt[i-1]], dp[i-1][w])\nelse:\n  dp[i][w] = dp[i-1][w]",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "Q6_DBMS1",
+      "exam_id": "exam-cse3103-a1",
+      "question_number": "Q6",
+      "text": "Given relation R(A, B, C, D) with FDs: AB -> C, C -> D, D -> A. Find all candidate keys and determine whether R is in 3NF and BCNF.",
+      "correct_answer": "1. Closures:\n(AB)+ = {A,B,C,D} => AB is a key.\n(BC)+ = {B,C,D,A} => BC is a key.\n(BD)+ = {B,D,A,C} => BD is a key.\nCandidate Keys: AB, BC, BD.\nPrime attributes: A, B, C, D (all attributes are prime!).\n2. 3NF check: For each FD X -> Y, either X is superkey or Y is prime. All FDs have prime RHS => R is in 3NF.\n3. BCNF check: For C -> D, C is not a superkey => R is NOT in BCNF.",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "Q7_DBMS2",
+      "exam_id": "exam-cse3103-a2",
+      "question_number": "Q7",
+      "text": "Explain the difference between Standard 2PL and Strict 2PL. How does Strict 2PL prevent cascading aborts?",
+      "correct_answer": "Standard 2PL has a growing phase (acquire locks) and shrinking phase (release locks anytime before commit).\nStrict 2PL requires all exclusive (X) locks to be held until the transaction explicitly COMMITS or ABORTS.\nHow it prevents cascading aborts: No other transaction can read uncommitted dirty data written by T. If T aborts, no other transaction has read its intermediate values, eliminating cascading rollbacks.",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:16:25.373Z"
+    }
+  ],
+  "clos": [
+    {
+      "id": "45ee4c9a-fc6a-4592-8ff1-890c11b236a5",
+      "question_id": "40345d16-617a-4853-b8eb-a35e5cb16895",
+      "code": "CLO-2",
+      "description": "Design recursive algorithms with base case termination.",
+      "created_at": "2026-09-06T08:19:08.488Z"
+    },
+    {
+      "id": "3dbd4660-0518-4bf5-91bc-aef1428537fa",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "code": "CLO-1",
+      "description": "Design recursive algorithms with correct boundary termination and state backtracking.",
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "37b42483-dfc6-487e-9ca3-e172f5e780c4",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "code": "CLO-2",
+      "description": "Manipulate dynamic pointer structures without memory leaks or cyclic references.",
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "d29b0df7-20b2-4fef-80e0-84557c910af7",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "code": "CLO-1",
+      "description": "Design recursive algorithms with correct boundary termination and state backtracking.",
+      "created_at": "2026-09-06T08:19:45.623Z"
+    },
+    {
+      "id": "fbfe84d6-1d1c-4624-bb14-13ab4b91ad19",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "code": "CLO-2",
+      "description": "Manipulate dynamic pointer structures without memory leaks or cyclic references.",
+      "created_at": "2026-09-06T08:19:45.623Z"
+    },
+    {
+      "id": "14dcf277-7b1d-49e1-9758-18f24216da69",
+      "question_id": "9729194a-5b68-49f4-a15c-c76dbcd4751a",
+      "code": "CLO-2",
+      "description": "Design recursive algorithms with base case termination.",
+      "created_at": "2026-09-06T08:19:46.822Z"
+    },
+    {
+      "id": "d810f8b4-9d75-45a1-a84f-ad78c26931f6",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "code": "CLO-1",
+      "description": "Design recursive algorithms with correct boundary termination and state backtracking.",
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "fe99ef95-13c6-4feb-9134-149f45d9cb92",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "code": "CLO-2",
+      "description": "Manipulate dynamic pointer structures without memory leaks or cyclic references.",
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "864acd38-7665-49df-aa8a-4dd921457ad8",
+      "question_id": "3989fcd6-aa14-4866-8ac7-bcfa65110c9f",
+      "code": "CLO-2",
+      "description": "Design recursive algorithms with base case termination.",
+      "created_at": "2026-09-06T08:20:03.419Z"
+    },
+    {
+      "id": "e50ec38f-5887-4526-8147-2a1d5984b3a9",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "code": "CLO-2",
+      "description": "Design recursive algorithms with base case termination.",
+      "created_at": "2026-09-06T09:08:59.822Z"
+    }
+  ],
+  "submissions": [
+    {
+      "id": "17b8e10d-8d34-4eab-ba83-8d734d063bc4",
+      "question_id": "Q1",
+      "student_id": "5cc1d89a-82ee-42a8-8be6-2f156e443e7d",
+      "student_name": "Tonima",
+      "student_identifier": "Tonima",
+      "answer_text": "int sum(int n) {\n  // Missing base case boundary check\n  return n + sum(n - 1);\n}",
+      "misconception_group": "Concept Mastered",
+      "feedback": "Excellent explanation! You correctly identified that the base case terminates recursive activation records to prevent stack overflow.",
+      "is_correct": true,
+      "created_at": "2026-09-06T08:12:12.761Z",
+      "faculty_id": "faculty-default",
+      "faculty_name": "Dr. Arpita Sengupta",
+      "course_code": "CSE 2100",
+      "assignment_title": "Midterm Examination Fall 2026",
+      "updated_at": "2026-09-06T09:19:09.415Z"
+    },
+    {
+      "id": "78910299-dae2-44fb-90e5-ca26984d02db",
+      "question_id": "Q3",
+      "student_id": "5cc1d89a-82ee-42a8-8be6-2f156e443e7d",
+      "student_name": "Tonima",
+      "student_identifier": "Tonima",
+      "answer_text": "// Question 1: Memory Allocation (First Fit & Worst Fit)\n#include <iostream>\nusing namespace std;\n\nvoid firstFitFunc(int block[], int nBlocks, int process[], int nProcesses) {\n    int blockCopy[nBlocks];\n    int allocation[nProcesses];\n\n    for (int i = 0; i < nBlocks; i++) {\n        blockCopy[i] = block[i];\n    }\n    for (int i = 0; i < nProcesses; i++) {\n        allocation[i] = -1;\n    }\n\n    for (int i = 0; i < nProcesses; i++) {\n        for (int j = 0; j < nBlocks; j++) {\n            if (blockCopy[j] >= process[i]) {\n                allocation[i] = j;\n                blockCopy[j] -= process[i];\n                break;\n            }\n        }\n    }\n\n    cout << \"\\nFirst Fit Allocation:\\n\";\n    for (int i = 0; i < nProcesses; i++) {\n        cout << \"P\" << i + 1 << \" (\" << process[i] << \") -> \";\n        if (allocation[i] != -1)\n            cout << \"Block \" << allocation[i] + 1;\n        else\n            cout << \"Not Allocated\";\n        cout << endl;\n    }\n}\n\nvoid worstFitFunc(int block[], int nBlocks, int process[], int nProcesses) {\n    int blockCopy[nBlocks];\n    int allocation[nProcesses];\n\n    for (int i = 0; i < nBlocks; i++) {\n        blockCopy[i] = block[i];\n    }\n    for (int i = 0; i < nProcesses; i++) {\n        allocation[i] = -1;\n    }\n\n    for (int i = 0; i < nProcesses; i++) {\n        int worstIndex = -1;\n\n        for (int j = 0; j < nBlocks; j++) {\n            if (blockCopy[j] >= process[i]) {\n\n                if (worstIndex == -1 || blockCopy[j] > blockCopy[worstIndex]) {\n                    worstIndex = j;\n                }\n            }\n        }\n\n        if (worstIndex != -1) {\n            allocation[i] = worstIndex;\n            blockCopy[worstIndex] -= process[i];\n        }\n    }\n\n    cout << \"\\nWorst Fit Allocation:\\n\";\n    for (int i = 0; i < nProcesses; i++) {\n        cout << \"P\" << i + 1 << \" (\" << process[i] << \") -> \";\n        if (allocation[i] != -1)\n            cout << \"Block \" << allocation[i] + 1;\n        else\n            cout << \"Not Allocated\";\n        cout << endl;\n    }\n}\n\nint main() {\n    int nBlocks, nProcesses;\n\n    cout << \"Enter number of memory blocks: \";\n    cin >> nBlocks;\n\n    int block[nBlocks];\n    cout << \"Enter block sizes:\\n\";\n    for (int i = 0; i < nBlocks; i++) {\n        cin >> block[i];\n    }\n\n    cout << \"Enter number of processes: \";\n    cin >> nProcesses;\n\n    int process[nProcesses];\n    cout << \"Enter process sizes:\\n\";\n    for (int i = 0; i < nProcesses; i++) {\n        cin >> process[i];\n    }\n\n    firstFitFunc(block, nBlocks, process, nProcesses);\n    worstFitFunc(block, nBlocks, process, nProcesses);\n\n    return 0;\n}",
+      "misconception_group": "Missing Base Case Boundary Termination",
+      "feedback": "Your implementation invokes reverse(head->next) without validating if head == NULL || head->next == NULL. This causes a segmentation fault on empty or 1-node lists.",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:14:18.449Z"
+    },
+    {
+      "id": "a6339478-e273-4da2-8ff6-15c23d485b5a",
+      "question_id": "40345d16-617a-4853-b8eb-a35e5cb16895",
+      "student_id": "92745ea0-d6de-44aa-bef7-c6731937e43e",
+      "student_name": "Alex Rivera",
+      "student_identifier": "Alex Rivera",
+      "answer_text": "Recursion is when a function calls itself. If head == NULL return head, then reverse rest.",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:19:08.516Z"
+    },
+    {
+      "id": "a9ad1195-ded3-4c2a-ad20-e22dbf795b6f",
+      "question_id": "40345d16-617a-4853-b8eb-a35e5cb16895",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL || head->next == NULL) return head; Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "created_at": "2026-09-06T08:19:08.529Z"
+    },
+    {
+      "id": "30a84842-afcc-4d65-ac61-6ca2098d225e",
+      "question_id": "40345d16-617a-4853-b8eb-a35e5cb16895",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Node* reverse(Node* head) { Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:19:08.536Z"
+    },
+    {
+      "id": "912644f8-dc57-4056-b987-1f153894b7e4",
+      "question_id": "40345d16-617a-4853-b8eb-a35e5cb16895",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL) return head; Node* rest = reverse(head->next); head->next = head; return rest; }",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:19:08.537Z"
+    },
+    {
+      "id": "99b7819a-f937-47d3-afbf-f0876524eb16",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "5d24f50f-68b3-452b-8d12-b54b5bae4bfe",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "968010fc-f645-457b-8a31-d6cbfffe9959",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next = head;\n  return rest;\n}",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "24e90256-9cf9-4e4f-aec8-a5b2a23d6162",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "student_id": null,
+      "student_name": "Student 4",
+      "student_identifier": "Student 4",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head.next);\n  head.next.next = head;\n  return rest;\n}",
+      "misconception_group": "Syntax & pointer dereferencing errors (. vs ->)",
+      "feedback": "In C, dynamic pointers use arrow notation (->) instead of dot notation (.) for structure member access.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "8cb1f1c9-0fe6-44b8-96b5-0e0e1d442325",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "student_id": null,
+      "student_name": "Student 5",
+      "student_identifier": "Student 5",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "715a03f7-c814-4989-a388-f8bbc5f97b19",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "student_id": null,
+      "student_name": "Student 6",
+      "student_identifier": "Student 6",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  return head;\n}",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "c7718ecf-f062-4126-8751-bb19fa9dc4d0",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "student_id": null,
+      "student_name": "Student 7",
+      "student_identifier": "Student 7",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL) return NULL;\n  head->next = reverse(head->next);\n  return head;\n}",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "19b27500-86df-402d-9990-15d43c21fb45",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "student_id": null,
+      "student_name": "Student 8",
+      "student_identifier": "Student 8",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* newHead = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return newHead;\n}",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T08:19:25.082Z"
+    },
+    {
+      "id": "9e9daa86-5a2b-4aab-983f-46861998c3bd",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T08:19:45.623Z"
+    },
+    {
+      "id": "838fb0e0-2e54-4527-b588-ee5a9e056a81",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:45.623Z"
+    },
+    {
+      "id": "c2b32c56-8043-443d-9df0-a82535060afd",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next = head;\n  return rest;\n}",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:45.623Z"
+    },
+    {
+      "id": "17ef7461-6177-481b-9145-9e28a8d4fa26",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "student_id": null,
+      "student_name": "Student 4",
+      "student_identifier": "Student 4",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head.next);\n  head.next.next = head;\n  return rest;\n}",
+      "misconception_group": "Syntax & pointer dereferencing errors (. vs ->)",
+      "feedback": "In C, dynamic pointers use arrow notation (->) instead of dot notation (.) for structure member access.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:45.623Z"
+    },
+    {
+      "id": "f8620f5f-86d7-49df-9069-fce99baeb950",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "student_id": null,
+      "student_name": "Student 5",
+      "student_identifier": "Student 5",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T08:19:45.623Z"
+    },
+    {
+      "id": "0efe9a08-8599-4178-9536-65f930c2f53e",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "student_id": null,
+      "student_name": "Student 6",
+      "student_identifier": "Student 6",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  return head;\n}",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:45.623Z"
+    },
+    {
+      "id": "d69b4f5e-efe2-43a1-9509-7957e74feaf5",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "student_id": null,
+      "student_name": "Student 7",
+      "student_identifier": "Student 7",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL) return NULL;\n  head->next = reverse(head->next);\n  return head;\n}",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:19:45.624Z"
+    },
+    {
+      "id": "2e324265-5626-4055-be8f-ddfae247411b",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "student_id": null,
+      "student_name": "Student 8",
+      "student_identifier": "Student 8",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* newHead = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return newHead;\n}",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T08:19:45.624Z"
+    },
+    {
+      "id": "ec5f0b4d-5d07-4326-9328-af311287d01d",
+      "question_id": "9729194a-5b68-49f4-a15c-c76dbcd4751a",
+      "student_id": "831c92fc-847f-4012-9f23-ee223340eb3a",
+      "student_name": "Alex Rivera",
+      "student_identifier": "Alex Rivera",
+      "answer_text": "Recursion is when a function calls itself. If head == NULL return head, then reverse rest.",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:19:46.842Z"
+    },
+    {
+      "id": "9c12fe63-48b3-4f4e-a29b-6f88133894a5",
+      "question_id": "9729194a-5b68-49f4-a15c-c76dbcd4751a",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL || head->next == NULL) return head; Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "created_at": "2026-09-06T08:19:46.859Z"
+    },
+    {
+      "id": "88f73357-765b-460c-90e7-553122cdeb7a",
+      "question_id": "9729194a-5b68-49f4-a15c-c76dbcd4751a",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Node* reverse(Node* head) { Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:19:46.865Z"
+    },
+    {
+      "id": "079ab1a8-d41c-472b-8a0c-e2a9a220b711",
+      "question_id": "9729194a-5b68-49f4-a15c-c76dbcd4751a",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL) return head; Node* rest = reverse(head->next); head->next = head; return rest; }",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:19:46.866Z"
+    },
+    {
+      "id": "e0738486-dd9b-4b14-98dc-9481cc6b3bda",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "1ed0b368-e219-434a-8f4b-db1a6b82f7c8",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "889a9f35-c968-4ed6-af17-7cd415f558b4",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next = head;\n  return rest;\n}",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "d3dc71b8-efe0-4ee8-acbd-60caa185f910",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "student_id": null,
+      "student_name": "Student 4",
+      "student_identifier": "Student 4",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head.next);\n  head.next.next = head;\n  return rest;\n}",
+      "misconception_group": "Syntax & pointer dereferencing errors (. vs ->)",
+      "feedback": "In C, dynamic pointers use arrow notation (->) instead of dot notation (.) for structure member access.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "bf6bfef0-4829-4f74-abbe-2199461b3115",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "student_id": null,
+      "student_name": "Student 5",
+      "student_identifier": "Student 5",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return rest;\n}",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "fec9d466-115e-4052-9ccf-0b0f3405b13e",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "student_id": null,
+      "student_name": "Student 6",
+      "student_identifier": "Student 6",
+      "answer_text": "Node* reverse(Node* head) {\n  Node* rest = reverse(head->next);\n  head->next->next = head;\n  return head;\n}",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "04875db5-be53-49fa-a43b-513a9ffdb91d",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "student_id": null,
+      "student_name": "Student 7",
+      "student_identifier": "Student 7",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL) return NULL;\n  head->next = reverse(head->next);\n  return head;\n}",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "09bf8134-a4d9-4f4c-b525-50deadc56046",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "student_id": null,
+      "student_name": "Student 8",
+      "student_identifier": "Student 8",
+      "answer_text": "Node* reverse(Node* head) {\n  if (head == NULL || head->next == NULL) return head;\n  Node* newHead = reverse(head->next);\n  head->next->next = head;\n  head->next = NULL;\n  return newHead;\n}",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T08:20:02.121Z"
+    },
+    {
+      "id": "78bcdd0f-924a-48a3-8763-9172e9be10d6",
+      "question_id": "3989fcd6-aa14-4866-8ac7-bcfa65110c9f",
+      "student_id": "febe11e6-557e-4a4f-8094-88dd92f8c6a1",
+      "student_name": "Alex Rivera",
+      "student_identifier": "Alex Rivera",
+      "answer_text": "Recursion is when a function calls itself. If head == NULL return head, then reverse rest.",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:20:03.436Z"
+    },
+    {
+      "id": "701b02ce-fdaa-4d04-b23a-4dd7811778be",
+      "question_id": "3989fcd6-aa14-4866-8ac7-bcfa65110c9f",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL || head->next == NULL) return head; Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "created_at": "2026-09-06T08:20:03.457Z"
+    },
+    {
+      "id": "bc169aaa-e48a-449c-b2c9-a442dc1fce53",
+      "question_id": "3989fcd6-aa14-4866-8ac7-bcfa65110c9f",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Node* reverse(Node* head) { Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:20:03.462Z"
+    },
+    {
+      "id": "521033a8-8703-48a4-9cf1-30955597b9d0",
+      "question_id": "3989fcd6-aa14-4866-8ac7-bcfa65110c9f",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL) return head; Node* rest = reverse(head->next); head->next = head; return rest; }",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T08:20:03.463Z"
+    },
+    {
+      "id": "5f0f8e60-935a-4871-bdbf-8f1418792b30",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "student_id": "d067a63d-28dc-4642-b023-97885286048d",
+      "student_name": "Alex Rivera",
+      "student_identifier": "Alex Rivera",
+      "answer_text": "Recursion is when a function calls itself. If head == NULL return head, then reverse rest.",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:08:59.840Z"
+    },
+    {
+      "id": "570dbad5-6781-4b70-8ff7-71cbf67bc031",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL || head->next == NULL) return head; Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Fully correct",
+      "feedback": "Excellent answer! You correctly handled base case boundaries and pointer unwinding.",
+      "is_correct": true,
+      "created_at": "2026-09-06T09:08:59.862Z"
+    },
+    {
+      "id": "aa253fc1-c9fd-4455-9cc7-757206f3c9dd",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Node* reverse(Node* head) { Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Pointer cycle / Memory disconnection",
+      "feedback": "You may need to review pointer cycle / memory disconnection.",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:08:59.866Z"
+    },
+    {
+      "id": "759cced9-da0e-48e6-9921-46c906afcb8c",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL) return head; Node* rest = reverse(head->next); head->next = head; return rest; }",
+      "misconception_group": "Base case omission or improper termination",
+      "feedback": "Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:08:59.886Z"
+    },
+    {
+      "id": "e236ef1d-ab19-4cc9-98e9-1c3251b78149",
+      "question_id": "Q4_ALGO1",
+      "student_id": "user-student-demo",
+      "student_name": "Samia Arpita",
+      "student_identifier": "Samia Arpita",
+      "faculty_id": "faculty-alex",
+      "faculty_name": "Prof. Alex Chen",
+      "course_code": "CSE 2201",
+      "assignment_title": "Assignment 1: Divide & Conquer Recurrences (Master Theorem)",
+      "answer_text": "Using Master Theorem Case 2: a=2, b=2, log2(2)=1, so f(n)=n matches n^1. Complexity is Theta(n log n).",
+      "misconception_group": "Concept Mastered",
+      "feedback": "Spot on! You correctly recognized Master Theorem Case 2 with balanced work across levels yielding Theta(n log n).",
+      "is_correct": true,
+      "created_at": "2026-09-06T09:16:48.711Z"
+    },
+    {
+      "id": "089d457c-9c9f-4edf-a611-42b5d340a439",
+      "question_id": "Q2",
+      "student_id": "5cc1d89a-82ee-42a8-8be6-2f156e443e7d",
+      "student_name": "Tonima",
+      "student_identifier": "Tonima",
+      "faculty_id": "faculty-default",
+      "faculty_name": "Dr. Arpita Sengupta",
+      "course_code": "CSE 2100",
+      "assignment_title": "Midterm Examination Fall 2026",
+      "answer_text": "int* createArray() {\n  int arr[10];\n  // Flaw: returning local stack address\n  return arr;\n}",
+      "misconception_group": "Dangling Stack Memory Misconception",
+      "feedback": "Warning: Stack variables are invalidated upon function return. Returning a local stack address creates a dangling pointer.",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:19:26.525Z"
+    }
+  ],
+  "analyses": [
+    {
+      "id": "1e11931b-7ea3-4ad4-8d43-68b664b35492",
+      "question_id": "40345d16-617a-4853-b8eb-a35e5cb16895",
+      "misconception_groups": [
+        {
+          "label": "Pointer cycle / Memory disconnection",
+          "percentage": 50,
+          "count": 2
+        },
+        {
+          "label": "Fully correct",
+          "percentage": 50,
+          "count": 2
+        }
+      ],
+      "insight": "Most students grasp the recursive step but fail to establish safe termination boundaries or detach pointers correctly.",
+      "intervention": "Spend 15 minutes reviewing recursion call stack diagrams and base-case design before the next topic.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T08:19:08.634Z"
+    },
+    {
+      "id": "0777b2b2-508b-46ed-9a09-17e8b8f96f0d",
+      "question_id": "804fdad9-4d24-48a9-a0eb-27a74b497310",
+      "misconception_groups": [
+        {
+          "label": "Base case omission / Infinite recursion",
+          "percentage": 13,
+          "count": 1
+        },
+        {
+          "label": "Pointer cycle / Memory disconnection",
+          "percentage": 25,
+          "count": 2
+        },
+        {
+          "label": "Syntax & dot-operator misuse",
+          "percentage": 13,
+          "count": 1
+        },
+        {
+          "label": "Fully correct",
+          "percentage": 49,
+          "count": 4
+        }
+      ],
+      "insight": "Most students grasp the recursive step but fail to establish safe termination boundaries or detach pointers correctly.",
+      "intervention": "Spend 15 minutes reviewing recursion call stack diagrams and base-case design before the next topic.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 8,
+      "created_at": "2026-09-06T08:19:25.150Z"
+    },
+    {
+      "id": "57ac4639-c73c-40a1-a7ff-204b86ad0982",
+      "question_id": "e589e21b-e382-4c47-ae86-f0309acb10f5",
+      "misconception_groups": [
+        {
+          "label": "Base case omission / Infinite recursion",
+          "percentage": 13,
+          "count": 1
+        },
+        {
+          "label": "Pointer cycle / Memory disconnection",
+          "percentage": 25,
+          "count": 2
+        },
+        {
+          "label": "Syntax & dot-operator misuse",
+          "percentage": 13,
+          "count": 1
+        },
+        {
+          "label": "Fully correct",
+          "percentage": 49,
+          "count": 4
+        }
+      ],
+      "insight": "Most students grasp the recursive step but fail to establish safe termination boundaries or detach pointers correctly.",
+      "intervention": "Spend 15 minutes reviewing recursion call stack diagrams and base-case design before the next topic.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 8,
+      "created_at": "2026-09-06T08:19:45.709Z"
+    },
+    {
+      "id": "10ce8288-1ce7-44aa-9a75-7051db63b4b7",
+      "question_id": "9729194a-5b68-49f4-a15c-c76dbcd4751a",
+      "misconception_groups": [
+        {
+          "label": "Pointer cycle / Memory disconnection",
+          "percentage": 50,
+          "count": 2
+        },
+        {
+          "label": "Fully correct",
+          "percentage": 50,
+          "count": 2
+        }
+      ],
+      "insight": "Most students grasp the recursive step but fail to establish safe termination boundaries or detach pointers correctly.",
+      "intervention": "Spend 15 minutes reviewing recursion call stack diagrams and base-case design before the next topic.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T08:19:46.987Z"
+    },
+    {
+      "id": "05e64fb4-aa05-4645-814c-26d3c394719d",
+      "question_id": "b031abc4-4d09-4dc6-8c6c-8cef5b7a3b55",
+      "misconception_groups": [
+        {
+          "label": "Base case omission / Infinite recursion",
+          "percentage": 13,
+          "count": 1
+        },
+        {
+          "label": "Pointer cycle / Memory disconnection",
+          "percentage": 25,
+          "count": 2
+        },
+        {
+          "label": "Syntax & dot-operator misuse",
+          "percentage": 13,
+          "count": 1
+        },
+        {
+          "label": "Fully correct",
+          "percentage": 49,
+          "count": 4
+        }
+      ],
+      "insight": "Most students grasp the recursive step but fail to establish safe termination boundaries or detach pointers correctly.",
+      "intervention": "Spend 15 minutes reviewing recursion call stack diagrams and base-case design before the next topic.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 8,
+      "created_at": "2026-09-06T08:20:02.244Z"
+    },
+    {
+      "id": "37fa95f0-ffcf-43a5-8929-2533d6502a78",
+      "question_id": "3989fcd6-aa14-4866-8ac7-bcfa65110c9f",
+      "misconception_groups": [
+        {
+          "label": "Pointer cycle / Memory disconnection",
+          "percentage": 50,
+          "count": 2
+        },
+        {
+          "label": "Fully correct",
+          "percentage": 50,
+          "count": 2
+        }
+      ],
+      "insight": "Most students grasp the recursive step but fail to establish safe termination boundaries or detach pointers correctly.",
+      "intervention": "Spend 15 minutes reviewing recursion call stack diagrams and base-case design before the next topic.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T08:20:03.534Z"
+    },
+    {
+      "id": "323b7cff-e4cb-4efd-aab9-18c687e27bb6",
+      "question_id": "655cf88b-a07f-4235-b528-e01390efc983",
+      "misconception_groups": [
+        {
+          "label": "Pointer cycle / Memory disconnection",
+          "percentage": 50,
+          "count": 2
+        },
+        {
+          "label": "Fully correct",
+          "percentage": 50,
+          "count": 2
+        }
+      ],
+      "insight": "Most students grasp the recursive step but fail to establish safe termination boundaries or detach pointers correctly.",
+      "intervention": "Spend 15 minutes reviewing recursion call stack diagrams and base-case design before the next topic.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T09:08:59.929Z"
+    }
+  ]
+}

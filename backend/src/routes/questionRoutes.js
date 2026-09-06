@@ -14,4 +14,7 @@ router.post('/', requireRole('faculty'), validateBody(createQuestionSchema), que
 // Batch upload student answers (TXT, CSV, JSON payload)
 router.post('/:id/upload', requireRole('faculty'), questionController.uploadSubmissions);
 
+// Faculty approve and release reference model solution
+router.patch('/:id/approve', requireRole('faculty'), questionController.approveSolution);
+
 module.exports = router;

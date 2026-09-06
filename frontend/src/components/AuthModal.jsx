@@ -11,7 +11,9 @@ import {
   CheckCircle2,
   Calendar,
   Hash,
-  Building
+  Building,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import LearnMapLogo from './LearnMapLogo';
@@ -30,14 +32,23 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   const [department, setDepartment] = useState('Department of Computer Science & Engineering');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // Clear password and errors whenever modal opens or switches mode/role
+  const resetAllFields = () => {
+    setEmail('');
+    setStudentId('');
+    setFullName('');
+    setPassword('');
+    setShowPassword(false);
+    setErrorMessage(null);
+  };
+
+  // Completely reset all input fields whenever modal opens or when switching role/mode
   useEffect(() => {
     if (isOpen) {
-      setPassword('');
-      setErrorMessage(null);
+      resetAllFields();
     }
   }, [isOpen, mode, selectedRole]);
 
@@ -52,8 +63,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   const isPasswordValid = hasMinLength && hasUpper && hasLower && hasNumber && hasSpecial;
 
   const handleClose = () => {
-    setPassword('');
-    setErrorMessage(null);
+    resetAllFields();
     onClose();
   };
 
@@ -72,18 +82,21 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
       if (mode === 'register') {
         await signUp({
           name: fullName,
-          email,
-          studentId: selectedRole === 'student' ? studentId : undefined,
-          semester: selectedRole === 'student' ? semester : undefined,
-          department: selectedRole === 'faculty' ? department : undefined,
+          email: email.trim(),
+          studentId: selectedRole === 'student' ? studentId.trim() : undefined,
+          semester: selectedRole === 'student' ? semester.trim() : undefined,
+          department: selectedRole === 'faculty' ? department.trim() : undefined,
           password,
           role: selectedRole
         });
       } else {
+        const inputId = (studentId || email || '').trim();
+        const isEmailInput = inputId.includes('@');
+
         await signIn({
-          email: email || undefined,
-          studentId: selectedRole === 'student' ? (studentId || email) : undefined,
-          semester: selectedRole === 'student' ? semester : undefined,
+          email: selectedRole === 'faculty' ? email.trim() : (isEmailInput ? inputId : (email ? email.trim() : undefined)),
+          studentId: selectedRole === 'student' ? (isEmailInput ? undefined : inputId) : undefined,
+          semester: selectedRole === 'student' ? semester.trim() : undefined,
           password,
           role: selectedRole
         });
@@ -167,14 +180,15 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
 
           {/* Error message */}
           {errorMessage && (
-            <div className="mb-3 p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-300 text-xs flex items-center gap-2">
-              <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>{errorMessage}</span>
+            <div className="mb-3 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-300 text-xs flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <span className="leading-snug">{errorMessage}</span>
             </div>
           )}
 
-          {/* Form with autoComplete="off" */}
-          <form onSubmit={handleSubmit} autoComplete="off" className="space-y-3">
+          {/* Form */}
+          <form onSubmit={handleSubmit} autoComplete="off" data-form-type="other" className="space-y-3">
+            {/* Registration: Full Name */}
             {mode === 'register' && (
               <div>
                 <label className="block text-xs font-semibold mb-1">
@@ -185,9 +199,12 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     type="text"
                     required
                     autoComplete="off"
+                    name="reg_fullname_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder={selectedRole === 'faculty' ? 'Dr. Arpita Sengupta' : 'Alex Chen'}
+                    placeholder={selectedRole === 'faculty' ? 'e.g. Dr. Arpita Sengupta' : 'e.g. Samia Rahman'}
                     className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
                   />
                   <User className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
@@ -195,45 +212,52 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               </div>
             )}
 
-            {/* Student Specific Fields: Student ID Number & Semester */}
+            {/* Student ID / Identification */}
             {selectedRole === 'student' && (
-              <>
-                <div>
-                  <label className="block text-xs font-semibold mb-1">
-                    Student ID Number
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      required
-                      autoComplete="off"
-                      value={studentId}
-                      onChange={(e) => setStudentId(e.target.value)}
-                      placeholder="e.g. 20210104001 or 2026-CSE-042"
-                      className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
-                    />
-                    <Hash className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
-                  </div>
+              <div>
+                <label className="block text-xs font-semibold mb-1">
+                  {mode === 'login' ? 'Student ID Number or Email' : 'Student ID Number'}
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    required
+                    autoComplete="off"
+                    name="student_id_input_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
+                    value={studentId}
+                    onChange={(e) => setStudentId(e.target.value)}
+                    placeholder={mode === 'login' ? 'e.g. 20210104001 or student@aust.edu' : 'e.g. 20210104001 or 2026-CSE-042'}
+                    className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
+                  />
+                  <Hash className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
                 </div>
+              </div>
+            )}
 
-                <div>
-                  <label className="block text-xs font-semibold mb-1">
-                    Semester / Session
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      required
-                      autoComplete="off"
-                      value={semester}
-                      onChange={(e) => setSemester(e.target.value)}
-                      placeholder="e.g. Fall 2026, 4th Semester"
-                      className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
-                    />
-                    <Calendar className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
-                  </div>
+            {/* Student Semester */}
+            {selectedRole === 'student' && (
+              <div>
+                <label className="block text-xs font-semibold mb-1">
+                  Semester / Session
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    required
+                    autoComplete="off"
+                    name="semester_input_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
+                    value={semester}
+                    onChange={(e) => setSemester(e.target.value)}
+                    placeholder="e.g. Fall 2026, 4th Semester"
+                    className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
+                  />
+                  <Calendar className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
                 </div>
-              </>
+              </div>
             )}
 
             {/* Faculty Department */}
@@ -246,6 +270,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                   <input
                     type="text"
                     autoComplete="off"
+                    name="department_input_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     placeholder="Department of Computer Science & Engineering"
@@ -256,7 +283,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               </div>
             )}
 
-            {/* Email Field (Required for faculty or student register) */}
+            {/* Email Field (Required for faculty login/register, or student register) */}
             {(selectedRole === 'faculty' || mode === 'register') && (
               <div>
                 <label className="block text-xs font-semibold mb-1">
@@ -267,6 +294,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     type="email"
                     required
                     autoComplete="off"
+                    name="inst_email_input_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={selectedRole === 'faculty' ? 'faculty@aust.edu' : 'student@aust.edu'}
@@ -277,22 +307,53 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               </div>
             )}
 
-            {/* Password with autoComplete="new-password" */}
+            {/* Password Field with View / Hide Toggle */}
             <div>
-              <label className="block text-xs font-semibold mb-1">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-[11px] font-medium text-[#7847EB] dark:text-[#B388FF] hover:underline flex items-center gap-1 focus:outline-none"
+                >
+                  {showPassword ? (
+                    <>
+                      <EyeOff className="w-3 h-3" />
+                      <span>Hide</span>
+                    </>
+                  ) : (
+                    <>
+                      <Eye className="w-3 h-3" />
+                      <span>Show</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   autoComplete="new-password"
+                  name="auth_password_input_unique"
+                  data-lpignore="true"
+                  data-form-type="other"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
+                  className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8 pr-9"
                 />
                 <Lock className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2.5 top-2.5 text-[#6C5B82] hover:text-[#231735] dark:hover:text-[#FAF7FD] transition-colors"
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                </button>
               </div>
             </div>
 

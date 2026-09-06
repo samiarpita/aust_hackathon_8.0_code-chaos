@@ -50,18 +50,20 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth }) {
 
         {/* Center Navigation Links based on Authenticated User Role */}
         <div className="flex items-center gap-1 bg-[#F8F6FD]/70 dark:bg-[#120A21]/70 p-1 rounded-full border border-[#B49BDE]/20 dark:border-[#C4ABF0]/10">
-          <button
-            onClick={() => setActiveTab('dashboard')}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-              activeTab === 'dashboard'
-                ? 'bg-white dark:bg-[#2C1F42] text-[#7847EB] dark:text-[#B388FF] shadow-xs font-semibold'
-                : 'text-[#6C5B82] dark:text-[#CAB7E4] hover:text-[#231735] dark:hover:text-[#FAF7FD]'
-            }`}
-          >
-            Dashboard
-          </button>
+          {(!user || isFaculty) && (
+            <button
+              onClick={() => setActiveTab(user ? 'dashboard' : 'landing')}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                activeTab === 'dashboard' || (!user && activeTab === 'landing')
+                  ? 'bg-white dark:bg-[#2C1F42] text-[#7847EB] dark:text-[#B388FF] shadow-xs font-semibold'
+                  : 'text-[#6C5B82] dark:text-[#CAB7E4] hover:text-[#231735] dark:hover:text-[#FAF7FD]'
+              }`}
+            >
+              {user ? 'Dashboard' : 'Home'}
+            </button>
+          )}
 
-          {isFaculty && (
+          {user && isFaculty && (
             <>
               <button
                 onClick={() => setActiveTab('new-analysis')}
@@ -87,7 +89,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth }) {
             </>
           )}
 
-          {isStudent && (
+          {(isStudent || !user) && (
             <button
               onClick={() => setActiveTab('student-portal')}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
@@ -97,7 +99,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth }) {
               }`}
             >
               <GraduationCap className="w-3.5 h-3.5" />
-              <span>My Diagnostic Feedback</span>
+              <span>{isStudent ? 'My Diagnostic Portal' : 'Student Portal'}</span>
             </button>
           )}
         </div>
@@ -120,10 +122,10 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth }) {
           {/* User Auth Pill with Role Indicator or Login button */}
           {user ? (
             <div className="flex items-center gap-1.5 pl-1.5 pr-2 py-1 rounded-full bg-white/80 dark:bg-[#251A38]/80 border border-[#B49BDE]/20 dark:border-[#C4ABF0]/15 text-xs">
-              <div className={`w-6 h-6 rounded-full text-white flex items-center justify-center font-bold text-[10px] ${
+              <div className={`w-6 h-6 rounded-full text-white flex items-center justify-center font-bold text-[10px] uppercase shadow-xs ${
                 isFaculty ? 'bg-gradient-to-tr from-[#7847EB] to-[#9061F9]' : 'bg-gradient-to-tr from-[#DB2777] to-[#EC4899]'
               }`}>
-                {isFaculty ? 'F' : 'S'}
+                {user.name?.trim() ? user.name.trim().charAt(0).toUpperCase() : (isFaculty ? 'F' : 'S')}
               </div>
               <div className="hidden lg:flex flex-col text-left text-[11px] leading-tight">
                 <span className="text-[#231735] dark:text-[#FAF7FD] font-semibold truncate max-w-[100px]">
