@@ -11,6 +11,7 @@ import ResultsPage from './pages/ResultsPage';
 import HistoryPage from './pages/HistoryPage';
 import StudentPortalPage from './pages/StudentPortalPage';
 import AuthModal from './components/AuthModal';
+import PostAssignmentModal from './components/PostAssignmentModal';
 
 function AppContent() {
   const { user, isStudent, isFaculty, switchRole } = useAuth();
@@ -29,6 +30,7 @@ function AppContent() {
   });
 
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isPostAssignmentOpen, setIsPostAssignmentOpen] = useState(false);
   const [activePresetDataset, setActivePresetDataset] = useState(null);
 
   // Automatically ensure logged-in students are always kept in the Student Portal
@@ -52,6 +54,19 @@ function AppContent() {
     switchRole('faculty');
     setActivePresetDataset(preset);
     setActiveTab('new-analysis');
+  };
+
+  const handleOpenPostAssignment = () => {
+    if (!user) {
+      setIsAuthOpen(true);
+      return;
+    }
+    if (user.role === 'student') {
+      setActiveTab('student-portal');
+      return;
+    }
+    switchRole('faculty');
+    setIsPostAssignmentOpen(true);
   };
 
   const handleViewDemo = () => {
@@ -100,6 +115,7 @@ function AppContent() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenPostAssignment={handleOpenPostAssignment}
       />
 
       {/* Main Content Router */}
@@ -115,6 +131,7 @@ function AppContent() {
         {activeTab === 'dashboard' && (
           <DashboardPage
             onNewAnalysis={handleStartAnalysis}
+            onOpenPostAssignment={handleOpenPostAssignment}
             onSelectAnalysis={handleSelectHistoricalAnalysis}
             onOpenStudentPortal={handleOpenStudentPortal}
           />
@@ -151,6 +168,16 @@ function AppContent() {
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
         onAuthSuccess={handleAuthSuccess}
+      />
+
+      {/* Post Assignment Modal for Faculty */}
+      <PostAssignmentModal
+        isOpen={isPostAssignmentOpen}
+        onClose={() => setIsPostAssignmentOpen(false)}
+        onNavigateToStudentPortal={handleOpenStudentPortal}
+        onAssignmentPosted={(result) => {
+          // Can optionally redirect or show toast
+        }}
       />
 
       {/* Clean Academic Footer */}

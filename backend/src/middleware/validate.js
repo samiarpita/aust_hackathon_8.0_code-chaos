@@ -65,6 +65,28 @@ const createExamSchema = z.object({
   title: z.string().trim().min(2, 'Exam title is required')
 });
 
+const postAssignmentSchema = z.object({
+  courseId: z.string().optional().nullable(),
+  courseCode: z.string().trim().min(2, 'Course code is required (e.g. CSE 2100)').optional(),
+  courseName: z.string().trim().min(2, 'Course name is required').optional(),
+  assignmentTitle: z.string().trim().min(2, 'Assignment title is required'),
+  assignmentType: z.enum(['code', 'theory']).default('code'),
+  dueDate: z.string().optional().default('2026-09-30'),
+  totalMarks: z.number().optional().default(10),
+  questionNumber: z.string().trim().default('Q1'),
+  questionText: z.string().trim().min(5, 'Question text must be at least 5 characters long'),
+  correctAnswer: z.string().trim().optional().nullable().default(''),
+  maxMarks: z.number().optional().default(10),
+  clos: z.array(z.string().or(z.object({ code: z.string().optional(), description: z.string() }))).optional().default([]),
+  isSolutionApproved: z.boolean().optional().default(false),
+  diagnosticMisconception: z.string().optional().default(''),
+  diagnosticExplanation: z.string().optional().default(''),
+  remedialAction: z.string().optional().default(''),
+  facultyId: z.string().optional().nullable(),
+  facultyName: z.string().optional().nullable(),
+  facultyEmail: z.string().optional().nullable()
+});
+
 // ------------------------------------------------------------------------------
 // QUESTION SCHEMAS
 // ------------------------------------------------------------------------------
@@ -102,31 +124,43 @@ const adHocAnalysisSchema = z.object({
     })
     .trim()
     .min(5, 'questionText must be at least 5 characters long'),
-  clos: z.array(z.string().or(z.object({ description: z.string() }))).optional().default([]),
+  clos: z.array(z.string().or(z.object({ code: z.string().optional(), description: z.string() }))).optional().default([]),
   answers: z
     .array(
-      z.string().or(z.object({ answer_text: z.string(), student_id: z.string().optional() })),
+      z.string().or(z.object({ answer_text: z.string(), student_id: z.string().optional(), student_name: z.string().optional() })),
       {
         required_error: 'answers array is required',
         invalid_type_error: 'answers must be an array of student responses'
       }
     )
     .min(2, 'At least 2 student answers are required for misconception analysis'),
+  assignmentType: z.enum(['code', 'theory']).optional().default('code'),
   examId: z.string().optional(),
+  courseId: z.string().optional(),
+  courseCode: z.string().optional(),
+  courseName: z.string().optional(),
+  assignmentTitle: z.string().optional(),
   questionNumber: z.string().optional(),
   correctAnswer: z.string().optional(),
+  isSolutionApproved: z.boolean().optional(),
   questionId: z.string().optional()
 });
 
 const storedQuestionAnalysisSchema = z.object({
   questionId: z.string().min(1, 'questionId is required'),
-  clos: z.array(z.string().or(z.object({ description: z.string() }))).optional().default([]),
+  clos: z.array(z.string().or(z.object({ code: z.string().optional(), description: z.string() }))).optional().default([]),
   answers: z
-    .array(z.string().or(z.object({ answer_text: z.string(), student_id: z.string().optional() })))
+    .array(z.string().or(z.object({ answer_text: z.string(), student_id: z.string().optional(), student_name: z.string().optional() })))
     .optional(),
+  assignmentType: z.enum(['code', 'theory']).optional().default('code'),
   examId: z.string().optional(),
+  courseId: z.string().optional(),
+  courseCode: z.string().optional(),
+  courseName: z.string().optional(),
+  assignmentTitle: z.string().optional(),
   questionNumber: z.string().optional(),
   correctAnswer: z.string().optional(),
+  isSolutionApproved: z.boolean().optional(),
   questionText: z.string().optional()
 });
 
@@ -186,6 +220,7 @@ module.exports = {
   loginSchema,
   createCourseSchema,
   createExamSchema,
+  postAssignmentSchema,
   createQuestionSchema,
   studentSubmissionSchema,
   adHocAnalysisSchema,

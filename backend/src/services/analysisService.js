@@ -15,8 +15,14 @@ class AnalysisService {
     clos = [],
     answers = [],
     examId = null,
+    courseId = null,
+    courseCode = null,
+    courseName = null,
+    assignmentTitle = null,
     questionNumber = 'Q1',
-    correctAnswer = null
+    correctAnswer = null,
+    assignmentType = 'code',
+    isSolutionApproved = false
   }) {
     if (!facultyId) {
       throw new Error('Faculty ID is required');
@@ -40,6 +46,10 @@ class AnalysisService {
       targetClos = existingQ.clos?.map(c => c.description || c) || [];
       correctAnswer = existingQ.correct_answer || correctAnswer;
 
+      if (typeof isSolutionApproved === 'boolean') {
+        await db.setQuestionSolutionApproval({ questionId: targetQuestionId, isApproved: isSolutionApproved });
+      }
+
       if (answers && answers.length > 0) {
         // Upload new batch for this question
         for (const ans of answers) {
@@ -47,6 +57,9 @@ class AnalysisService {
             questionId: targetQuestionId,
             studentId: typeof ans === 'object' && ans.student_id ? ans.student_id : null,
             studentName: typeof ans === 'object' && ans.student_name ? ans.student_name : 'Student',
+            facultyId,
+            courseCode,
+            assignmentTitle,
             answerText: typeof ans === 'string' ? ans : (ans.answer_text || '')
           });
         }
@@ -56,11 +69,38 @@ class AnalysisService {
       const refreshedQ = await db.getQuestionById(targetQuestionId);
       submissionsToAnalyze = refreshedQ.submissions || [];
     } else {
-      // Case 2: Ad-hoc question analysis (Contract A backward compatibility)
+      // Case 2: Custom / Ad-hoc question analysis created by Faculty
       let targetExamId = examId;
+
       if (!targetExamId) {
-        const { examId: defaultExamId } = await db.getOrCreateDefaultCourseAndExam(facultyId);
-        targetExamId = defaultExamId;
+        if (courseId) {
+          const exams = await db.listExamsForCourse(courseId);
+          if (exams && exams.length > 0) {
+            targetExamId = exams[0].id;
+          } else {
+            const newExam = await db.createExam({ courseId, title: assignmentTitle || 'Custom Assignment Assessment' });
+            targetExamId = newExam.id;
+          }
+        } else if (courseCode) {
+          // Find or create course
+          const facultyCourses = await db.listCoursesForFaculty(facultyId);
+          let matchCourse = facultyCourses.find(c => c.code.toLowerCase() === courseCode.toLowerCase());
+          if (!matchCourse) {
+            matchCourse = await db.createCourse({
+              facultyId,
+              name: courseName || `${courseCode} Course`,
+              code: courseCode
+            });
+          }
+          const newExam = await db.createExam({
+            courseId: matchCourse.id,
+            title: assignmentTitle || 'Custom Coursework Analysis'
+          });
+          targetExamId = newExam.id;
+        } else {
+          const { examId: defaultExamId } = await db.getOrCreateDefaultCourseAndExam(facultyId);
+          targetExamId = defaultExamId;
+        }
       }
 
       const { question } = await db.createQuestionWithDetails({
@@ -69,10 +109,20 @@ class AnalysisService {
         questionNumber,
         correctAnswer,
         clos: targetClos,
-        submissions: answers
+        submissions: answers.map((ans, idx) => ({
+          student_name: typeof ans === 'object' && ans.student_name ? ans.student_name : `Student ${idx + 1}`,
+          student_identifier: typeof ans === 'object' && ans.student_identifier ? ans.student_identifier : `Student ${idx + 1}`,
+          answer_text: typeof ans === 'string' ? ans : (ans.answer_text || ''),
+          faculty_id: facultyId
+        }))
       });
 
       targetQuestionId = question.id;
+
+      if (isSolutionApproved) {
+        await db.setQuestionSolutionApproval({ questionId: targetQuestionId, isApproved: true });
+      }
+
       const loadedQ = await db.getQuestionById(targetQuestionId);
       submissionsToAnalyze = loadedQ.submissions || [];
     }
@@ -85,12 +135,13 @@ class AnalysisService {
       throw err;
     }
 
-    // 3. Invoke AI Misconception Engine (Contract B)
+    // 3. Invoke AI Misconception Engine with Code/Theory domain awareness
     const aiResult = await analyzeAnswers({
       questionText: targetQuestionText,
       clos: targetClos,
       answers: answerTexts,
-      correctAnswer
+      correctAnswer,
+      assignmentType
     });
 
     // 4. Calculate Group Counts & Tag Individual Submissions with specific lackings
@@ -115,25 +166,20 @@ class AnalysisService {
       if (
         answerStr.includes('if (head == null || head->next == null)') ||
         answerStr.includes('fully correct') ||
-        answerStr.includes('newhead = reverse')
+        answerStr.includes('theta(n log n)') ||
+        answerStr.includes('not in bcnf') ||
+        answerStr.includes('concept mastered')
       ) {
-        assignedGroup = 'Fully correct';
+        assignedGroup = 'Fully correct / Concept mastered';
         isCorrect = true;
-        feedbackNote = 'Excellent answer! You correctly handled base case boundaries and pointer unwinding.';
-      } else if (answerStr.includes('head == null') && !answerStr.includes('head->next == null')) {
-        assignedGroup = 'Base case omission or improper termination';
-        isCorrect = false;
-        feedbackNote = 'Your solution terminates when head is null, but fails to check single-node list termination (head->next == null).';
-      } else if (answerStr.includes('head.next') || answerStr.includes('.')) {
-        assignedGroup = 'Syntax & pointer dereferencing errors (. vs ->)';
-        isCorrect = false;
-        feedbackNote = 'In C, dynamic pointers use arrow notation (->) instead of dot notation (.) for structure member access.';
+        feedbackNote = 'Excellent answer! You correctly handled the core requirements and invariants.';
       } else {
-        // Distribute across detected groups
         const groupIndex = i % Math.max(1, groups.length);
-        assignedGroup = groups[groupIndex]?.label || 'Conceptual misunderstanding';
-        isCorrect = assignedGroup.toLowerCase().includes('correct');
-        feedbackNote = isCorrect ? 'Good work on this question.' : `You may need to review ${assignedGroup.toLowerCase()}.`;
+        assignedGroup = groups[groupIndex]?.label || 'Conceptual gap';
+        isCorrect = assignedGroup.toLowerCase().includes('correct') || assignedGroup.toLowerCase().includes('mastered');
+        feedbackNote = isCorrect 
+          ? 'Good work on this problem.' 
+          : `Review area: ${assignedGroup}. Consult the reference model once approved by faculty.`;
       }
 
       await db.updateSubmissionLacking({
@@ -154,7 +200,7 @@ class AnalysisService {
       totalSubmissions: answerTexts.length
     });
 
-    // 6. Return Contract A format (augmented with counts and breakdown metrics)
+    // 6. Return Contract A format
     return {
       id: analysis.id,
       questionId: targetQuestionId,
@@ -162,6 +208,7 @@ class AnalysisService {
       groups: groups,
       insight: analysis.insight,
       intervention: analysis.intervention,
+      assignmentType,
       totalSubmissions: answerTexts.length,
       createdAt: analysis.created_at || analysis.createdAt
     };

@@ -16,7 +16,7 @@ import { useAuth } from '../context/AuthContext';
 import { useAnalysis } from '../context/AnalysisContext';
 import LearnMapLogo from './LearnMapLogo';
 
-export default function Navbar({ activeTab, setActiveTab, onOpenAuth }) {
+export default function Navbar({ activeTab, setActiveTab, onOpenAuth, onOpenPostAssignment }) {
   const { theme, toggleTheme, isDark } = useTheme();
   const { user, signOut, isFaculty, isStudent, isAuthenticated } = useAuth();
   const { isMockMode, toggleMockMode } = useAnalysis();
@@ -65,6 +65,14 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuth }) {
 
           {user && isFaculty && (
             <>
+              <button
+                onClick={onOpenPostAssignment}
+                className="px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/25 border border-emerald-500/20 transition-all flex items-center gap-1"
+              >
+                <PlusCircle className="w-3.5 h-3.5" />
+                <span>Post Assignment</span>
+              </button>
+
               <button
                 onClick={() => setActiveTab('new-analysis')}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${

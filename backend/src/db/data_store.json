@@ -21,16 +21,6 @@
       "passwordHash": "$2b$10$lifLUSdn2/1SGNi9Zd.88O.cR27UgUMdKxBf1BLFDQlR.fE02GjcW"
     },
     {
-      "id": "7c5f4e19-5704-4bc3-a954-6360bb44074a",
-      "email": "sarah.faculty@aust.edu",
-      "passwordHash": "$2b$10$lAwop3pe86H0yAsC3yJ0DunFEjDpMwOqsMicsOFR39JlwcDJQmdte"
-    },
-    {
-      "id": "d067a63d-28dc-4642-b023-97885286048d",
-      "email": "alex.student@aust.edu",
-      "passwordHash": "$2b$10$POaRU26xQcxsA9kucwfru.n51gxNAYV6Ki7E872Uzh8qL0cng16za"
-    },
-    {
       "id": "faculty-arpita",
       "email": "arpita.cse@aust.edu",
       "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
@@ -49,6 +39,16 @@
       "id": "user-student-demo",
       "email": "student.demo@aust.edu",
       "passwordHash": "$2b$10$NhmXR84hLgkNTWDtr0i6kuwXt5AKeNOnHLCMx5ZWMHUUsyVregCEq"
+    },
+    {
+      "id": "566b291d-6b05-4f7d-a26b-f6f43b44fcca",
+      "email": "sarah.faculty@aust.edu",
+      "passwordHash": "$2b$10$cRLUHkQz8nZjNk4WR8HJDOd80m/EpXwpBU0kQfe2YmaMuqWXK4P6W"
+    },
+    {
+      "id": "9e12c582-4bb3-4d0b-b2c3-5d6f3436cfb9",
+      "email": "alex.student@aust.edu",
+      "passwordHash": "$2b$10$bW/NrUJCf2fwvCirFN2/m.jgiCXiEzaI6kDB8TFIad9ElR1iF7Aaq"
     }
   ],
   "profiles": [
@@ -97,28 +97,6 @@
       "updated_at": "2026-09-06T08:05:25.772Z"
     },
     {
-      "id": "7c5f4e19-5704-4bc3-a954-6360bb44074a",
-      "email": "sarah.faculty@aust.edu",
-      "name": "Dr. Sarah Connor",
-      "role": "faculty",
-      "student_id_number": null,
-      "semester": null,
-      "department": "Department of CSE",
-      "created_at": "2026-09-06T09:08:59.166Z",
-      "updated_at": "2026-09-06T09:08:59.166Z"
-    },
-    {
-      "id": "d067a63d-28dc-4642-b023-97885286048d",
-      "email": "alex.student@aust.edu",
-      "name": "Alex Rivera",
-      "role": "student",
-      "student_id_number": "20210104001",
-      "semester": "Fall 2026",
-      "department": null,
-      "created_at": "2026-09-06T09:08:59.314Z",
-      "updated_at": "2026-09-06T09:08:59.314Z"
-    },
-    {
       "id": "faculty-arpita",
       "email": "arpita.cse@aust.edu",
       "name": "Dr. Arpita Sengupta",
@@ -164,24 +142,55 @@
       "department": "Computer Science & Engineering",
       "created_at": "2026-09-06T09:16:25.532Z",
       "updated_at": "2026-09-06T09:16:25.532Z"
+    },
+    {
+      "id": "566b291d-6b05-4f7d-a26b-f6f43b44fcca",
+      "email": "sarah.faculty@aust.edu",
+      "name": "Dr. Sarah Connor",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Department of CSE",
+      "created_at": "2026-09-06T09:43:43.947Z",
+      "updated_at": "2026-09-06T09:43:43.947Z",
+      "designation": "Assistant Professor"
+    },
+    {
+      "id": "9e12c582-4bb3-4d0b-b2c3-5d6f3436cfb9",
+      "email": "alex.student@aust.edu",
+      "name": "Alex Rivera",
+      "role": "student",
+      "student_id_number": "20210104001",
+      "semester": "Fall 2026",
+      "department": null,
+      "created_at": "2026-09-06T09:43:44.131Z",
+      "updated_at": "2026-09-06T09:43:44.131Z"
     }
   ],
   "courses": [
     {
       "id": "course-cse2100",
-      "faculty_id": "faculty-default",
+      "faculty_id": "faculty-arpita",
       "name": "Data Structures and Algorithms",
       "code": "CSE 2100",
       "created_at": "2026-09-06T07:59:10.545Z",
-      "updated_at": "2026-09-06T07:59:10.546Z"
+      "updated_at": "2026-09-06T07:59:10.546Z",
+      "faculty_name": "Dr. Arpita Sengupta",
+      "faculty_email": "arpita.cse@aust.edu",
+      "department": "Computer Science & Engineering",
+      "section": "Section A & B"
     },
     {
       "id": "a3cc3b7d-14cd-4784-8cec-dd14bbef0aa0",
-      "faculty_id": "7ec35112-d993-4eff-b01a-e41de9b26850",
+      "faculty_id": "faculty-alex",
       "name": "Data Structures and Algorithms",
       "code": "CSE 2201",
       "created_at": "2026-09-06T08:19:08.455Z",
-      "updated_at": "2026-09-06T08:19:08.455Z"
+      "updated_at": "2026-09-06T08:19:08.455Z",
+      "faculty_name": "Prof. Alex Chen",
+      "faculty_email": "alex.chen@aust.edu",
+      "department": "Computer Science & Engineering",
+      "section": "Section A"
     },
     {
       "id": "3d6fcaf4-824f-4afc-9671-8cc9ce3874f1",
@@ -221,11 +230,89 @@
       "name": "Database Management Systems",
       "code": "CSE 3103",
       "created_at": "2026-09-06T09:16:25.372Z",
-      "updated_at": "2026-09-06T09:16:25.373Z"
+      "updated_at": "2026-09-06T09:16:25.373Z",
+      "faculty_name": "Dr. Sarah Rahman",
+      "faculty_email": "sarah.faculty@aust.edu",
+      "department": "Computer Science & Engineering",
+      "section": "Section B"
+    },
+    {
+      "id": "22bb51e8-e80f-48b5-bb8f-b0d167919854",
+      "faculty_id": "faculty-arpita",
+      "name": "Algorithms & Complexity",
+      "code": "CSE 2201",
+      "created_at": "2026-09-06T09:32:29.600Z",
+      "updated_at": "2026-09-06T09:32:29.600Z"
+    },
+    {
+      "id": "26078d5e-51c3-467b-976a-41b2a6b5b01b",
+      "faculty_id": "faculty-arpita",
+      "name": "Database Management Systems",
+      "code": "CSE 3103",
+      "created_at": "2026-09-06T09:32:29.757Z",
+      "updated_at": "2026-09-06T09:32:29.757Z"
+    },
+    {
+      "id": "2686b79d-3fdd-45da-9759-7ad301d7babb",
+      "faculty_id": "83547f83-d9f8-41e8-a596-07af039772dc",
+      "name": "Algorithms & Complexity",
+      "code": "CSE 2201",
+      "created_at": "2026-09-06T09:36:34.239Z",
+      "updated_at": "2026-09-06T09:36:34.239Z"
+    },
+    {
+      "id": "89b2d850-7dd1-4472-8342-42b67997b511",
+      "faculty_id": "566b291d-6b05-4f7d-a26b-f6f43b44fcca",
+      "name": "Data Structures and Algorithms",
+      "code": "CSE 2201",
+      "created_at": "2026-09-06T09:43:44.597Z",
+      "updated_at": "2026-09-06T09:43:44.597Z"
+    },
+    {
+      "id": "course-75c4ff13",
+      "faculty_id": "faculty-arpita",
+      "faculty_name": "Dr. Arpita Sengupta",
+      "faculty_email": "arpita.cse@aust.edu",
+      "name": "Artificial Intelligence & Heuristic Search",
+      "code": "CSE 4107",
+      "department": "Computer Science & Engineering",
+      "section": "Section A",
+      "created_at": "2026-09-06T09:46:05.031Z",
+      "updated_at": "2026-09-06T09:46:05.031Z"
     }
   ],
   "enrollments": [],
   "exams": [
+    {
+      "id": "exam-a48136da",
+      "course_id": "course-cse3103",
+      "title": "Assignment 3: Multi-Version Concurrency Control (MVCC)",
+      "assignment_type": "theory",
+      "due_date": "2026-10-25",
+      "total_marks": 15,
+      "faculty_id": "566b291d-6b05-4f7d-a26b-f6f43b44fcca",
+      "faculty_name": "Dr. Sarah Connor",
+      "faculty_email": "sarah.faculty@aust.edu",
+      "department": "Department of CSE",
+      "designation": "Assistant Professor",
+      "created_at": "2026-09-06T09:58:23.336Z",
+      "updated_at": "2026-09-06T09:58:23.336Z"
+    },
+    {
+      "id": "exam-d791c328",
+      "course_id": "course-cse3103",
+      "title": "Assignment 3: Multi-Version Concurrency Control (MVCC)",
+      "assignment_type": "theory",
+      "due_date": "2026-10-25",
+      "total_marks": 15,
+      "faculty_id": "566b291d-6b05-4f7d-a26b-f6f43b44fcca",
+      "faculty_name": "Dr. Sarah Connor",
+      "faculty_email": "sarah.faculty@aust.edu",
+      "department": "Department of CSE",
+      "designation": "Assistant Professor",
+      "created_at": "2026-09-06T09:57:33.948Z",
+      "updated_at": "2026-09-06T09:57:33.948Z"
+    },
     {
       "id": "exam-midterm-fall2026",
       "course_id": "course-cse2100",
@@ -312,9 +399,101 @@
       "total_marks": 10,
       "created_at": "2026-09-06T09:16:25.373Z",
       "updated_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "a2f87c55-505c-4a26-bbcc-044fa85e5b3c",
+      "course_id": "22bb51e8-e80f-48b5-bb8f-b0d167919854",
+      "title": "Assignment 3: Dynamic Programming",
+      "created_at": "2026-09-06T09:32:29.602Z",
+      "updated_at": "2026-09-06T09:32:29.602Z"
+    },
+    {
+      "id": "bc802bef-f64a-448c-a729-0b2c03429edf",
+      "course_id": "26078d5e-51c3-467b-976a-41b2a6b5b01b",
+      "title": "Assignment 4: Relational Normalization & BCNF",
+      "created_at": "2026-09-06T09:32:29.762Z",
+      "updated_at": "2026-09-06T09:32:29.762Z"
+    },
+    {
+      "id": "978b2190-9c9c-4b79-9c59-3480e6becbb6",
+      "course_id": "2686b79d-3fdd-45da-9759-7ad301d7babb",
+      "title": "Assignment 1: Divide & Conquer Recurrences",
+      "created_at": "2026-09-06T09:36:34.241Z",
+      "updated_at": "2026-09-06T09:36:34.241Z"
+    },
+    {
+      "id": "exam-d1f68658",
+      "course_id": "course-cse2100",
+      "title": "Assignment 3: Red-Black Tree Balancing & Color Flips",
+      "due_date": "2026-10-15",
+      "total_marks": 15,
+      "created_at": "2026-09-06T09:41:42.241Z",
+      "updated_at": "2026-09-06T09:41:42.241Z"
+    },
+    {
+      "id": "559c71f6-8c1f-43af-9f2f-6fd63b82adcb",
+      "course_id": "89b2d850-7dd1-4472-8342-42b67997b511",
+      "title": "Midterm Exam Fall 2026",
+      "created_at": "2026-09-06T09:43:44.610Z",
+      "updated_at": "2026-09-06T09:43:44.610Z"
+    },
+    {
+      "id": "exam-00a28335",
+      "course_id": "course-75c4ff13",
+      "title": "Assignment 1: A* Search Admissibility & Consistency",
+      "due_date": "2026-10-30",
+      "total_marks": 20,
+      "created_at": "2026-09-06T09:46:05.031Z",
+      "updated_at": "2026-09-06T09:46:05.031Z"
+    },
+    {
+      "id": "exam-643e0df2",
+      "course_id": "course-75c4ff13",
+      "title": "Assignment 1: A* Search Admissibility & Consistency",
+      "due_date": "2026-10-30",
+      "total_marks": 20,
+      "created_at": "2026-09-06T09:46:25.290Z",
+      "updated_at": "2026-09-06T09:46:25.290Z"
+    },
+    {
+      "id": "exam-068da255",
+      "course_id": "a3cc3b7d-14cd-4784-8cec-dd14bbef0aa0",
+      "title": "Lab Task 3: Dijkstra Priority Queue Implementation",
+      "due_date": "2026-10-20",
+      "total_marks": 10,
+      "created_at": "2026-09-06T09:49:43.048Z",
+      "updated_at": "2026-09-06T09:49:43.048Z"
     }
   ],
   "questions": [
+    {
+      "id": "q-50ddad0c",
+      "exam_id": "exam-a48136da",
+      "question_number": "Q11",
+      "text": "Explain how Multi-Version Concurrency Control (MVCC) achieves non-blocking read operations without write locks. Contrast with Strict 2PL.",
+      "correct_answer": "MVCC maintains multiple timestamped versions of each data item. Read transactions see a consistent snapshot matching their start timestamp, while write transactions create a newer version without blocking concurrent readers.",
+      "max_marks": 15,
+      "is_solution_approved": false,
+      "faculty_id": "566b291d-6b05-4f7d-a26b-f6f43b44fcca",
+      "faculty_name": "Dr. Sarah Connor",
+      "faculty_email": "sarah.faculty@aust.edu",
+      "created_at": "2026-09-06T09:58:23.336Z",
+      "updated_at": "2026-09-06T09:58:23.336Z"
+    },
+    {
+      "id": "q-52fdf11b",
+      "exam_id": "exam-d791c328",
+      "question_number": "Q11",
+      "text": "Explain how Multi-Version Concurrency Control (MVCC) achieves non-blocking read operations without write locks. Contrast with Strict 2PL.",
+      "correct_answer": "MVCC maintains multiple timestamped versions of each data item. Read transactions see a consistent snapshot matching their start timestamp, while write transactions create a newer version without blocking concurrent readers.",
+      "max_marks": 15,
+      "is_solution_approved": false,
+      "faculty_id": "566b291d-6b05-4f7d-a26b-f6f43b44fcca",
+      "faculty_name": "Dr. Sarah Connor",
+      "faculty_email": "sarah.faculty@aust.edu",
+      "created_at": "2026-09-06T09:57:33.948Z",
+      "updated_at": "2026-09-06T09:57:33.948Z"
+    },
     {
       "id": "Q1",
       "exam_id": "exam-midterm-fall2026",
@@ -446,6 +625,90 @@
       "max_marks": 10,
       "is_solution_approved": false,
       "created_at": "2026-09-06T09:16:25.373Z"
+    },
+    {
+      "id": "f7df2ea6-9fb8-4967-a187-b97d67841f66",
+      "exam_id": "a2f87c55-505c-4a26-bbcc-044fa85e5b3c",
+      "question_number": "Q-DP-1",
+      "text": "Write a dynamic programming function int knapSack(int W, int wt[], int val[], int n) and explain the 2D state transition table.",
+      "correct_answer": "int knapSack(int W, int wt[], int val[], int n) {\n  int dp[n+1][W+1];\n  // if wt[i-1] <= w: dp[i][w] = max(val[i-1] + dp[i-1][w-wt[i-1]], dp[i-1][w]);\n}",
+      "max_marks": 10,
+      "created_at": "2026-09-06T09:32:29.603Z",
+      "is_solution_approved": true,
+      "updated_at": "2026-09-06T09:32:29.619Z"
+    },
+    {
+      "id": "961a86a1-6764-4df4-b086-a6e1c9332564",
+      "exam_id": "bc802bef-f64a-448c-a729-0b2c03429edf",
+      "question_number": "Q-BCNF-1",
+      "text": "Given relation R(A, B, C, D) with FDs AB -> C, C -> D, D -> A. Determine whether R is in 3NF and BCNF with mathematical proof.",
+      "correct_answer": "Keys: AB, BC, BD. All attributes prime => 3NF holds. For C -> D, C is not superkey => BCNF fails.",
+      "max_marks": 10,
+      "created_at": "2026-09-06T09:32:29.763Z"
+    },
+    {
+      "id": "28e990ab-ef58-46aa-9b71-a8abfb94c11a",
+      "exam_id": "978b2190-9c9c-4b79-9c59-3480e6becbb6",
+      "question_number": "Q4",
+      "text": "State the Master Theorem conditions. Solve T(n) = 2T(n/2) + O(n) and state the tight asymptotic bound with explanation.",
+      "correct_answer": "Using Master Theorem: T(n) = aT(n/b) + f(n)\na = 2, b = 2 => log_b(a) = log_2(2) = 1.\nf(n) = O(n) = Theta(n^1).\nThis matches Case 2: f(n) = Theta(n^{log_b(a)}).\nTherefore, T(n) = Theta(n^{log_b(a)} * log n) = Theta(n log n).",
+      "max_marks": 10,
+      "created_at": "2026-09-06T09:36:34.243Z"
+    },
+    {
+      "id": "q-f9661e0d",
+      "exam_id": "exam-d1f68658",
+      "question_number": "Q8",
+      "text": "Write a C++ method to perform a Left-Rotation on node x in a Red-Black Tree. Maintain parent, left, and right pointers.",
+      "correct_answer": "void leftRotate(Node*& root, Node* x) { Node* y = x->right; x->right = y->left; if (y->left != nullptr) y->left->parent = x; y->parent = x->parent; if (x->parent == nullptr) root = y; else if (x == x->parent->left) x->parent->left = y; else x->parent->right = y; y->left = x; x->parent = y; }",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:41:42.241Z",
+      "updated_at": "2026-09-06T09:41:42.241Z"
+    },
+    {
+      "id": "bebee352-732d-47a8-9318-3815f1be5eb5",
+      "exam_id": "559c71f6-8c1f-43af-9f2f-6fd63b82adcb",
+      "question_number": "Q3",
+      "text": "Explain recursion and the importance of a base case.",
+      "correct_answer": "A recursive function calls itself on smaller inputs until reaching a base case condition which stops further recursive calls and returns the base result.",
+      "max_marks": 10,
+      "created_at": "2026-09-06T09:43:44.631Z",
+      "is_solution_approved": false,
+      "updated_at": "2026-09-06T09:43:44.686Z"
+    },
+    {
+      "id": "q-9583ad77",
+      "exam_id": "exam-00a28335",
+      "question_number": "Q1",
+      "text": "Prove why heuristic consistency (monotone property) implies heuristic admissibility in A* search.",
+      "correct_answer": "A heuristic h is consistent if h(n) <= c(n, a, n') + h(n'). Proof: By mathematical induction along any path to goal node G where h(G)=0...",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:46:05.031Z",
+      "updated_at": "2026-09-06T09:46:05.031Z"
+    },
+    {
+      "id": "q-a31b58bc",
+      "exam_id": "exam-643e0df2",
+      "question_number": "Q1",
+      "text": "Prove why heuristic consistency (monotone property) implies heuristic admissibility in A* search.",
+      "correct_answer": "A heuristic h is consistent if h(n) <= c(n, a, n') + h(n'). Proof: By mathematical induction along any path to goal node G where h(G)=0...",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:46:25.290Z",
+      "updated_at": "2026-09-06T09:46:25.290Z"
+    },
+    {
+      "id": "q-f5cd0c51",
+      "exam_id": "exam-068da255",
+      "question_number": "Q9",
+      "text": "Write a C++ implementation of Dijkstra's algorithm using `std::priority_queue<pair<int, int>>` to find shortest paths from source vertex `src` in a non-negative weighted graph. Explain how you avoid processing stale distance entries in the priority queue.",
+      "correct_answer": "void dijkstra(int src, int V, vector<vector<pair<int,int>>>& adj, vector<int>& dist) {\n  dist.assign(V, 1e9);\n  priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;\n  dist[src] = 0;\n  pq.push({0, src});\n  while (!pq.empty()) {\n    auto [d, u] = pq.top(); pq.pop();\n    if (d > dist[u]) continue; // Guard against stale heap entries\n    for (auto& [v, w] : adj[u]) {\n      if (dist[u] + w < dist[v]) {\n        dist[v] = dist[u] + w;\n        pq.push({dist[v], v});\n      }\n    }\n  }\n}",
+      "max_marks": 10,
+      "is_solution_approved": false,
+      "created_at": "2026-09-06T09:49:43.048Z",
+      "updated_at": "2026-09-06T09:49:43.048Z"
     }
   ],
   "clos": [
@@ -518,6 +781,76 @@
       "code": "CLO-2",
       "description": "Design recursive algorithms with base case termination.",
       "created_at": "2026-09-06T09:08:59.822Z"
+    },
+    {
+      "id": "47079cbe-ed05-446c-857a-fa5998aa0742",
+      "question_id": "f7df2ea6-9fb8-4967-a187-b97d67841f66",
+      "code": "CLO-1",
+      "description": "CLO 3: Synthesize dynamic programming state tables and overlapping subproblems",
+      "created_at": "2026-09-06T09:32:29.603Z"
+    },
+    {
+      "id": "cb2142ba-0ace-4f9c-a9c0-04182b3882d7",
+      "question_id": "961a86a1-6764-4df4-b086-a6e1c9332564",
+      "code": "CLO-1",
+      "description": "CLO 2: Evaluate functional dependencies and perform loss-less relational decompositions",
+      "created_at": "2026-09-06T09:32:29.763Z"
+    },
+    {
+      "id": "7fbaf56c-24c4-4d5d-ba73-10fd77281182",
+      "question_id": "28e990ab-ef58-46aa-9b71-a8abfb94c11a",
+      "code": "CLO-1",
+      "description": "CLO 1: Formulate and solve recurrence relations using asymptotic analysis",
+      "created_at": "2026-09-06T09:36:34.243Z"
+    },
+    {
+      "id": "clo-9dfa5d31",
+      "question_id": "q-f9661e0d",
+      "code": "CLO 1",
+      "description": "CLO 2: Implement self-balancing binary search tree rotations without pointer corruptions",
+      "created_at": "2026-09-06T09:41:42.241Z"
+    },
+    {
+      "id": "f967143e-4ff8-4e72-9289-228542728592",
+      "question_id": "bebee352-732d-47a8-9318-3815f1be5eb5",
+      "code": "CLO-2",
+      "description": "Design recursive algorithms with base case termination.",
+      "created_at": "2026-09-06T09:43:44.631Z"
+    },
+    {
+      "id": "clo-b57c3f03",
+      "question_id": "q-9583ad77",
+      "code": "CLO 1",
+      "description": "CLO 1: Formulate heuristic functions and prove admissibility/consistency invariants",
+      "created_at": "2026-09-06T09:46:05.031Z"
+    },
+    {
+      "id": "clo-d48af15c",
+      "question_id": "q-a31b58bc",
+      "code": "CLO 1",
+      "description": "CLO 1: Formulate heuristic functions and prove admissibility/consistency invariants",
+      "created_at": "2026-09-06T09:46:25.290Z"
+    },
+    {
+      "id": "clo-ea8f5c6c",
+      "question_id": "q-f5cd0c51",
+      "code": "CLO 1",
+      "description": "CLO 2: Synthesize greedy shortest-path algorithms with min-heap priority queues",
+      "created_at": "2026-09-06T09:49:43.048Z"
+    },
+    {
+      "id": "clo-c8353d92",
+      "question_id": "q-52fdf11b",
+      "code": "CLO 1",
+      "description": "CLO 4: Analyze isolation levels, MVCC snapshot isolation, and lock-free concurrency protocols",
+      "created_at": "2026-09-06T09:57:33.948Z"
+    },
+    {
+      "id": "clo-f23c3219",
+      "question_id": "q-50ddad0c",
+      "code": "CLO 1",
+      "description": "CLO 4: Analyze isolation levels, MVCC snapshot isolation, and lock-free concurrency protocols",
+      "created_at": "2026-09-06T09:58:23.336Z"
     }
   ],
   "submissions": [
@@ -1085,6 +1418,242 @@
       "feedback": "Warning: Stack variables are invalidated upon function return. Returning a local stack address creates a dangling pointer.",
       "is_correct": false,
       "created_at": "2026-09-06T09:19:26.525Z"
+    },
+    {
+      "id": "7ffc2cd6-77ba-494c-92a3-b22dc0e288d8",
+      "question_id": "f7df2ea6-9fb8-4967-a187-b97d67841f66",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "dp[i][w] = dp[i-1][w] + val[i]; // greedy assumption",
+      "misconception_group": "Greedy Choice Fallacy in 0/1 Discrete Subproblems",
+      "feedback": "Review area: Greedy Choice Fallacy in 0/1 Discrete Subproblems. Consult the reference model once approved by faculty.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T09:32:29.603Z"
+    },
+    {
+      "id": "bc06790a-8d52-4cb0-a340-f6a32ebc4935",
+      "question_id": "f7df2ea6-9fb8-4967-a187-b97d67841f66",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "int knapSack(int W, int wt[], int val[], int n) { if (wt[i-1] <= w) dp[i][w] = max(val[i-1] + dp[i-1][w-wt[i-1]], dp[i-1][w]); else dp[i][w] = dp[i-1][w]; }",
+      "misconception_group": "Fully correct / Concept mastered",
+      "feedback": "Good work on this problem.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T09:32:29.603Z"
+    },
+    {
+      "id": "f1bcfec6-b35d-45b4-a71a-a62c9b762f4c",
+      "question_id": "f7df2ea6-9fb8-4967-a187-b97d67841f66",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "We sort by ratio and take elements greedily.",
+      "misconception_group": "Greedy Choice Fallacy in 0/1 Discrete Subproblems",
+      "feedback": "Review area: Greedy Choice Fallacy in 0/1 Discrete Subproblems. Consult the reference model once approved by faculty.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T09:32:29.603Z"
+    },
+    {
+      "id": "5cd82070-8e9d-4b5f-9d92-f564c916e539",
+      "question_id": "f7df2ea6-9fb8-4967-a187-b97d67841f66",
+      "student_id": null,
+      "student_name": "Student 4",
+      "student_identifier": "Student 4",
+      "answer_text": "dp[i][w] = max(include, exclude); // missing capacity condition",
+      "misconception_group": "Fully correct / Concept mastered",
+      "feedback": "Good work on this problem.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T09:32:29.603Z"
+    },
+    {
+      "id": "2ef1b75c-9ee0-41da-99da-cf9148d1da21",
+      "question_id": "961a86a1-6764-4df4-b086-a6e1c9332564",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "Candidate key is {A, B}. Since all attributes are in keys, R is in BCNF without any decomposition.",
+      "misconception_group": "Conflating 3NF Prime Attribute Property with BCNF Superkey Requirement",
+      "feedback": "Review area: Conflating 3NF Prime Attribute Property with BCNF Superkey Requirement. Consult the reference model once approved by faculty.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T09:32:29.763Z"
+    },
+    {
+      "id": "3f6c9cbe-723a-43aa-babf-9eab42883f16",
+      "question_id": "961a86a1-6764-4df4-b086-a6e1c9332564",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Candidate keys are AB, BC, BD. Prime attributes are {A, B, C, D}. All FDs have prime RHS so R is in 3NF. But C is not a superkey for C->D, so R is NOT in BCNF.",
+      "misconception_group": "Fully correct / Concept mastered",
+      "feedback": "Excellent answer! You correctly handled the core requirements and invariants.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T09:32:29.763Z"
+    },
+    {
+      "id": "41c1ecf9-515a-428b-9690-4d9c167b8330",
+      "question_id": "961a86a1-6764-4df4-b086-a6e1c9332564",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "R is in BCNF because prime attributes exist and there is no partial dependency.",
+      "misconception_group": "Fully correct / Concept mastered",
+      "feedback": "Good work on this problem.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T09:32:29.763Z"
+    },
+    {
+      "id": "1734c229-bb15-4ea8-8c16-ebb588c425a0",
+      "question_id": "961a86a1-6764-4df4-b086-a6e1c9332564",
+      "student_id": null,
+      "student_name": "Student 4",
+      "student_identifier": "Student 4",
+      "answer_text": "R is not in 3NF because there are transitive dependencies C->D and D->A.",
+      "misconception_group": "Conflating 3NF Prime Attribute Property with BCNF Superkey Requirement",
+      "feedback": "Review area: Conflating 3NF Prime Attribute Property with BCNF Superkey Requirement. Consult the reference model once approved by faculty.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T09:32:29.763Z"
+    },
+    {
+      "id": "8102d587-92f3-4aea-99de-246e8890dbb2",
+      "question_id": "28e990ab-ef58-46aa-9b71-a8abfb94c11a",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "answer_text": "T(n) = 2T(n/2) + O(n)\nHere a=2, b=2, f(n)=n. Since a=b, time complexity is O(n^2).",
+      "misconception_group": "Incomplete Definition / Missing Theoretical Invariant",
+      "feedback": "Review area: Incomplete Definition / Missing Theoretical Invariant. Consult the reference model once approved by faculty.",
+      "is_correct": false,
+      "score": null,
+      "created_at": "2026-09-06T09:36:34.243Z"
+    },
+    {
+      "id": "cf3fd136-af9a-4b71-9d9b-a3e3c3ec455e",
+      "question_id": "28e990ab-ef58-46aa-9b71-a8abfb94c11a",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "answer_text": "Using Master Theorem Case 2: a=2, b=2, log2(2)=1, so f(n)=n matches n^1. Complexity is Theta(n log n) because work across all recursion levels is balanced.",
+      "misconception_group": "Fully correct / Concept mastered",
+      "feedback": "Excellent answer! You correctly handled the core requirements and invariants.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T09:36:34.243Z"
+    },
+    {
+      "id": "29437ab9-561b-4069-9f10-982c0cb97d41",
+      "question_id": "28e990ab-ef58-46aa-9b71-a8abfb94c11a",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "answer_text": "T(n) = O(n) because at each step we do linear work and divide the array into halves.",
+      "misconception_group": "Fully correct / Concept mastered",
+      "feedback": "Good work on this problem.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T09:36:34.243Z"
+    },
+    {
+      "id": "138fbe98-b2f0-4ac8-bdfb-86a499a0eb5a",
+      "question_id": "28e990ab-ef58-46aa-9b71-a8abfb94c11a",
+      "student_id": null,
+      "student_name": "Student 4",
+      "student_identifier": "Student 4",
+      "answer_text": "By Master theorem Case 2, T(n) = Theta(n log n) because work per level is constant across tree depth.",
+      "misconception_group": "Fully correct / Concept mastered",
+      "feedback": "Excellent answer! You correctly handled the core requirements and invariants.",
+      "is_correct": true,
+      "score": null,
+      "created_at": "2026-09-06T09:36:34.243Z"
+    },
+    {
+      "id": "1535a51a-138f-404b-b06d-877f31c188f7",
+      "question_id": "bebee352-732d-47a8-9318-3815f1be5eb5",
+      "student_id": "9e12c582-4bb3-4d0b-b2c3-5d6f3436cfb9",
+      "student_name": "Alex Rivera",
+      "student_identifier": "Alex Rivera",
+      "faculty_id": null,
+      "faculty_name": null,
+      "course_code": null,
+      "assignment_title": null,
+      "answer_text": "Recursion is when a function calls itself. If head == NULL return head, then reverse rest.",
+      "misconception_group": "Incomplete Definition / Missing Theoretical Invariant",
+      "feedback": "Review area: Incomplete Definition / Missing Theoretical Invariant. Consult the reference model once approved by faculty.",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:43:44.646Z"
+    },
+    {
+      "id": "36dd08da-a61c-45bf-84aa-79a6b62b2bc2",
+      "question_id": "bebee352-732d-47a8-9318-3815f1be5eb5",
+      "student_id": null,
+      "student_name": "Student 1",
+      "student_identifier": "Student 1",
+      "faculty_id": null,
+      "faculty_name": null,
+      "course_code": null,
+      "assignment_title": null,
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL || head->next == NULL) return head; Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Fully correct / Concept mastered",
+      "feedback": "Excellent answer! You correctly handled the core requirements and invariants.",
+      "is_correct": true,
+      "created_at": "2026-09-06T09:43:44.667Z"
+    },
+    {
+      "id": "18ef44bd-ce05-433e-882f-cca348aec53e",
+      "question_id": "bebee352-732d-47a8-9318-3815f1be5eb5",
+      "student_id": null,
+      "student_name": "Student 2",
+      "student_identifier": "Student 2",
+      "faculty_id": null,
+      "faculty_name": null,
+      "course_code": null,
+      "assignment_title": null,
+      "answer_text": "Node* reverse(Node* head) { Node* rest = reverse(head->next); head->next->next = head; head->next = NULL; return rest; }",
+      "misconception_group": "Incomplete Definition / Missing Theoretical Invariant",
+      "feedback": "Review area: Incomplete Definition / Missing Theoretical Invariant. Consult the reference model once approved by faculty.",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:43:44.673Z"
+    },
+    {
+      "id": "40380ed5-e14a-454a-9265-90580f9e0399",
+      "question_id": "bebee352-732d-47a8-9318-3815f1be5eb5",
+      "student_id": null,
+      "student_name": "Student 3",
+      "student_identifier": "Student 3",
+      "faculty_id": null,
+      "faculty_name": null,
+      "course_code": null,
+      "assignment_title": null,
+      "answer_text": "Node* reverse(Node* head) { if (head == NULL) return head; Node* rest = reverse(head->next); head->next = head; return rest; }",
+      "misconception_group": "Term Conflation / Inverse Causality",
+      "feedback": "Review area: Term Conflation / Inverse Causality. Consult the reference model once approved by faculty.",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:43:44.674Z"
+    },
+    {
+      "id": "5550eaac-2e72-468b-9dc9-4eabb382c1c6",
+      "question_id": "q-a31b58bc",
+      "student_id": "user-student-demo",
+      "student_name": "Samia Arpita",
+      "student_identifier": "Samia Arpita",
+      "faculty_id": null,
+      "faculty_name": null,
+      "course_code": "CSE 4107",
+      "assignment_title": "Assignment 1: A* Search Admissibility & Consistency",
+      "answer_text": "Consistency means the heuristic value is always smaller than the actual cost to the goal.",
+      "misconception_group": "Missing Call-Stack Unwinding Concept",
+      "feedback": "Your answer does not clearly explain how stack frames pop off the call stack when the terminating condition is met.",
+      "is_correct": false,
+      "created_at": "2026-09-06T09:46:25.431Z"
     }
   ],
   "analyses": [
@@ -1264,6 +1833,100 @@
       "model_used": "gemini-1.5-pro",
       "total_submissions": 4,
       "created_at": "2026-09-06T09:08:59.929Z"
+    },
+    {
+      "id": "c634aad3-a9ce-406e-80e9-573bafbaf9c7",
+      "question_id": "f7df2ea6-9fb8-4967-a187-b97d67841f66",
+      "misconception_groups": [
+        {
+          "label": "Greedy Choice Fallacy in 0/1 Discrete Subproblems",
+          "percentage": 25,
+          "count": 1
+        },
+        {
+          "label": "Fully correct / Concept mastered",
+          "percentage": 75,
+          "count": 3
+        }
+      ],
+      "insight": "Students attempt to apply fractional greedy ratio sorting to discrete 0/1 knapsack items.",
+      "intervention": "Draw a 4x4 DP table on the board contrasting greedy item picking vs optimal substructure transitions.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T09:32:29.710Z"
+    },
+    {
+      "id": "395f9ee4-6f1c-4232-9568-91507804aeeb",
+      "question_id": "961a86a1-6764-4df4-b086-a6e1c9332564",
+      "misconception_groups": [
+        {
+          "label": "Conflating 3NF Prime Attribute Property with BCNF Superkey Requirement",
+          "percentage": 25,
+          "count": 1
+        },
+        {
+          "label": "Incomplete Functional Dependency Decomposition",
+          "percentage": 50,
+          "count": 2
+        },
+        {
+          "label": "Fully correct / Concept mastered",
+          "percentage": 25,
+          "count": 1
+        }
+      ],
+      "insight": "Most students verify prime attribute satisfaction for 3NF but fail to enforce superkey determinants for BCNF.",
+      "intervention": "Spend 15 minutes reviewing candidate key closures and determinant checks on the whiteboard.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T09:32:29.798Z"
+    },
+    {
+      "id": "c6281be3-7b50-4767-8ced-b193db463ac3",
+      "question_id": "28e990ab-ef58-46aa-9b71-a8abfb94c11a",
+      "misconception_groups": [
+        {
+          "label": "Incomplete Definition / Missing Theoretical Invariant",
+          "percentage": 50,
+          "count": 2
+        },
+        {
+          "label": "Term Conflation / Inverse Causality",
+          "percentage": 25,
+          "count": 1
+        },
+        {
+          "label": "Fully correct / Concept mastered",
+          "percentage": 25,
+          "count": 1
+        }
+      ],
+      "insight": "Students provide high-level summaries without detailing the core theoretical mechanisms required by the prompt.",
+      "intervention": "Dedicate 20 minutes in next lecture to working through step-by-step conceptual proofs and rubric criteria.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T09:36:34.342Z"
+    },
+    {
+      "id": "9bdc2c4c-82a4-4a2a-a1f9-b80fd8a47fc4",
+      "question_id": "bebee352-732d-47a8-9318-3815f1be5eb5",
+      "misconception_groups": [
+        {
+          "label": "Incomplete Definition / Missing Theoretical Invariant",
+          "percentage": 75,
+          "count": 3
+        },
+        {
+          "label": "Term Conflation / Inverse Causality",
+          "percentage": 25,
+          "count": 1
+        }
+      ],
+      "insight": "Students provide high-level summaries without detailing the core theoretical mechanisms required by the prompt.",
+      "intervention": "Dedicate 20 minutes in next lecture to working through step-by-step conceptual proofs and rubric criteria.",
+      "model_used": "gemini-1.5-pro",
+      "total_submissions": 4,
+      "created_at": "2026-09-06T09:43:44.769Z"
     }
   ]
 }

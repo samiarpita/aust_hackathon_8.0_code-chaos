@@ -279,34 +279,54 @@ const SEED_QUESTIONS_MAP = {
 
 // Seed default preset courses, exams, questions into memoryStore if missing
 SEED_COURSES.forEach(course => {
-  if (!memoryStore.courses.some(c => c.id === course.id || c.code === course.code)) {
+  const existing = memoryStore.courses.find(c => c.id === course.id || c.code === course.code);
+  if (!existing) {
     memoryStore.courses.push({
       id: course.id,
       faculty_id: course.faculty_id,
+      faculty_name: course.faculty_name,
+      faculty_email: course.faculty_email,
       name: course.name,
       code: course.code,
+      department: course.department || 'Computer Science & Engineering',
+      section: course.section || 'Section A',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     });
+  } else {
+    // Repair and ensure complete faculty metadata
+    if (!existing.faculty_name || existing.faculty_id === 'faculty-default') {
+      existing.faculty_id = course.faculty_id;
+      existing.faculty_name = course.faculty_name;
+      existing.faculty_email = course.faculty_email;
+      existing.department = course.department;
+      existing.section = course.section;
+    }
   }
 });
 
 SEED_ASSIGNMENTS.forEach(exam => {
   if (!memoryStore.exams.some(e => e.id === exam.id)) {
+    const parentCourse = memoryStore.courses.find(c => c.id === exam.course_id);
     memoryStore.exams.push({
       id: exam.id,
       course_id: exam.course_id,
       title: exam.title,
       due_date: exam.due_date,
       total_marks: exam.total_marks,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      faculty_id: parentCourse?.faculty_id || 'faculty-arpita',
+      faculty_name: parentCourse?.faculty_name || 'Dr. Arpita Sengupta',
+      faculty_email: parentCourse?.faculty_email || 'arpita.cse@aust.edu',
+      department: parentCourse?.department || 'Computer Science & Engineering',
+      created_at: '2026-09-01T00:00:00.000Z',
+      updated_at: '2026-09-01T00:00:00.000Z'
     });
   }
 });
 
 Object.keys(SEED_QUESTIONS_MAP).forEach(qKey => {
   const qDef = SEED_QUESTIONS_MAP[qKey];
+  const parentExam = memoryStore.exams.find(e => e.id === qDef.exam_id);
   if (!memoryStore.questions.some(q => q.id === qDef.id || q.question_number === qDef.id)) {
     memoryStore.questions.push({
       id: qDef.id,
@@ -316,7 +336,10 @@ Object.keys(SEED_QUESTIONS_MAP).forEach(qKey => {
       correct_answer: qDef.correct_answer,
       max_marks: qDef.max_marks,
       is_solution_approved: false,
-      created_at: new Date().toISOString()
+      faculty_id: parentExam?.faculty_id || 'faculty-arpita',
+      faculty_name: parentExam?.faculty_name || 'Dr. Arpita Sengupta',
+      faculty_email: parentExam?.faculty_email || 'arpita.cse@aust.edu',
+      created_at: '2026-09-01T00:00:00.000Z'
     });
   }
 });
@@ -367,8 +390,12 @@ try {
   ];
 
   DEMO_FACULTIES.forEach(df => {
-    if (!memoryStore.profiles.some(p => p.email.toLowerCase() === df.email.toLowerCase() || p.id === df.id)) {
-      memoryStore.profiles.push({
+    let existingProfile = memoryStore.profiles.find(
+      p => p.id === df.id || (p.email && p.email.toLowerCase() === df.email.toLowerCase())
+    );
+
+    if (!existingProfile) {
+      existingProfile = {
         id: df.id,
         email: df.email.toLowerCase(),
         name: df.name,
@@ -379,18 +406,24 @@ try {
         designation: df.designation,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      });
+      };
+      memoryStore.profiles.push(existingProfile);
+    } else {
+      existingProfile.name = existingProfile.name || df.name;
+      existingProfile.department = existingProfile.department || df.department;
+      existingProfile.designation = existingProfile.designation || df.designation;
     }
-    if (!memoryStore.users.some(u => u.email.toLowerCase() === df.email.toLowerCase())) {
+
+    if (!memoryStore.users.some(u => u.email && u.email.toLowerCase() === df.email.toLowerCase())) {
       memoryStore.users.push({
-        id: df.id,
+        id: existingProfile.id,
         email: df.email.toLowerCase(),
         passwordHash: demoHash
       });
     }
   });
 
-  if (!memoryStore.profiles.find(p => p.email === 'student.demo@aust.edu')) {
+  if (!memoryStore.profiles.find(p => p.email && p.email.toLowerCase() === 'student.demo@aust.edu')) {
     memoryStore.profiles.push({
       id: 'user-student-demo',
       email: 'student.demo@aust.edu',
@@ -854,10 +887,25 @@ const db = {
   async listAllFaculties() {
     if (!isConfigured) {
       const faculties = memoryStore.profiles.filter(p => p.role === 'faculty');
-      return faculties.map(f => {
+      const seen = new Set();
+      const uniqueFaculties = [];
+      faculties.forEach(f => {
+        const key = (f.email || f.id).toLowerCase();
+        if (!seen.has(key)) {
+          seen.add(key);
+          uniqueFaculties.push(f);
+        }
+      });
+
+      return uniqueFaculties.map(f => {
+        const fEmail = (f.email || '').toLowerCase();
         const courses = memoryStore.courses.filter(
-          c => c.faculty_id === f.id || (c.faculty_email && c.faculty_email.toLowerCase() === f.email.toLowerCase())
+          c => c.faculty_id === f.id || (c.faculty_email && c.faculty_email.toLowerCase() === fEmail)
         );
+        const postedExams = memoryStore.exams.filter(
+          e => e.faculty_id === f.id || (e.faculty_email && e.faculty_email.toLowerCase() === fEmail)
+        );
+
         return {
           id: f.id,
           name: f.name,
@@ -869,7 +917,8 @@ const db = {
             code: c.code,
             name: c.name,
             section: c.section || 'Section A'
-          }))
+          })),
+          assignmentsCount: postedExams.length
         };
       });
     }
@@ -885,9 +934,30 @@ const db = {
 
   async listStudentAssignments(studentId) {
     if (!isConfigured) {
-      return memoryStore.courses.map(c => {
-        const faculty = memoryStore.profiles.find(
-          p => p.id === c.faculty_id || (c.faculty_email && p.email.toLowerCase() === c.faculty_email.toLowerCase())
+      // Find courses that either have exams or are in the seed list
+      const activeCourses = memoryStore.courses.filter(c => {
+        const hasExams = memoryStore.exams.some(e => e.course_id === c.id);
+        const isSeed = SEED_COURSES.some(sc => sc.id === c.id || sc.code === c.code);
+        return hasExams || isSeed;
+      });
+
+      // Deduplicate courses by code if duplicate codes exist
+      const seenCodes = new Set();
+      const dedupedCourses = [];
+      activeCourses.forEach(c => {
+        const codeKey = (c.code || '').trim().toUpperCase();
+        if (!seenCodes.has(codeKey) || !codeKey) {
+          seenCodes.add(codeKey);
+          dedupedCourses.push(c);
+        }
+      });
+
+      const coursesToMap = dedupedCourses.length > 0 ? dedupedCourses : memoryStore.courses;
+
+      return coursesToMap.map(c => {
+        const cEmail = (c.faculty_email || '').toLowerCase();
+        const courseFaculty = memoryStore.profiles.find(
+          p => p.id === c.faculty_id || (p.email && p.email.toLowerCase() === cEmail)
         ) || {
           id: c.faculty_id || 'faculty-arpita',
           name: c.faculty_name || 'Dr. Arpita Sengupta',
@@ -896,14 +966,39 @@ const db = {
           designation: 'Faculty Instructor'
         };
 
-        const exams = memoryStore.exams.filter(e => e.course_id === c.id).map(e => {
-          const questions = memoryStore.questions.filter(q => q.exam_id === e.id).map(q => {
+        // Get exams for this course (or matching course code)
+        const courseExams = memoryStore.exams.filter(e => {
+          if (e.course_id === c.id) return true;
+          const parentCourse = memoryStore.courses.find(pc => pc.id === e.course_id);
+          return parentCourse && parentCourse.code === c.code;
+        });
+
+        // Sort exams by created_at DESC so newest assignments appear first
+        courseExams.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+        const exams = courseExams.map(e => {
+          const eEmail = (e.faculty_email || '').toLowerCase();
+          const examFaculty = (e.faculty_id && memoryStore.profiles.find(p => p.id === e.faculty_id)) ||
+            (eEmail && memoryStore.profiles.find(p => p.email && p.email.toLowerCase() === eEmail)) ||
+            (e.faculty_name ? { id: e.faculty_id || 'faculty-custom', name: e.faculty_name, email: e.faculty_email || '', department: e.department || 'CSE', designation: e.designation || 'Faculty Instructor' } : null) ||
+            courseFaculty;
+
+          const examQuestions = memoryStore.questions.filter(q => q.exam_id === e.id);
+          examQuestions.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+          const questions = examQuestions.map(q => {
             const clos = memoryStore.clos.filter(clo => clo.question_id === q.id);
             const studentSub = studentId 
               ? memoryStore.submissions.find(s => (s.question_id === q.id || s.question_id === q.question_number) && s.student_id === studentId)
               : null;
             
             const seedMeta = SEED_QUESTIONS_MAP[q.id] || SEED_QUESTIONS_MAP[q.question_number] || {};
+            const qEmail = (q.faculty_email || '').toLowerCase();
+
+            const qFaculty = (q.faculty_id && memoryStore.profiles.find(p => p.id === q.faculty_id)) ||
+              (qEmail && memoryStore.profiles.find(p => p.email && p.email.toLowerCase() === qEmail)) ||
+              seedMeta.faculty ||
+              examFaculty;
 
             return {
               id: q.id,
@@ -915,11 +1010,20 @@ const db = {
               initialAnswer: seedMeta.initialAnswer || '',
               correctAnswer: q.correct_answer || seedMeta.correct_answer,
               isSolutionApproved: Boolean(q.is_solution_approved),
+              assignmentType: seedMeta.assignmentType || e.assignment_type || 'code',
+              faculty: {
+                id: qFaculty.id,
+                name: qFaculty.name,
+                email: qFaculty.email,
+                department: qFaculty.department || 'Computer Science & Engineering',
+                designation: qFaculty.designation || 'Faculty Instructor'
+              },
               clo: clos.length > 0 ? clos[0].description : (seedMeta.clo || 'CLO 1: Core Competency Analysis'),
               diagnosticMisconception: seedMeta.diagnosticMisconception || 'Misconception Analysis',
               diagnosticExplanation: seedMeta.diagnosticExplanation || 'Detailed diagnostic explanation.',
               remedialAction: seedMeta.remedialAction || 'Review core problem patterns.',
-              cohortStat: seedMeta.cohortStat || '35% of students made this mistake',
+              cohortStat: seedMeta.cohortStat || 'Newly posted assignment',
+              createdAt: q.created_at || e.created_at,
               submission: studentSub ? {
                 id: studentSub.id,
                 answerText: studentSub.answer_text,
@@ -927,8 +1031,8 @@ const db = {
                 feedback: studentSub.feedback,
                 isCorrect: studentSub.is_correct,
                 submittedAt: studentSub.created_at || studentSub.updated_at,
-                targetFacultyId: studentSub.faculty_id || faculty.id,
-                targetFacultyName: studentSub.faculty_name || faculty.name
+                targetFacultyId: studentSub.faculty_id || qFaculty.id,
+                targetFacultyName: studentSub.faculty_name || qFaculty.name
               } : null
             };
           });
@@ -938,6 +1042,15 @@ const db = {
             title: e.title,
             dueDate: e.due_date || '2026-09-30',
             totalMarks: e.total_marks || 10,
+            assignmentType: e.assignment_type || 'code',
+            faculty: {
+              id: examFaculty.id,
+              name: examFaculty.name,
+              email: examFaculty.email,
+              department: examFaculty.department || 'Computer Science & Engineering',
+              designation: examFaculty.designation || 'Faculty Instructor'
+            },
+            createdAt: e.created_at,
             questions
           };
         });
@@ -949,11 +1062,11 @@ const db = {
           department: c.department || 'Computer Science & Engineering',
           section: c.section || 'Section A',
           faculty: {
-            id: faculty.id,
-            name: faculty.name,
-            email: faculty.email,
-            department: faculty.department || 'Computer Science & Engineering',
-            designation: faculty.designation || 'Course Instructor'
+            id: courseFaculty.id,
+            name: courseFaculty.name,
+            email: courseFaculty.email,
+            department: courseFaculty.department || 'Computer Science & Engineering',
+            designation: courseFaculty.designation || 'Course Instructor'
           },
           assignments: exams
         };
@@ -976,6 +1089,231 @@ const db = {
       `);
     if (error) throw error;
     return courses || [];
+  },
+
+  async postAssignment({
+    facultyId,
+    facultyName,
+    facultyEmail,
+    courseId,
+    courseCode,
+    courseName,
+    assignmentTitle,
+    assignmentType = 'code',
+    dueDate = '2026-09-30',
+    totalMarks = 10,
+    questionNumber = 'Q1',
+    questionText,
+    correctAnswer = '',
+    maxMarks = 10,
+    clos = [],
+    isSolutionApproved = false,
+    diagnosticMisconception = '',
+    diagnosticExplanation = '',
+    remedialAction = ''
+  }) {
+    if (!isConfigured) {
+      // 1. Resolve posting faculty details
+      let resolvedFaculty = null;
+      if (facultyId) {
+        resolvedFaculty = memoryStore.profiles.find(p => p.id === facultyId);
+      }
+      if (!resolvedFaculty && facultyEmail) {
+        resolvedFaculty = memoryStore.profiles.find(
+          p => p.email && p.email.toLowerCase() === facultyEmail.toLowerCase()
+        );
+      }
+      if (!resolvedFaculty) {
+        resolvedFaculty = {
+          id: facultyId || `faculty-${randomUUID().slice(0, 8)}`,
+          name: facultyName || 'Faculty Member',
+          email: facultyEmail || 'faculty@aust.edu',
+          department: 'Computer Science & Engineering',
+          designation: 'Faculty Instructor'
+        };
+      }
+
+      // 2. Resolve or create course
+      let course = null;
+      if (courseId) {
+        course = memoryStore.courses.find(c => c.id === courseId);
+      }
+      if (!course && courseCode) {
+        course = memoryStore.courses.find(
+          c => c.code && c.code.trim().toUpperCase() === courseCode.trim().toUpperCase()
+        );
+      }
+      if (!course) {
+        course = {
+          id: `course-${randomUUID().slice(0, 8)}`,
+          faculty_id: resolvedFaculty.id,
+          faculty_name: resolvedFaculty.name,
+          faculty_email: resolvedFaculty.email,
+          name: courseName || `${courseCode || 'CSE 4000'} Course`,
+          code: (courseCode || 'CSE 4000').toUpperCase(),
+          department: resolvedFaculty.department || 'Computer Science & Engineering',
+          section: 'Section A',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        memoryStore.courses.unshift(course);
+      } else {
+        // Ensure course faculty info is available
+        course.faculty_id = course.faculty_id || resolvedFaculty.id;
+        course.faculty_name = course.faculty_name || resolvedFaculty.name;
+        course.faculty_email = course.faculty_email || resolvedFaculty.email;
+      }
+
+      // 3. Create exam / assignment linked directly to this faculty
+      const exam = {
+        id: `exam-${randomUUID().slice(0, 8)}`,
+        course_id: course.id,
+        title: assignmentTitle || 'New Coursework Assignment',
+        assignment_type: assignmentType || 'code',
+        due_date: dueDate || '2026-09-30',
+        total_marks: Number(totalMarks) || 10,
+        faculty_id: resolvedFaculty.id,
+        faculty_name: resolvedFaculty.name,
+        faculty_email: resolvedFaculty.email,
+        department: resolvedFaculty.department || 'Computer Science & Engineering',
+        designation: resolvedFaculty.designation || 'Faculty Instructor',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      memoryStore.exams.unshift(exam); // Place newest first
+
+      // 4. Create question linked directly to this faculty
+      const qId = `q-${randomUUID().slice(0, 8)}`;
+      const question = {
+        id: qId,
+        exam_id: exam.id,
+        question_number: questionNumber || 'Q1',
+        text: questionText,
+        correct_answer: correctAnswer || '',
+        max_marks: Number(maxMarks) || Number(totalMarks) || 10.0,
+        is_solution_approved: Boolean(isSolutionApproved),
+        faculty_id: resolvedFaculty.id,
+        faculty_name: resolvedFaculty.name,
+        faculty_email: resolvedFaculty.email,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      memoryStore.questions.unshift(question); // Place newest first
+
+      // 5. Attach CLOs
+      const cloList = Array.isArray(clos) ? clos : [clos].filter(Boolean);
+      const cloRecords = cloList.map((cloItem, index) => {
+        const desc = typeof cloItem === 'string' ? cloItem : (cloItem?.description || `CLO ${index + 1}`);
+        const code = typeof cloItem === 'object' && cloItem?.code ? cloItem.code : `CLO ${index + 1}`;
+        const record = {
+          id: `clo-${randomUUID().slice(0, 8)}`,
+          question_id: qId,
+          code,
+          description: desc,
+          created_at: new Date().toISOString()
+        };
+        memoryStore.clos.push(record);
+        return record;
+      });
+
+      // 6. Populate rich metadata for student portal & radar
+      SEED_QUESTIONS_MAP[qId] = {
+        id: qId,
+        exam_id: exam.id,
+        question_number: questionNumber || 'Q1',
+        title: assignmentTitle || questionText.slice(0, 45),
+        marks: `${maxMarks || totalMarks || 10} Marks`,
+        maxMarks: Number(maxMarks) || 10.0,
+        prompt: questionText,
+        initialAnswer: '',
+        correct_answer: correctAnswer || '',
+        assignmentType: assignmentType || 'code',
+        faculty: {
+          id: resolvedFaculty.id,
+          name: resolvedFaculty.name,
+          email: resolvedFaculty.email,
+          department: resolvedFaculty.department || 'Computer Science & Engineering',
+          designation: resolvedFaculty.designation || 'Faculty Instructor'
+        },
+        clo: cloList[0] ? (typeof cloList[0] === 'string' ? cloList[0] : cloList[0].description) : 'CLO 1: Core Problem Analysis',
+        diagnosticMisconception: diagnosticMisconception || (assignmentType === 'code' ? 'Algorithmic or Boundary Invariant Flaw' : 'Conceptual Misunderstanding in Theoretical Model'),
+        diagnosticExplanation: diagnosticExplanation || 'Diagnostic analysis evaluated by AI Misconception Radar.',
+        remedialAction: remedialAction || 'Review benchmark reference implementation and lecture notes.',
+        cohortStat: 'Newly posted assignment'
+      };
+
+      persistData();
+
+      return {
+        course,
+        exam,
+        question,
+        clos: cloRecords,
+        assignment: {
+          id: exam.id,
+          courseId: course.id,
+          courseCode: course.code,
+          courseName: course.name,
+          title: exam.title,
+          assignmentType,
+          dueDate: exam.due_date,
+          totalMarks: exam.total_marks,
+          faculty: {
+            id: resolvedFaculty.id,
+            name: resolvedFaculty.name,
+            email: resolvedFaculty.email,
+            department: resolvedFaculty.department,
+            designation: resolvedFaculty.designation
+          },
+          questionId: question.id,
+          questionNumber: question.question_number,
+          prompt: question.text,
+          correctAnswer: question.correct_answer,
+          isSolutionApproved: question.is_solution_approved,
+          clos: cloRecords
+        }
+      };
+    }
+
+    // Configured Supabase backend
+    let course = null;
+    if (courseId) {
+      const { data } = await supabase.from('courses').select().eq('id', courseId).single();
+      course = data;
+    }
+    if (!course && courseCode) {
+      const { data } = await supabase.from('courses').select().eq('code', courseCode.toUpperCase()).single();
+      course = data;
+    }
+    if (!course) {
+      const { data, error } = await supabase.from('courses').insert({
+        faculty_id: facultyId,
+        name: courseName || `${courseCode || 'CSE 4000'} Course`,
+        code: (courseCode || 'CSE 4000').toUpperCase()
+      }).select().single();
+      if (error) throw error;
+      course = data;
+    }
+
+    const { data: exam, error: examErr } = await supabase.from('exams').insert({
+      course_id: course.id,
+      title: assignmentTitle || 'New Assignment',
+      due_date: dueDate || '2026-09-30',
+      total_marks: Number(totalMarks) || 10
+    }).select().single();
+    if (examErr) throw examErr;
+
+    const { data: question, error: qErr } = await supabase.from('questions').insert({
+      exam_id: exam.id,
+      question_number: questionNumber || 'Q1',
+      text: questionText,
+      correct_answer: correctAnswer || '',
+      max_marks: Number(maxMarks) || 10.0,
+      is_solution_approved: Boolean(isSolutionApproved)
+    }).select().single();
+    if (qErr) throw qErr;
+
+    return { course, exam, question };
   },
 
   async setQuestionSolutionApproval({ questionId, isApproved }) {
@@ -1193,13 +1531,30 @@ const db = {
         subs = subs.filter(s => s.question_id === questionId || s.question_id === (SEED_QUESTIONS_MAP[questionId]?.id));
       }
       if (facultyId) {
-        const facultyCourseIds = memoryStore.courses
-          .filter(c => c.faculty_id === facultyId || (c.faculty_email && c.faculty_email.toLowerCase() === facultyId.toLowerCase()))
-          .map(c => c.id);
-        const facultyExamIds = memoryStore.exams.filter(e => facultyCourseIds.includes(e.course_id)).map(e => e.id);
-        const facultyQIds = memoryStore.questions.filter(q => facultyExamIds.includes(q.exam_id)).map(q => q.id);
+        const facultyProfile = memoryStore.profiles.find(
+          p => p.id === facultyId || (p.email && p.email.toLowerCase() === facultyId.toLowerCase())
+        );
+        const fEmail = (facultyProfile?.email || facultyId).toLowerCase();
 
-        subs = subs.filter(s => s.faculty_id === facultyId || facultyQIds.includes(s.question_id) || facultyCourseIds.length === 0);
+        subs = subs.filter(s => {
+          // Direct match on submission target
+          if (s.faculty_id === facultyId || (s.faculty_email && s.faculty_email.toLowerCase() === fEmail)) return true;
+
+          // Match on question faculty
+          const q = memoryStore.questions.find(item => item.id === s.question_id || item.question_number === s.question_id);
+          if (q && (q.faculty_id === facultyId || (q.faculty_email && q.faculty_email.toLowerCase() === fEmail))) return true;
+
+          // Match on exam faculty
+          const exam = q ? memoryStore.exams.find(e => e.id === q.exam_id) : null;
+          if (exam && (exam.faculty_id === facultyId || (exam.faculty_email && exam.faculty_email.toLowerCase() === fEmail))) return true;
+
+          // Match on course faculty
+          const course = exam ? memoryStore.courses.find(c => c.id === exam.course_id) : null;
+          if (course && (course.faculty_id === facultyId || (course.faculty_email && course.faculty_email.toLowerCase() === fEmail))) return true;
+
+          // If no specific course was assigned, show to all faculty
+          return false;
+        });
       }
       return subs.map(s => {
         const q = memoryStore.questions.find(item => item.id === s.question_id || item.question_number === s.question_id);
