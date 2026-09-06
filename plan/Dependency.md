@@ -43,15 +43,11 @@ there's nothing to merge-conflict over.
   against the mock API — *Dev 1* `[Blocked by: D1-1.2]`
 
 ### Developer 2 — Backend Skeleton & DB (`backend/**` except `backend/src/ai/**`)
-- [ ] **[D2-1.1]** Scaffold Express app — *Dev 2* `[Unblocks: D2-1.3]`
-- [ ] **[D2-1.2]** Write Supabase migrations for the schema in Contract C — *Dev 2* `[Blocked by:
-  C-3] [Unblocks: D2-1.4]`
-- [ ] **[D2-1.3]** Implement Supabase JWT auth middleware — *Dev 2* `[Blocked by: D2-1.1]`
-- [ ] **[D2-1.4]** Set up Row-Level Security scoping every table to `courses.faculty_id =
-  auth.uid()` — *Dev 2* `[Blocked by: D2-1.2]`
-- [ ] **[D2-1.5]** Implement the three routes (`POST /api/analyses`, `GET /api/analyses/:id`, `GET
-  /api/analyses?examId=`) with a **stubbed** `analyzeAnswers()` returning fixed mock data matching
-  Contract B — *Dev 2* `[Blocked by: C-1, C-2, D2-1.1, D2-1.3]`
+- [x] ~~**[D2-1.1]** Scaffold Express app — *Dev 2* `[Unblocks: D2-1.3]`~~
+- [x] ~~**[D2-1.2]** Write Supabase migrations for the schema in Contract C — *Dev 2* `[Blocked by: C-3] [Unblocks: D2-1.4]`~~
+- [x] ~~**[D2-1.3]** Implement Supabase JWT auth middleware — *Dev 2* `[Blocked by: D2-1.1]`~~
+- [x] ~~**[D2-1.4]** Set up Row-Level Security scoping every table to `courses.faculty_id = auth.uid()` — *Dev 2* `[Blocked by: D2-1.2]`~~
+- [x] ~~**[D2-1.5]** Implement the three routes (`POST /api/analyses`, `GET /api/analyses/:id`, `GET /api/analyses?examId=`) with a **stubbed** `analyzeAnswers()` returning fixed mock data matching Contract B — *Dev 2* `[Blocked by: C-1, C-2, D2-1.1, D2-1.3]`~~
 
 ### Developer 3 — AI Module (`backend/src/ai/**`)
 - [ ] **[D3-1.1]** Build `analyzeAnswers({ questionText, clos, answers })` matching Contract B —

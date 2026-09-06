@@ -13,15 +13,29 @@ import StudentPortalPage from './pages/StudentPortalPage';
 import AuthModal from './components/AuthModal';
 
 function AppContent() {
-  const { isStudent, isFaculty, switchRole } = useAuth();
+  const { user, isStudent, isFaculty, switchRole } = useAuth();
   const { selectAnalysis, demoDataset } = useAnalysis();
 
-  // Navigation tab state
-  const [activeTab, setActiveTab] = useState('dashboard');
+  // Navigation tab state - default to landing page when unauthenticated
+  const [activeTab, setActiveTab] = useState(() => {
+    const savedUser = localStorage.getItem('learnmap_user');
+    if (!savedUser) return 'landing';
+    try {
+      const parsed = JSON.parse(savedUser);
+      return parsed.role === 'student' ? 'student-portal' : 'dashboard';
+    } catch {
+      return 'landing';
+    }
+  });
+
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [activePresetDataset, setActivePresetDataset] = useState(null);
 
   const handleStartAnalysis = () => {
+    if (!user) {
+      setIsAuthOpen(true);
+      return;
+    }
     switchRole('faculty');
     setActivePresetDataset(null);
     setActiveTab('new-analysis');
@@ -34,6 +48,10 @@ function AppContent() {
   };
 
   const handleOpenStudentPortal = () => {
+    if (!user) {
+      setIsAuthOpen(true);
+      return;
+    }
     switchRole('student');
     setActiveTab('student-portal');
   };
@@ -46,6 +64,14 @@ function AppContent() {
   const handleSelectHistoricalAnalysis = (analysis) => {
     selectAnalysis(analysis);
     setActiveTab('results');
+  };
+
+  const handleAuthSuccess = (role) => {
+    if (role === 'student') {
+      setActiveTab('student-portal');
+    } else {
+      setActiveTab('dashboard');
+    }
   };
 
   return (
@@ -112,6 +138,7 @@ function AppContent() {
       <AuthModal
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
+        onAuthSuccess={handleAuthSuccess}
       />
 
       {/* Clean Academic Footer */}

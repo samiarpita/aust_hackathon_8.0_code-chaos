@@ -8,14 +8,16 @@ import {
   GraduationCap, 
   Briefcase, 
   AlertCircle,
-  Sparkles,
-  ShieldCheck
+  CheckCircle2,
+  Calendar,
+  Hash,
+  Building
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import LearnMapLogo from './LearnMapLogo';
 
-export default function AuthModal({ isOpen, onClose }) {
-  const { signIn, signUp, loginAsDemoFaculty, loginAsDemoStudent } = useAuth();
+export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
+  const { signIn, signUp } = useAuth();
 
   // Mode: 'login' or 'register'
   const [mode, setMode] = useState('login');
@@ -23,6 +25,9 @@ export default function AuthModal({ isOpen, onClose }) {
   const [selectedRole, setSelectedRole] = useState('faculty');
 
   const [email, setEmail] = useState('');
+  const [studentId, setStudentId] = useState('');
+  const [semester, setSemester] = useState('Fall 2026');
+  const [department, setDepartment] = useState('Department of Computer Science & Engineering');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,35 +35,54 @@ export default function AuthModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
+  // Password criteria check
+  const hasMinLength = password.length >= 8;
+  const hasUpper = /[A-Z]/.test(password);
+  const hasLower = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password);
+  const isPasswordValid = hasMinLength && hasUpper && hasLower && hasNumber && hasSpecial;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage(null);
+
+    if (mode === 'register' && !isPasswordValid) {
+      setErrorMessage('Password must satisfy all security constraints listed below.');
+      return;
+    }
+
     setLoading(true);
 
     try {
       if (mode === 'register') {
-        const { error } = await signUp(email, password, { full_name: fullName }, selectedRole);
-        if (error) throw error;
+        await signUp({
+          name: fullName,
+          email,
+          studentId: selectedRole === 'student' ? studentId : undefined,
+          semester: selectedRole === 'student' ? semester : undefined,
+          department: selectedRole === 'faculty' ? department : undefined,
+          password,
+          role: selectedRole
+        });
       } else {
-        const { error } = await signIn(email, password, selectedRole);
-        if (error) throw error;
+        await signIn({
+          email: email || undefined,
+          studentId: selectedRole === 'student' ? (studentId || email) : undefined,
+          semester: selectedRole === 'student' ? semester : undefined,
+          password,
+          role: selectedRole
+        });
+      }
+      if (onAuthSuccess) {
+        onAuthSuccess(selectedRole);
       }
       onClose();
     } catch (err) {
-      setErrorMessage(err.message || "Authentication failed. Please verify your credentials.");
+      setErrorMessage(err.message || 'Authentication failed. Please verify your credentials.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDemoFaculty = () => {
-    loginAsDemoFaculty();
-    onClose();
-  };
-
-  const handleDemoStudent = () => {
-    loginAsDemoStudent();
-    onClose();
   };
 
   return (
@@ -68,7 +92,7 @@ export default function AuthModal({ isOpen, onClose }) {
           initial={{ opacity: 0, scale: 0.95, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 12 }}
-          className="relative w-full max-w-md rounded-3xl glass-surface-elevated p-6 sm:p-8 border border-[#B49BDE]/30 dark:border-[#C4ABF0]/20 shadow-2xl text-[#3E2E54] dark:text-[#EDE4F8]"
+          className="relative w-full max-w-md rounded-3xl glass-surface-elevated p-6 sm:p-8 border border-[#B49BDE]/30 dark:border-[#C4ABF0]/20 shadow-2xl text-[#3E2E54] dark:text-[#EDE4F8] max-h-[90vh] overflow-y-auto"
         >
           {/* Close button */}
           <button
@@ -84,7 +108,7 @@ export default function AuthModal({ isOpen, onClose }) {
               <LearnMapLogo size="lg" showText={true} />
             </div>
             <p className="text-xs text-[#6C5B82] dark:text-[#CAB7E4]">
-              {mode === 'login' ? 'Sign in to access your portal' : 'Create an account to get started'}
+              {mode === 'login' ? `Sign in to your ${selectedRole} portal` : `Create a new ${selectedRole} account`}
             </p>
           </div>
 
@@ -92,7 +116,10 @@ export default function AuthModal({ isOpen, onClose }) {
           <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-black/5 dark:bg-black/20 border border-[#B49BDE]/20 dark:border-[#C4ABF0]/15 mb-4">
             <button
               type="button"
-              onClick={() => setSelectedRole('faculty')}
+              onClick={() => {
+                setSelectedRole('faculty');
+                setErrorMessage(null);
+              }}
               className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                 selectedRole === 'faculty'
                   ? 'bg-white dark:bg-[#2C1F42] text-[#7847EB] dark:text-[#B388FF] shadow-sm'
@@ -105,7 +132,10 @@ export default function AuthModal({ isOpen, onClose }) {
 
             <button
               type="button"
-              onClick={() => setSelectedRole('student')}
+              onClick={() => {
+                setSelectedRole('student');
+                setErrorMessage(null);
+              }}
               className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                 selectedRole === 'student'
                   ? 'bg-white dark:bg-[#2C1F42] text-[#EC4899] dark:text-[#F472B6] shadow-sm'
@@ -115,36 +145,6 @@ export default function AuthModal({ isOpen, onClose }) {
               <GraduationCap className="w-3.5 h-3.5" />
               <span>Student Portal</span>
             </button>
-          </div>
-
-          {/* Quick 1-Click Demo Logins */}
-          <div className="flex gap-2 mb-4">
-            <button
-              type="button"
-              onClick={handleDemoFaculty}
-              className="flex-1 py-2 px-2.5 rounded-xl border border-[#7847EB]/30 dark:border-[#B388FF]/30 bg-[#7847EB]/5 dark:bg-[#B388FF]/10 hover:bg-[#7847EB]/10 text-[11px] font-medium text-[#7847EB] dark:text-[#B388FF] flex items-center justify-center gap-1.5 transition-all"
-            >
-              <Sparkles className="w-3 h-3" />
-              <span>Demo Faculty</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleDemoStudent}
-              className="flex-1 py-2 px-2.5 rounded-xl border border-[#EC4899]/30 dark:border-[#F472B6]/30 bg-[#EC4899]/5 dark:bg-[#F472B6]/10 hover:bg-[#EC4899]/10 text-[11px] font-medium text-[#EC4899] dark:text-[#F472B6] flex items-center justify-center gap-1.5 transition-all"
-            >
-              <Sparkles className="w-3 h-3" />
-              <span>Demo Student</span>
-            </button>
-          </div>
-
-          {/* Divider */}
-          <div className="relative flex py-2 items-center mb-3">
-            <div className="flex-grow border-t border-[#B49BDE]/20 dark:border-[#C4ABF0]/15" />
-            <span className="flex-shrink mx-2 text-[10px] text-[#6C5B82] dark:text-[#CAB7E4] uppercase tracking-wider font-semibold">
-              Or Email Login
-            </span>
-            <div className="flex-grow border-t border-[#B49BDE]/20 dark:border-[#C4ABF0]/15" />
           </div>
 
           {/* Error message */}
@@ -176,23 +176,85 @@ export default function AuthModal({ isOpen, onClose }) {
               </div>
             )}
 
-            <div>
-              <label className="block text-xs font-semibold mb-1">
-                Institutional Email
-              </label>
-              <div className="relative">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={selectedRole === 'faculty' ? 'faculty@aust.edu' : 'student@aust.edu'}
-                  className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
-                />
-                <Mail className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
-              </div>
-            </div>
+            {/* Student Specific Fields: Student ID Number & Semester */}
+            {selectedRole === 'student' && (
+              <>
+                <div>
+                  <label className="block text-xs font-semibold mb-1">
+                    Student ID Number
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      value={studentId}
+                      onChange={(e) => setStudentId(e.target.value)}
+                      placeholder="e.g. 20210104001 or 2026-CSE-042"
+                      className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
+                    />
+                    <Hash className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
+                  </div>
+                </div>
 
+                <div>
+                  <label className="block text-xs font-semibold mb-1">
+                    Semester / Session
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      value={semester}
+                      onChange={(e) => setSemester(e.target.value)}
+                      placeholder="e.g. Fall 2026, 4th Semester"
+                      className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
+                    />
+                    <Calendar className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Faculty Department */}
+            {selectedRole === 'faculty' && mode === 'register' && (
+              <div>
+                <label className="block text-xs font-semibold mb-1">
+                  Department
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                    placeholder="Department of Computer Science & Engineering"
+                    className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
+                  />
+                  <Building className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
+                </div>
+              </div>
+            )}
+
+            {/* Email Field (Required for faculty or student register) */}
+            {(selectedRole === 'faculty' || mode === 'register') && (
+              <div>
+                <label className="block text-xs font-semibold mb-1">
+                  Institutional Email
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={selectedRole === 'faculty' ? 'faculty@aust.edu' : 'student@aust.edu'}
+                    className="w-full px-3.5 py-2 rounded-xl glass-input text-xs pl-8"
+                  />
+                  <Mail className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6C5B82]" />
+                </div>
+              </div>
+            )}
+
+            {/* Password */}
             <div>
               <label className="block text-xs font-semibold mb-1">
                 Password
@@ -210,16 +272,44 @@ export default function AuthModal({ isOpen, onClose }) {
               </div>
             </div>
 
+            {/* Password Constraints Visual Indicator (in register mode) */}
+            {mode === 'register' && (
+              <div className="p-2.5 rounded-xl bg-black/5 dark:bg-black/20 border border-[#B49BDE]/20 dark:border-[#C4ABF0]/15 space-y-1 text-[10px]">
+                <p className="font-semibold text-[#6C5B82] dark:text-[#CAB7E4] mb-1">Password Requirements:</p>
+                <div className="grid grid-cols-2 gap-1 text-[10px]">
+                  <span className={`flex items-center gap-1 ${hasMinLength ? 'text-emerald-500 font-medium' : 'text-[#6C5B82]'}`}>
+                    <CheckCircle2 className="w-3 h-3" /> Min 8 characters
+                  </span>
+                  <span className={`flex items-center gap-1 ${hasUpper ? 'text-emerald-500 font-medium' : 'text-[#6C5B82]'}`}>
+                    <CheckCircle2 className="w-3 h-3" /> 1 Uppercase (A-Z)
+                  </span>
+                  <span className={`flex items-center gap-1 ${hasLower ? 'text-emerald-500 font-medium' : 'text-[#6C5B82]'}`}>
+                    <CheckCircle2 className="w-3 h-3" /> 1 Lowercase (a-z)
+                  </span>
+                  <span className={`flex items-center gap-1 ${hasNumber ? 'text-emerald-500 font-medium' : 'text-[#6C5B82]'}`}>
+                    <CheckCircle2 className="w-3 h-3" /> 1 Number (0-9)
+                  </span>
+                  <span className={`flex items-center gap-1 col-span-2 ${hasSpecial ? 'text-emerald-500 font-medium' : 'text-[#6C5B82]'}`}>
+                    <CheckCircle2 className="w-3 h-3" /> 1 Special character (!@#$%^&*)
+                  </span>
+                </div>
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={loading}
-              className={`w-full mt-1 py-2.5 px-4 rounded-xl text-white font-semibold text-xs shadow-md hover:shadow-lg transition-all disabled:opacity-50 ${
+              className={`w-full mt-2 py-2.5 px-4 rounded-xl text-white font-semibold text-xs shadow-md hover:shadow-lg transition-all disabled:opacity-50 ${
                 selectedRole === 'faculty'
                   ? 'bg-gradient-to-r from-[#7847EB] to-[#9061F9]'
                   : 'bg-gradient-to-r from-[#DB2777] to-[#EC4899]'
               }`}
             >
-              {loading ? 'Processing...' : mode === 'login' ? `Sign In as ${selectedRole === 'faculty' ? 'Faculty' : 'Student'}` : `Register as ${selectedRole === 'faculty' ? 'Faculty' : 'Student'}`}
+              {loading 
+                ? 'Authenticating...' 
+                : mode === 'login' 
+                  ? `Sign In as ${selectedRole === 'faculty' ? 'Faculty' : 'Student'}` 
+                  : `Register ${selectedRole === 'faculty' ? 'Faculty' : 'Student'} Account`}
             </button>
           </form>
 
