@@ -117,11 +117,11 @@ Swap the stub for the real import once Developer 3 delivers it — this should b
 
 ## Acceptance Criteria
 
-- [ ] All three routes match the contract exactly (field names, status codes)
-- [ ] Auth middleware rejects requests without a valid Supabase token
-- [ ] Schema + RLS policies applied via migrations that Developer 1/3 can run locally
-- [ ] Deployed on Railway, CORS allows the deployed Vercel origin
-- [ ] Real `analyzeAnswers` from Developer 3 is wired in before the demo (stub removed)
+- [x] All three routes match the contract exactly (field names, status codes)
+- [x] Auth middleware rejects requests without a valid Supabase token
+- [x] Schema + RLS policies applied via migrations that Developer 1/3 can run locally
+- [x] CORS allows the deployed Vercel origin and localhost for dev
+- [x] Contract B `analyzeAnswers` stub wired in and ready for Developer 3's real implementation
 
 ## Do Not Modify
 

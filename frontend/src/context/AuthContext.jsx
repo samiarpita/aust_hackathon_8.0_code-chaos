@@ -1,131 +1,171 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 
 const AuthContext = createContext();
-
-export const DEMO_FACULTY_USER = {
-  id: 'faculty-001',
-  email: 'faculty@aust.edu',
-  role: 'faculty',
-  user_metadata: {
-    full_name: 'Dr. Arpita Sengupta',
-    role: 'faculty',
-    department: 'Department of Computer Science & Engineering',
-    course: 'CSE 2100: Data Structures'
-  }
-};
-
-export const DEMO_STUDENT_USER = {
-  id: 'student-042',
-  email: 'alex.chen@student.aust.edu',
-  role: 'student',
-  user_metadata: {
-    full_name: 'Alex Chen',
-    role: 'student',
-    student_id: '2026-CSE-042',
-    enrolled_courses: ['CSE 2100: Data Structures']
-  }
-};
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     try {
-      const savedRole = localStorage.getItem('learnmap_user_role') || 'faculty';
-      return savedRole === 'student' ? DEMO_STUDENT_USER : DEMO_FACULTY_USER;
+      const savedUser = localStorage.getItem('learnmap_user');
+      return savedUser ? JSON.parse(savedUser) : null;
     } catch {
-      return DEMO_FACULTY_USER;
+      return null;
     }
   });
 
-  const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem('learnmap_token') || null;
+  });
+
   const [activeRole, setActiveRole] = useState(() => {
     return localStorage.getItem('learnmap_user_role') || 'faculty';
   });
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('learnmap_user_role', activeRole);
-    } catch (e) {
-      console.warn(e);
-    }
-  }, [activeRole]);
+  const [loading, setLoading] = useState(true);
 
-  // Switch role explicitly
+  // Sync token and user profile on mount
+  useEffect(() => {
+    async function verifyUser() {
+      const storedToken = localStorage.getItem('learnmap_token');
+      if (!storedToken) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${storedToken}`
+          }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+          setActiveRole(data.user.role || 'faculty');
+          localStorage.setItem('learnmap_user', JSON.stringify(data.user));
+          localStorage.setItem('learnmap_user_role', data.user.role || 'faculty');
+        } else {
+          // Token expired or invalid
+          localStorage.removeItem('learnmap_token');
+          localStorage.removeItem('learnmap_user');
+          setUser(null);
+        }
+      } catch (err) {
+        console.warn('Could not verify session with backend:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    verifyUser();
+  }, []);
+
   const switchRole = (newRole) => {
     setActiveRole(newRole);
-    if (newRole === 'student') {
-      setUser(DEMO_STUDENT_USER);
-    } else {
-      setUser(DEMO_FACULTY_USER);
-    }
+    localStorage.setItem('learnmap_user_role', newRole);
   };
 
-  const loginAsDemoFaculty = () => {
-    setActiveRole('faculty');
-    setUser(DEMO_FACULTY_USER);
-  };
-
-  const loginAsDemoStudent = () => {
-    setActiveRole('student');
-    setUser(DEMO_STUDENT_USER);
-  };
-
-  const signIn = async (email, password, role = 'faculty') => {
-    if (!isSupabaseConfigured()) {
-      if (role === 'student') {
-        loginAsDemoStudent();
-      } else {
-        loginAsDemoFaculty();
-      }
-      return { data: { user }, error: null };
-    }
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (!error && data.user) {
-      setUser({ ...data.user, role });
-      setActiveRole(role);
-    }
-    return { data, error };
-  };
-
-  const signUp = async (email, password, metadata = {}, role = 'faculty') => {
-    if (!isSupabaseConfigured()) {
-      if (role === 'student') {
-        loginAsDemoStudent();
-      } else {
-        loginAsDemoFaculty();
-      }
-      return { data: { user }, error: null };
-    }
-
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { ...metadata, role } }
+  /**
+   * Real Sign In
+   */
+  const signIn = async ({ email, studentId, idNumber, semester, password, role = 'faculty' }) => {
+    const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        studentId: studentId || idNumber,
+        semester,
+        password,
+        role
+      })
     });
-    return { data, error };
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Login failed. Please verify your credentials.');
+    }
+
+    setToken(data.token);
+    setUser(data.user);
+    setActiveRole(data.user.role);
+
+    localStorage.setItem('learnmap_token', data.token);
+    localStorage.setItem('learnmap_user', JSON.stringify(data.user));
+    localStorage.setItem('learnmap_user_role', data.user.role);
+
+    return data;
   };
 
-  const signOut = () => {
+  /**
+   * Real Sign Up / Registration
+   */
+  const signUp = async ({ name, email, studentId, idNumber, semester, department, password, role = 'faculty' }) => {
+    const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        email,
+        studentId: studentId || idNumber,
+        semester,
+        department,
+        password,
+        role
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Registration failed. Please check constraints.');
+    }
+
+    setToken(data.token);
+    setUser(data.user);
+    setActiveRole(data.user.role);
+
+    localStorage.setItem('learnmap_token', data.token);
+    localStorage.setItem('learnmap_user', JSON.stringify(data.user));
+    localStorage.setItem('learnmap_user_role', data.user.role);
+
+    return data;
+  };
+
+  /**
+   * Sign Out - Clears user state and storage
+   */
+  const signOut = async () => {
+    try {
+      if (token) {
+        await fetch(`${API_BASE_URL}/api/auth/logout`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(() => {});
+      }
+    } catch {}
+
     setUser(null);
-    setSession(null);
+    setToken(null);
+    localStorage.removeItem('learnmap_token');
+    localStorage.removeItem('learnmap_user');
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        role: activeRole,
-        activeRole,
+        token,
+        loading,
+        role: user?.role || activeRole,
+        activeRole: user?.role || activeRole,
         switchRole,
-        loginAsDemoFaculty,
-        loginAsDemoStudent,
         signIn,
         signUp,
         signOut,
-        isFaculty: activeRole === 'faculty',
-        isStudent: activeRole === 'student',
+        isFaculty: (user?.role || activeRole) === 'faculty',
+        isStudent: (user?.role || activeRole) === 'student',
+        isAuthenticated: !!user
       }}
     >
       {children}
