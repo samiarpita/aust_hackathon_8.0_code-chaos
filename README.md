@@ -1,5 +1,4 @@
-
-# Student Misconception Radar
+# LearnMap-The Student Misconception Radar
 
 AI Build Hackathon — Final Round (AUST CSE Carnival <8.0/>, 6 September 2026)
 Theme: **AI for Academic Life**
