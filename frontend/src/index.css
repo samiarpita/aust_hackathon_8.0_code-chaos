@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-base-light: #F8F6FD;
+  --color-glass-light: rgba(255, 255, 255, 0.70);
+  --color-border-light: rgba(180, 155, 222, 0.28);
+  --color-heading-light: #231735;
+  --color-body-light: #3E2E54;
+  --color-muted-light: #6C5B82;
+  --color-accent-light: #7847EB;
+
+  --color-base-dark: #0F0A19;
+  --color-glass-dark: rgba(28, 19, 44, 0.65);
+  --color-border-dark: rgba(196, 171, 240, 0.15);
+  --color-heading-dark: #FAF7FD;
+  --color-body-dark: #EDE4F8;
+  --color-muted-dark: #CAB7E4;
+  --color-accent-dark: #B388FF;
+}
+
+/* Glassmorphic card styling */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(180, 155, 222, 0.28);
+}
+
+.dark .glass-surface {
+  background: rgba(28, 19, 44, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(196, 171, 240, 0.15);
+}
+
+.glass-surface-elevated {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(180, 155, 222, 0.35);
+  box-shadow: 0 12px 40px rgba(120, 71, 235, 0.09);
+}
+
+.dark .glass-surface-elevated {
+  background: rgba(35, 24, 56, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(196, 171, 240, 0.22);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* Glass input fields */
+.glass-input {
+  background: rgba(255, 255, 255, 0.60);
+  border: 1px solid rgba(180, 155, 222, 0.35);
+  color: #231735;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.90);
+  border-color: #7847EB;
+  box-shadow: 0 0 0 3px rgba(120, 71, 235, 0.15);
+  outline: none;
+}
+
+.dark .glass-input {
+  background: rgba(20, 13, 33, 0.55);
+  border: 1px solid rgba(196, 171, 240, 0.20);
+  color: #FAF7FD;
+}
+
+.dark .glass-input:focus {
+  background: rgba(24, 16, 40, 0.85);
+  border-color: #B388FF;
+  box-shadow: 0 0 0 3px rgba(179, 136, 255, 0.2);
+  outline: none;
+}
+
+/* Iridescent shimmer effect for skeleton loaders */
+@keyframes iridescentShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.iridescent-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(180, 155, 222, 0.12) 0%,
+    rgba(216, 180, 254, 0.28) 50%,
+    rgba(180, 155, 222, 0.12) 100%
+  );
+  background-size: 200% 100%;
+  animation: iridescentShimmer 2.2s infinite ease-in-out;
+}
+
+.dark .iridescent-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(120, 71, 235, 0.15) 0%,
+    rgba(196, 171, 240, 0.28) 50%,
+    rgba(120, 71, 235, 0.15) 100%
+  );
+  background-size: 200% 100%;
+  animation: iridescentShimmer 2.2s infinite ease-in-out;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(180, 155, 222, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 71, 235, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(196, 171, 240, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(179, 136, 255, 0.45);
+}
