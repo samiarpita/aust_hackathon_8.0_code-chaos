@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -33,6 +33,14 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  // Clear password and errors whenever modal opens or switches mode/role
+  useEffect(() => {
+    if (isOpen) {
+      setPassword('');
+      setErrorMessage(null);
+    }
+  }, [isOpen, mode, selectedRole]);
+
   if (!isOpen) return null;
 
   // Password criteria check
@@ -42,6 +50,12 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   const hasNumber = /\d/.test(password);
   const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password);
   const isPasswordValid = hasMinLength && hasUpper && hasLower && hasNumber && hasSpecial;
+
+  const handleClose = () => {
+    setPassword('');
+    setErrorMessage(null);
+    onClose();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,6 +88,8 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
           role: selectedRole
         });
       }
+      
+      setPassword('');
       if (onAuthSuccess) {
         onAuthSuccess(selectedRole);
       }
@@ -96,7 +112,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
         >
           {/* Close button */}
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="absolute top-4 right-4 p-1.5 rounded-full text-[#6C5B82] dark:text-[#CAB7E4] hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
           >
             <X className="w-5 h-5" />
@@ -118,6 +134,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               type="button"
               onClick={() => {
                 setSelectedRole('faculty');
+                setPassword('');
                 setErrorMessage(null);
               }}
               className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
@@ -134,6 +151,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               type="button"
               onClick={() => {
                 setSelectedRole('student');
+                setPassword('');
                 setErrorMessage(null);
               }}
               className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
@@ -155,8 +173,8 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             </div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-3">
+          {/* Form with autoComplete="off" */}
+          <form onSubmit={handleSubmit} autoComplete="off" className="space-y-3">
             {mode === 'register' && (
               <div>
                 <label className="block text-xs font-semibold mb-1">
@@ -166,6 +184,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                   <input
                     type="text"
                     required
+                    autoComplete="off"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder={selectedRole === 'faculty' ? 'Dr. Arpita Sengupta' : 'Alex Chen'}
@@ -187,6 +206,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     <input
                       type="text"
                       required
+                      autoComplete="off"
                       value={studentId}
                       onChange={(e) => setStudentId(e.target.value)}
                       placeholder="e.g. 20210104001 or 2026-CSE-042"
@@ -204,6 +224,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     <input
                       type="text"
                       required
+                      autoComplete="off"
                       value={semester}
                       onChange={(e) => setSemester(e.target.value)}
                       placeholder="e.g. Fall 2026, 4th Semester"
@@ -224,6 +245,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 <div className="relative">
                   <input
                     type="text"
+                    autoComplete="off"
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     placeholder="Department of Computer Science & Engineering"
@@ -244,6 +266,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                   <input
                     type="email"
                     required
+                    autoComplete="off"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={selectedRole === 'faculty' ? 'faculty@aust.edu' : 'student@aust.edu'}
@@ -254,7 +277,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               </div>
             )}
 
-            {/* Password */}
+            {/* Password with autoComplete="new-password" */}
             <div>
               <label className="block text-xs font-semibold mb-1">
                 Password
@@ -263,6 +286,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 <input
                   type="password"
                   required
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
@@ -320,6 +344,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               type="button"
               onClick={() => {
                 setMode(mode === 'login' ? 'register' : 'login');
+                setPassword('');
                 setErrorMessage(null);
               }}
               className="text-[#7847EB] dark:text-[#B388FF] font-semibold hover:underline"
