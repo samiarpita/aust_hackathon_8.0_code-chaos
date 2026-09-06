@@ -36,12 +36,19 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // Clear password, showPassword toggle, and errors whenever modal opens or switches mode/role
+  const resetAllFields = () => {
+    setEmail('');
+    setStudentId('');
+    setFullName('');
+    setPassword('');
+    setShowPassword(false);
+    setErrorMessage(null);
+  };
+
+  // Completely reset all input fields whenever modal opens or when switching role/mode
   useEffect(() => {
     if (isOpen) {
-      setPassword('');
-      setShowPassword(false);
-      setErrorMessage(null);
+      resetAllFields();
     }
   }, [isOpen, mode, selectedRole]);
 
@@ -56,9 +63,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   const isPasswordValid = hasMinLength && hasUpper && hasLower && hasNumber && hasSpecial;
 
   const handleClose = () => {
-    setPassword('');
-    setShowPassword(false);
-    setErrorMessage(null);
+    resetAllFields();
     onClose();
   };
 
@@ -182,7 +187,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} autoComplete="off" className="space-y-3">
+          <form onSubmit={handleSubmit} autoComplete="off" data-form-type="other" className="space-y-3">
             {/* Registration: Full Name */}
             {mode === 'register' && (
               <div>
@@ -194,6 +199,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     type="text"
                     required
                     autoComplete="off"
+                    name="reg_fullname_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder={selectedRole === 'faculty' ? 'e.g. Dr. Arpita Sengupta' : 'e.g. Samia Rahman'}
@@ -215,6 +223,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     type="text"
                     required
                     autoComplete="off"
+                    name="student_id_input_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
                     value={studentId}
                     onChange={(e) => setStudentId(e.target.value)}
                     placeholder={mode === 'login' ? 'e.g. 20210104001 or student@aust.edu' : 'e.g. 20210104001 or 2026-CSE-042'}
@@ -236,6 +247,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     type="text"
                     required
                     autoComplete="off"
+                    name="semester_input_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
                     value={semester}
                     onChange={(e) => setSemester(e.target.value)}
                     placeholder="e.g. Fall 2026, 4th Semester"
@@ -256,6 +270,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                   <input
                     type="text"
                     autoComplete="off"
+                    name="department_input_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     placeholder="Department of Computer Science & Engineering"
@@ -277,6 +294,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     type="email"
                     required
                     autoComplete="off"
+                    name="inst_email_input_unique"
+                    data-lpignore="true"
+                    data-form-type="other"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={selectedRole === 'faculty' ? 'faculty@aust.edu' : 'student@aust.edu'}
@@ -317,6 +337,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                   type={showPassword ? 'text' : 'password'}
                   required
                   autoComplete="new-password"
+                  name="auth_password_input_unique"
+                  data-lpignore="true"
+                  data-form-type="other"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"

@@ -14,6 +14,11 @@
       "id": "5cc1d89a-82ee-42a8-8be6-2f156e443e7d",
       "email": "tonima@gmail.com",
       "passwordHash": "$2b$10$5PKoGfTcF0IGHivLIoLQeO06edorXn5/Ogv6DKxO9k3K3JQF6F0a6"
+    },
+    {
+      "id": "83547f83-d9f8-41e8-a596-07af039772dc",
+      "email": "arpita@gmail.com",
+      "passwordHash": "$2b$10$lifLUSdn2/1SGNi9Zd.88O.cR27UgUMdKxBf1BLFDQlR.fE02GjcW"
     }
   ],
   "profiles": [
@@ -49,6 +54,17 @@
       "department": null,
       "created_at": "2026-09-06T08:01:05.376Z",
       "updated_at": "2026-09-06T08:01:05.376Z"
+    },
+    {
+      "id": "83547f83-d9f8-41e8-a596-07af039772dc",
+      "email": "arpita@gmail.com",
+      "name": "Arpita",
+      "role": "faculty",
+      "student_id_number": null,
+      "semester": null,
+      "department": "Department of Computer Science & Engineering",
+      "created_at": "2026-09-06T08:05:25.772Z",
+      "updated_at": "2026-09-06T08:05:25.772Z"
     }
   ],
   "courses": [
